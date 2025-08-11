@@ -1,0 +1,300 @@
+import 'package:construction_management_app/common/app_images/app_images.dart';
+
+class DummyData {
+  static final List<Map<String, String>> valleyList = [
+    {
+      "title": "Green Valley School",
+      "subTitle": "123 Oal St ",
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Green Valley School",
+      "subTitle": "123 Oal St ",
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Green Valley School",
+      "subTitle": "123 Oal St ",
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Green Valley School",
+      "subTitle": "123 Oal St ",
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Green Valley School",
+      "subTitle": "123 Oal St ",
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+  ];
+
+  static final List<Map<String, String>> highwayList = [
+    {
+      "title": "Highway Bridge Project",
+      "subTitle": "123 Oal St ",
+      "image2": AppImages.image2,
+      "image1": AppImages.image1,
+      "image": AppImages.image,
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Highway Bridge Project",
+      "subTitle": "123 Oal St ",
+      "image2": AppImages.image2,
+      "image1": AppImages.image1,
+      "image": AppImages.image,
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Highway Bridge Project",
+      "subTitle": "123 Oal St ",
+      "image2": AppImages.image2,
+      "image1": AppImages.image1,
+      "image": AppImages.image,
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+    {
+      "title": "Highway Bridge Project",
+      "subTitle": "123 Oal St ",
+      "image2": AppImages.image2,
+      "image1": AppImages.image1,
+      "image": AppImages.image,
+      "text": "12 daily logs ",
+      "text1": "2 day work",
+      "text2": "View Detalis",
+    },
+  ];
+
+  static final List<Map<String, String>> notifications = [
+    {
+      'message':
+          'Your subscription will renew on June 1, 2025. Please update your payment method if necessary.',
+    },
+    {
+      'message':
+          'Concrete pour for foundation completed and approved by Supervisor John.',
+    },
+    {
+      'message':
+          'Your subscription will renew on June 1, 2025. Please update your payment method if necessary.',
+    },
+    {
+      'message':
+          'Concrete pour for foundation completed and approved by Supervisor John.',
+    },
+    {'message': 'Supervisor Sarah Khan has been added to your company.'},
+  ];
+
+  static final List<Map<String, String>> sitediaryList = [
+    {
+      "title": "Concrete Pouring",
+      "subTitle": "123 Oak St",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+  ];
+
+  static final List<Map<String, String>> list = [
+    {"image": AppImages.planning, "name": "Site Diary"},
+    {"image": AppImages.clock, "name": "Dayworks"},
+    {"image": AppImages.planning, "name": "Planning"},
+    {"image": AppImages.planning, "name": "Resources"},
+    {"image": AppImages.planning, "name": "Checksheet"},
+    {"image": AppImages.planning, "name": "Tools"},
+  ];
+
+  static final List<Map<String, String>> allsiteList = [
+    {
+      "title": "Concrete Pouring",
+      "subTitle": "123 Oak St",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Concrete Pouring",
+      "subTitle": "123 Oak St",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Concrete Pouring",
+      "subTitle": "123 Oak St",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Concrete Pouring",
+      "subTitle": "123 Oak St",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+  ];
+
+  static final List<Map<String, String>> dayworkList = [
+    {
+      "title": "Day Work-01",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Day Work-01",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Day Work-01",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Day Work-01",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+    {
+      "title": "Day Work-01",
+      "text": "8 hours",
+      "text1": "5 Workers",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "text4": "Edit Log",
+      "image": AppImages.clock,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+      "image3": AppImages.linedit,
+    },
+  ];
+
+  static final List<Map<String, String>> tomorrowList = [
+    {
+      "title": "Concrete Pouring",
+      "text1": "5 Workers",
+      "text": "Due Tomorrow, 3:00 PM",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "image": AppImages.gari,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+    },
+    {
+      "title": "Concrete Pouring",
+      "text1": "5 Workers",
+      "text": "Due Tomorrow, 3:00 PM",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "image": AppImages.gari,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+    },
+    {
+      "title": "Concrete Pouring",
+      "text1": "5 Workers",
+      "text": "Due Tomorrow, 3:00 PM",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "image": AppImages.gari,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+    },
+    {
+      "title": "Concrete Pouring",
+      "text1": "5 Workers",
+      "text": "Due Tomorrow, 3:00 PM",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "image": AppImages.gari,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+    },
+    {
+      "title": "Concrete Pouring",
+      "text1": "5 Workers",
+      "text": "Due Tomorrow, 3:00 PM",
+      "text2": "1 Cement Mixer",
+      "text3": "View Details",
+      "image": AppImages.gari,
+      "image1": AppImages.person,
+      "image2": AppImages.gari,
+    },
+  ];
+}
