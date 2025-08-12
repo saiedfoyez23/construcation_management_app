@@ -20,6 +20,9 @@ class SignInController extends GetxController {
   ].obs;
   RxString selectedRole = "".obs;
 
+  Rx<TextEditingController> emailController = TextEditingController().obs;
+  Rx<TextEditingController> passwordController = TextEditingController().obs;
+
   ///Login
   Future loginController({
     required String email,
