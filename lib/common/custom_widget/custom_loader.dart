@@ -12,7 +12,7 @@ class CustomLoaderButton extends StatelessWidget {
       height: 43,
       width: Get.width,
       decoration: BoxDecoration(
- color: AppColors.black,
+        color: AppColors.black,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Center(child: SpinKitDualRing(color: AppColors.white, size: 30.0)),

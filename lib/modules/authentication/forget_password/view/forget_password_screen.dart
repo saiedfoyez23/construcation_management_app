@@ -4,6 +4,7 @@ import 'package:construction_management_app/common/custom_widget/custom_loader.d
 import 'package:construction_management_app/common/custom_widget/custom_text_form_field_widget.dart';
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
 import 'package:construction_management_app/modules/authentication/forget_password/controller/forget_controller.dart';
+import 'package:construction_management_app/modules/authentication/forget_password/view/otp_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,9 +87,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           ? CustomLoaderButton()
                           : CustomButtonWidget(
                             onTap: () {
-                              forgetController.forgetPassword(
-                                email: email.text,
-                              );
+                              Get.to(OtpVerification(email: email.text));
+                              // forgetController.forgetPassword(
+                              //   email: email.text,
+                              // );
                             },
                             title: "Send Verification Code",
                             cardColor: AppColors.linerColor,

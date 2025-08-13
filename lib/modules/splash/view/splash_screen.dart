@@ -20,11 +20,13 @@ class _SplashScreenState extends State<SplashScreen> {
     // Navigate to the main screen after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       var token = LocalStorage.getData(key: AppConstant.token);
-      if (token != '') {
-        Get.to(() => Dashboard()); // Navigate to the home screen
-      } else {
-        Get.to(() => WelcomeScreen()); // Navigate to the home screen
-      }
+      Get.to(() => WelcomeScreen());
+      //Get.to(() => Dashboard());
+      // if (token != '') {
+      //   Get.to(() => Dashboard()); // Navigate to the home screen
+      // } else {
+      //   Get.to(() => WelcomeScreen()); // Navigate to the home screen
+      // }
     });
   }
 

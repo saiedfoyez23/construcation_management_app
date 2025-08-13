@@ -8,10 +8,10 @@ import 'package:construction_management_app/common/custom_widget/custom_text_fie
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
 import 'package:construction_management_app/modules/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_intl_phone_field/flutter_intl_phone_field.dart';
+import 'package:flutter_intl_phone_field/phone_number.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:mime/mime.dart';
 import "package:path/path.dart" as path;
 

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
+import 'new_password.dart';
+
 class OtpVerification extends StatefulWidget {
   final String email;
   const OtpVerification({super.key, required this.email});
@@ -169,10 +171,11 @@ class _OtpVerificationState extends State<OtpVerification> {
                           ? CustomLoaderButton()
                           : CustomButtonWidget(
                             onTap: () {
-                              forgetController.forgetOtpController(
-                                email: widget.email,
-                                otp: otp.text,
-                              );
+                              Get.to(NewPassword());
+                              // forgetController.forgetOtpController(
+                              //   email: widget.email,
+                              //   otp: otp.text,
+                              // );
                             },
                             title: "Verify",
                             cardColor: AppColors.gray,

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
-import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_otp_verify.dart';
+import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_otp_verify_view.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
@@ -11,6 +14,43 @@ import 'dart:convert';
 class SignUpController extends GetxController {
   var isLoading = false.obs;
   var isLoadingNow = false.obs;
+  RxBool isObscureText = true.obs;
+  RxBool isConfirmObscureText = true.obs;
+
+  Rx<File> selectedFile = File("").obs;
+
+
+  RxList<String> roles = [
+    'Company Admin',
+    'Supervisor',
+    'Project Manager'
+  ].obs;
+  RxString selectedRole = "".obs;
+
+
+  Rx<TextEditingController> nameController = TextEditingController().obs;
+  Rx<TextEditingController> companyNameController = TextEditingController().obs;
+  Rx<TextEditingController> companyEmailController = TextEditingController().obs;
+  Rx<TextEditingController> phoneNumberController = TextEditingController().obs;
+  Rx<TextEditingController> passwordController = TextEditingController().obs;
+  Rx<TextEditingController> confirmPasswordController = TextEditingController().obs;
+
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+      withData: false,
+    );
+
+    if (result != null && result.files.single.path != null) {
+      selectedFile.value = File(result.files.single.path!);
+    }
+  }
+
+  Future<void> removeFile() async {
+    selectedFile.value = File("");
+  }
 
   /// SignUp
   Future signupController({

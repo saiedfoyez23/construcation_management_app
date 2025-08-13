@@ -12,6 +12,7 @@ import 'dart:convert';
 class ForgetController extends GetxController {
   var isLoading = false.obs;
   var isLoadingNow = false.obs;
+  Rx<TextEditingController> emailController = TextEditingController().obs;
 
   Future forgetPassword({required String email}) async {
     try {

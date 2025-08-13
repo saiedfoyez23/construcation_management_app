@@ -15,6 +15,7 @@ class TextHelperClass {
     Color textColor = const Color.fromRGBO(35, 47, 48, 1),
     FontWeight fontWeight = FontWeight.w700,
     FontStyle fontStyle = FontStyle.normal,
+    TextOverflow textOverFlow = TextOverflow.visible,
   }) {
     return Container(
       width: width.w(context),
@@ -24,6 +25,7 @@ class TextHelperClass {
       ),
       child: Text(
         text,
+        overflow: textOverFlow,
         textAlign: textAlign, // Controls text alignment within container
         style: GoogleFonts.albertSans(
           fontSize: fontSize.sp(context),

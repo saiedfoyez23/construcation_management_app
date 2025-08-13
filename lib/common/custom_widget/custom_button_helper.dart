@@ -10,7 +10,7 @@ class CustomButtonHelper {
     required String text,
     required VoidCallback onPressed,
     Alignment alignment = Alignment.centerLeft,
-    double height = 24,
+    double height = 45,
     Color textColor = const Color(0xFF1F93FF),
     double fontSize = 17,
     FontWeight fontWeight = FontWeight.w700,
@@ -24,7 +24,7 @@ class CustomButtonHelper {
         child: TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
-            padding: padding,
+            //padding: padding,
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
@@ -47,27 +47,39 @@ class CustomButtonHelper {
   }
 
 
-
-
   static Widget customRoundedButton({
     required BuildContext context,
     required String text,
     required VoidCallback onPressed,
     double width = 375,
     double height = 50,
-    Color backgroundColor = const Color(0xFFDCDDDF),
+    Color? backgroundColor, // Make optional when using gradient
     Color textColor = const Color.fromRGBO(255, 255, 255, 1),
     double fontSize = 20,
     FontWeight fontWeight = FontWeight.w500,
     double borderRadius = 100,
     EdgeInsetsGeometry padding = EdgeInsets.zero,
     bool isFullWidth = false,
+    Gradient? gradient,
+    List<Color>? gradientColors,
+    AlignmentGeometry begin = Alignment.centerLeft,
+    AlignmentGeometry end = Alignment.centerRight,
   }) {
+
+    // Handle gradient creation
+    final actualGradient = gradient ?? (gradientColors != null ? LinearGradient(
+      colors: gradientColors,
+      begin: begin,
+      end: end,
+    ) : null);
+
     return Container(
       width: isFullWidth ? double.infinity : width.w(context),
       height: height.h(context),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: backgroundColor, // Will be null if using gradient
+        gradient: actualGradient,
+        borderRadius: BorderRadius.circular(borderRadius.r(context)),
       ),
       child: TextButton(
         onPressed: onPressed,
@@ -75,10 +87,12 @@ class CustomButtonHelper {
           padding: padding,
           minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          backgroundColor: backgroundColor,
+          backgroundColor: Colors.transparent, // Important for gradient
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius.r(context)),
           ),
+          // Add splash effect that works with gradient
+          foregroundColor: textColor,
         ),
         child: Center(
           child: Text(
@@ -100,7 +114,7 @@ class CustomButtonHelper {
     required BuildContext context,
     required String normalText,
     required String highlightedText,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
     Alignment alignment = Alignment.center,
     Color normalTextColor = const Color.fromRGBO(9, 44, 76, 1),
     Color highlightedTextColor = const Color.fromRGBO(68, 77, 98, 1),

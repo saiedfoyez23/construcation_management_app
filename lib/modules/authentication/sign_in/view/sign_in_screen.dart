@@ -1,5 +1,8 @@
 import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/modules/authentication/forget_password/view/forget_password_screen.dart';
+import 'package:construction_management_app/modules/authentication/forget_password/view/forgot_password_view.dart';
+import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,7 +83,7 @@ class SignInScreen extends StatelessWidget {
                       ),
 
 
-                      SpaceHelperClass.v(10.h(context)),
+                      SpaceHelperClass.v(16.h(context)),
 
                       CustomTextFormFieldClass.build(
                         context: context,
@@ -90,7 +93,7 @@ class SignInScreen extends StatelessWidget {
                       ),
 
 
-                      SpaceHelperClass.v(10.h(context)),
+                      SpaceHelperClass.v(16.h(context)),
 
 
                       CustomTextFormFieldClass.build(
@@ -116,15 +119,14 @@ class SignInScreen extends StatelessWidget {
                         ),
                       ),
 
-                      SpaceHelperClass.v(10.h(context)),
+                      SpaceHelperClass.v(16.h(context)),
 
 
                       CustomButtonHelper.customTextButton(
                         context: context,
                         text: 'Forgot Password?',
                         onPressed: () {
-                          print('Button pressed!');
-                          // Add your navigation or logic here
+                          Get.off(()=>ForgotPasswordView(),preventDuplicates: false);
                         },
                       ),
 
@@ -136,6 +138,8 @@ class SignInScreen extends StatelessWidget {
                       CustomButtonHelper.customRoundedButton(
                         context: context,
                         text: 'Log In',
+                        backgroundColor: Color.fromRGBO(220, 221, 223, 1),
+                        fontWeight: FontWeight.w700,
                         onPressed: () {
                           print('Login button pressed');
                           // Add your login logic here
@@ -150,7 +154,7 @@ class SignInScreen extends StatelessWidget {
                         normalText: 'You don\'t have an account? ',
                         highlightedText: 'Sign Up',
                         onPressed: () {
-                          //Navigator.push(context, MaterialPageRoute(builder: (_) => SignUpScreen()));
+                          Get.off(()=>SignUpView(),preventDuplicates: false);
                         },
                       ),
 

@@ -45,6 +45,8 @@ class AppImages {
   static String eye = "asset/icons/eye.png";
   static String deleted = "asset/icons/deleted.png";
   static String about = "asset/icons/about.png";
+  static String uploadImage = "asset/icons/upload.png";
+  static const String arrowImage = "asset/icons/Icon.png";
 
   //////////////////////// icons /////////////////////////////
 }

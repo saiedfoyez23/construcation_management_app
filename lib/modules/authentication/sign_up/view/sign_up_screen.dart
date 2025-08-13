@@ -7,10 +7,10 @@ import 'package:construction_management_app/common/custom_widget/custom_text_for
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
 import 'package:construction_management_app/modules/authentication/sign_up/controller/sign_up_controller.dart';
-import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_otp_verify.dart';
+import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_otp_verify_view.dart';
 import 'package:construction_management_app/modules/authentication/sign_up/view/widget/file_choose_view_card.dart';
 import 'package:construction_management_app/modules/authentication/sign_up/view/widget/logo_file_view_card.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:flutter_intl_phone_field/flutter_intl_phone_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
