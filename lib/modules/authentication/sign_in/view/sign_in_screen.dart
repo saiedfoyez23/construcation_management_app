@@ -1,16 +1,12 @@
-import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/authentication/forget_password/view/forget_password_screen.dart';
 import 'package:construction_management_app/modules/authentication/forget_password/view/forgot_password_view.dart';
 import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../controller/sign_in_controller.dart';
 
-class SignInScreen extends StatelessWidget {
-  SignInScreen({super.key});
+class SignInView extends StatelessWidget {
+  SignInView({super.key});
 
   final SignInController signInController = Get.put(SignInController());
 

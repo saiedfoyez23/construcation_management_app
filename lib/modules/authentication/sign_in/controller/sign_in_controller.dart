@@ -4,7 +4,7 @@ import 'package:construction_management_app/common/custom_widget/custom_snackbar
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
-import 'package:construction_management_app/modules/dashboard/view/dashboard.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
@@ -50,7 +50,7 @@ class SignInController extends GetxController {
 
         kSnackBar(message: message, bgColor: AppColors.green);
 
-        Get.to(Dashboard());
+        Get.to(DashboardView(index: 1));
 
         isLoading(false);
       } else {

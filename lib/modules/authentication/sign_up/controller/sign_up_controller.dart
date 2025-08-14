@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
-import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
-import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_otp_verify_view.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -81,14 +78,14 @@ class SignUpController extends GetxController {
       if (responseBody != null) {
         String message = responseBody['message'].toString();
         kSnackBar(message: message, bgColor: AppColors.green);
-        Get.to(
-          SignUpOtpVerification(
-            name: name,
-            companyName: companyname,
-            email: email,
-            password: password,
-          ),
-        );
+        // Get.to(
+        //   SignUpOtpVerification(
+        //     name: name,
+        //     companyName: companyname,
+        //     email: email,
+        //     password: password,
+        //   ),
+        // );
       } else {
         throw 'Sign Up Failed!';
       }

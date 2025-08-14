@@ -143,7 +143,7 @@ class SignUpEmailVerifyView extends StatelessWidget {
                           backgroundColor: Color.fromRGBO(220, 221, 223, 1),
                           fontWeight: FontWeight.w700,
                           onPressed: () {
-                            Get.off(()=>SignInScreen(),preventDuplicates: false);
+                            Get.off(()=>SignInView(),preventDuplicates: false);
                             // Add your login logic here
                           },
                         ),

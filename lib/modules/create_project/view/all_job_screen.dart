@@ -6,7 +6,7 @@ import 'package:construction_management_app/common/custom_widget/custom_text_wid
 import 'package:construction_management_app/modules/create_project/controller/my_project_controller.dart';
 import 'package:construction_management_app/modules/create_project/view/create_project_screen.dart';
 import 'package:construction_management_app/modules/create_project/view/widget/higway_bridge_project_widget.dart';
-import 'package:construction_management_app/modules/dashboard/view/dashboard.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/site_diary/view/project_detalis_site.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +28,7 @@ class AllJobScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Get.offAll(Dashboard());
+                      Get.offAll(DashboardView(index: 0,));
                     },
                     child: Icon(Icons.arrow_back),
                   ),

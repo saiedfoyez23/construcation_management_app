@@ -8,14 +8,10 @@ import 'package:construction_management_app/modules/supervisor/view/employ_list_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
 
-  @override
-  State<Dashboard> createState() => _DashboardState();
-}
-
-class _DashboardState extends State<Dashboard> {
+class DashboardView extends StatelessWidget {
+  DashboardView({super.key,required this.index});
+  final int index;
   final List<Widget> _screens = [
     HomeScreen(),
     AllJobScreen(),
@@ -26,15 +22,14 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final DashboardController controller = Get.put(DashboardController());
+    DashboardController controller = Get.put(DashboardController(initialIndex: index));
     return Scaffold(
-      body: Obx(
-        () => _screens[controller.selectedIndex.value],
-      ), // Dynamic screen update
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
+      body: Obx(() => _screens[controller.selectedIndex.value],),
+      bottomNavigationBar: Obx(()=>BottomNavigationBar(
           currentIndex: controller.selectedIndex.value,
-          onTap: controller.changeIndex,
+          onTap: (int index) {
+            controller.onItemTapped(index);
+          },
           backgroundColor: Colors.white,
           selectedItemColor: Color(0xff2C5880),
           unselectedItemColor: Colors.grey,
@@ -66,3 +61,4 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+

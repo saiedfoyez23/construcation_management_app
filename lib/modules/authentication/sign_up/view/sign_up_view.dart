@@ -2,7 +2,6 @@ import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
 import 'package:construction_management_app/modules/authentication/sign_up/controller/sign_up_controller.dart';
 import 'package:construction_management_app/modules/authentication/sign_up/view/sign_up_email_verify_view.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -215,7 +214,7 @@ class SignUpView extends StatelessWidget {
                         normalText: 'You don\'t have an account? ',
                         highlightedText: 'Login',
                         onPressed: () {
-                          Get.off(()=>SignInScreen(),preventDuplicates: false);
+                          Get.off(()=>SignInView(),preventDuplicates: false);
                         },
                       ),
 

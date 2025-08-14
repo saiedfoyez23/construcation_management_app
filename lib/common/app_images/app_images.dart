@@ -47,6 +47,11 @@ class AppImages {
   static String about = "asset/icons/about.png";
   static String uploadImage = "asset/icons/upload.png";
   static const String arrowImage = "asset/icons/Icon.png";
+  static String successImage = "asset/icons/success.png";
+  static String successCheckImage = "asset/icons/success_check.png";
+  static String indecator = "asset/icons/indecator.png";
+  static String notificationCircle = "asset/icons/notification_circle.png";
+  static String messageNotificationCircle = "asset/icons/message_notification_circle.png";
 
   //////////////////////// icons /////////////////////////////
 }

@@ -11,25 +11,33 @@ class CustomButtonHelper {
     required VoidCallback onPressed,
     Alignment alignment = Alignment.centerLeft,
     double height = 45,
+    double? width, // Optional width parameter
     Color textColor = const Color(0xFF1F93FF),
+    Color backgroundColor = Colors.transparent,
     double fontSize = 17,
     FontWeight fontWeight = FontWeight.w700,
     double borderRadius = 4,
     EdgeInsetsGeometry padding = EdgeInsets.zero,
+    double elevation = 0,
   }) {
     return Align(
       alignment: alignment,
       child: SizedBox(
+        width: width, // Apply width if provided
         height: height.h(context),
-        child: TextButton(
+        child: ElevatedButton(
           onPressed: onPressed,
-          style: TextButton.styleFrom(
-            //padding: padding,
-            minimumSize: Size.zero,
+          style: ElevatedButton.styleFrom(
+            padding: padding,
+            minimumSize: Size(width ?? 0, height.h(context)), // Set minimum size
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            backgroundColor: backgroundColor,
+            elevation: elevation,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
             ),
+            shadowColor: Colors.transparent,
+            foregroundColor: Colors.transparent,
           ),
           child: Text(
             text,
@@ -64,6 +72,10 @@ class CustomButtonHelper {
     List<Color>? gradientColors,
     AlignmentGeometry begin = Alignment.centerLeft,
     AlignmentGeometry end = Alignment.centerRight,
+    double elevation = 0,
+    bool hasBorder = false, // New parameter for border
+    Color borderColor = const Color.fromRGBO(38, 50, 56, 1), // New parameter for border color
+    double borderWidth = 1, // New parameter for border width
   }) {
 
     // Handle gradient creation
@@ -71,27 +83,36 @@ class CustomButtonHelper {
       colors: gradientColors,
       begin: begin,
       end: end,
-    ) : null);
+    ) : null );
 
     return Container(
       width: isFullWidth ? double.infinity : width.w(context),
       height: height.h(context),
       decoration: BoxDecoration(
-        color: backgroundColor, // Will be null if using gradient
-        gradient: actualGradient,
         borderRadius: BorderRadius.circular(borderRadius.r(context)),
+        gradient: actualGradient,
+        border: hasBorder ? Border.all(
+          color: borderColor,
+          width: borderWidth.w(context),
+        ) : null,
       ),
-      child: TextButton(
+      child: ElevatedButton(
         onPressed: onPressed,
-        style: TextButton.styleFrom(
+        style: ElevatedButton.styleFrom(
           padding: padding,
-          minimumSize: Size.zero,
+          minimumSize: Size(width.w(context), height.h(context)), // Set minimum size
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          backgroundColor: Colors.transparent, // Important for gradient
+          backgroundColor: backgroundColor ?? Colors.transparent,
+          elevation: elevation,
+          shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius.r(context)),
+            side: hasBorder ? BorderSide(
+              color: borderColor,
+              width: borderWidth,
+            ) : BorderSide.none,
           ),
-          // Add splash effect that works with gradient
+          // For splash effect
           foregroundColor: textColor,
         ),
         child: Center(

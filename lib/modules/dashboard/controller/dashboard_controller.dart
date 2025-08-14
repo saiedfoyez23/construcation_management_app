@@ -3,9 +3,18 @@ import 'package:get/get.dart';
 class DashboardController extends GetxController {
   var selectedIndex = 0.obs;
 
-  /// observable variable
+  int initialIndex = 0;
 
-  void changeIndex(int index) {
+  DashboardController({required this.initialIndex});
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    onItemTapped(initialIndex);
+  }
+
+  void onItemTapped(int index) {
     selectedIndex.value = index;
   }
 }

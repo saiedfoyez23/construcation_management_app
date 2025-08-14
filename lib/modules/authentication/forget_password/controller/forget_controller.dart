@@ -2,9 +2,6 @@ import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
-import 'package:construction_management_app/modules/authentication/forget_password/view/new_password.dart';
-import 'package:construction_management_app/modules/authentication/forget_password/view/otp_verification.dart';
-import 'package:construction_management_app/modules/authentication/password_successful.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
@@ -36,7 +33,7 @@ class ForgetController extends GetxController {
         String message = responseBody['message'].toString();
 
         kSnackBar(message: message, bgColor: AppColors.green);
-        Get.to(OtpVerification(email: email));
+        //Get.to(OtpVerification(email: email));
 
         isLoading(false);
       } else {
@@ -72,7 +69,7 @@ class ForgetController extends GetxController {
       if (responseBody != null) {
         String message = responseBody['message'].toString();
         kSnackBar(message: message, bgColor: AppColors.green);
-        Get.to(NewPassword());
+        //Get.to(NewPassword());
         isLoading(false);
       } else {
         throw 'Otp in Failed!';
@@ -106,7 +103,7 @@ class ForgetController extends GetxController {
         String message = responseBody['message'].toString();
 
         kSnackBar(message: message, bgColor: AppColors.green);
-        Get.to(PasswordSuccessful());
+        //Get.to(PasswordSuccessful());
 
         isLoading(false);
       } else {

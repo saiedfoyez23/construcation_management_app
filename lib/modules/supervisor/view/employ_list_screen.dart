@@ -292,7 +292,7 @@ import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/common/common_container/container_view.dart';
 import 'package:construction_management_app/common/custom_widget/custom_text_field.dart';
-import 'package:construction_management_app/modules/dashboard/view/dashboard.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/supervisor/controller/company_employees_controller.dart';
 import 'package:construction_management_app/modules/supervisor/view/widget/add_new_supervisor_dialog.dart';
 import 'package:construction_management_app/modules/supervisor/view/widget/manager_screen.dart';
@@ -336,7 +336,7 @@ class _EmployListScreenState extends State<EmployListScreen>
         backgroundColor: AppColors.background,
         leading: GestureDetector(
           onTap: () {
-            Get.offAll(Dashboard());
+            Get.offAll(DashboardView(index: 0));
           },
           child: Icon(Icons.arrow_back),
         ),

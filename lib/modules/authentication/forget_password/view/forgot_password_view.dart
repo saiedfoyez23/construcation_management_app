@@ -17,7 +17,7 @@ class ForgotPasswordView extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (canPop,result) {
-        Get.off(()=>SignInScreen(),preventDuplicates: false);
+        Get.off(()=>SignInView(),preventDuplicates: false);
       },
       child: Scaffold(
         body: SafeArea(
@@ -33,7 +33,7 @@ class ForgotPasswordView extends StatelessWidget {
                 CustomAppBarHelper.authAppBar(
                   context: context,
                   onBackPressed: () async {
-                    Get.off(()=>SignInScreen(),preventDuplicates: false);
+                    Get.off(()=>SignInView(),preventDuplicates: false);
                   },
                 ),
 
@@ -102,13 +102,13 @@ class ForgotPasswordView extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                )
 
-                ],
-              ),
+              ],
             ),
           ),
         ),
+      ),
     );
   }
 }

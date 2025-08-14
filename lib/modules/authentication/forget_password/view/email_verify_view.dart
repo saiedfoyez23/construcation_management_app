@@ -1,6 +1,7 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/authentication/forget_password/controller/email_verify_controller.dart';
 import 'package:construction_management_app/modules/authentication/forget_password/view/forgot_password_view.dart';
+import 'package:construction_management_app/modules/authentication/forget_password/view/new_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -141,8 +142,7 @@ class EmailVerifyView extends StatelessWidget {
                           backgroundColor: Color.fromRGBO(220, 221, 223, 1),
                           fontWeight: FontWeight.w700,
                           onPressed: () {
-                            //Get.off(()=>SignInScreen(),preventDuplicates: false);
-                            // Add your login logic here
+                            Get.off(()=>NewPasswordView(),preventDuplicates: false);
                           },
                         ),
 

@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 SizedBox(width: 20),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.to(() => SignInScreen());
+                                    Get.to(() => SignInView());
                                   },
                                   child: CustomButtonWidget(
                                     height: 35,

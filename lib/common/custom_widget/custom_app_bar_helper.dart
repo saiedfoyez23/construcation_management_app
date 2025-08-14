@@ -1,7 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import '../app_images/app_images.dart';
 
 class CustomAppBarHelper {
 
@@ -9,19 +8,26 @@ class CustomAppBarHelper {
     required BuildContext context,
     required VoidCallback onBackPressed,
     double width = 375,
-    double height = 48,
+    double height = 58,
     Color borderColor = const Color.fromRGBO(239, 239, 239, 1),
     double borderWidth = 1,
     EdgeInsetsGeometry? padding,
     String backButtonImage = AppImages.arrowImage,
-    double backButtonSize = 24,
+    double backButtonSize = 34,
   }) {
-    return SliverToBoxAdapter(
-      child: Container(
+    return SliverAppBar(
+      pinned: true,
+      floating: false,
+      primary: true,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      backgroundColor: AppColors.scaffoldBackGroundColor,
+      toolbarHeight: height.h(context),
+      flexibleSpace: Container(
         width: width.w(context),
         height: height.h(context),
         padding: padding ?? EdgeInsets.symmetric(
-          horizontal: 24.hpm(context),
+          horizontal: 20.hpm(context),
           vertical: 12.vpm(context),
         ),
         alignment: Alignment.centerLeft,
@@ -36,11 +42,14 @@ class CustomAppBarHelper {
         child: ImageHelperClass.customImageButtonContainer(
           onPressed: onBackPressed,
           context: context,
-          height: backButtonSize.h(context),
-          width: backButtonSize.w(context),
+          height: backButtonSize,
+          width: backButtonSize,
           imagePath: backButtonImage,
+          imageFit: BoxFit.cover,
+          fit: BoxFit.contain,
         ),
       ),
     );
   }
+
 }
