@@ -22,8 +22,8 @@ class SplashScreenController extends GetxController {
     // Navigate to the main screen after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       var token = LocalStorage.getData(key: AppConstant.token);
-      //Get.to(() => WelcomeScreenView());
-      Get.to(() => DashboardView(index: 0,));
+      Get.to(() => WelcomeScreenView());
+      //Get.to(() => DashboardView(index: 0,));
       // if (token != '') {
       //   Get.to(() => Dashboard()); // Navigate to the home screen
       // } else {
