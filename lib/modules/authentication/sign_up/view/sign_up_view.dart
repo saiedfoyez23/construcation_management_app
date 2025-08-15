@@ -5,6 +5,8 @@ import 'package:construction_management_app/modules/authentication/sign_up/view/
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/custom_widget/custom_snackbar.dart';
+
 
 class SignUpView extends StatelessWidget {
   SignUpView({super.key});
@@ -69,19 +71,19 @@ class SignUpView extends StatelessWidget {
                       SpaceHelperClass.v(20.h(context)),
 
 
-                      DropdownHelperClass.customDropdown(
-                        context: context,
-                        items: signUpController.roles,
-                        selectedValue: signUpController.selectedRole.value == "" ? null : signUpController.selectedRole.value,
-                        onChanged: (String? newValue) {
-                          signUpController.selectedRole.value = newValue!;
-                        },
-                        hintText: 'Select your role',
-                        width: 375,
-                      ),
+                      // DropdownHelperClass.customDropdown(
+                      //   context: context,
+                      //   items: signUpController.roles,
+                      //   selectedValue: signUpController.selectedRole.value == "" ? null : signUpController.selectedRole.value,
+                      //   onChanged: (String? newValue) {
+                      //     signUpController.selectedRole.value = newValue!;
+                      //   },
+                      //   hintText: 'Select your role',
+                      //   width: 375,
+                      // ),
 
 
-                      SpaceHelperClass.v(16.h(context)),
+                      //SpaceHelperClass.v(16.h(context)),
 
 
                       CustomTextFormFieldClass.build(
@@ -131,7 +133,7 @@ class SignUpView extends StatelessWidget {
                         controller: signUpController.phoneNumberController.value,
                         initialCountryCode: 'US',
                         onChanged: (phone) {
-                          print(phone.completeNumber);
+                          signUpController.phoneNumber.value = phone.completeNumber;
                         },
                       ),
 
@@ -192,16 +194,47 @@ class SignUpView extends StatelessWidget {
                       SpaceHelperClass.v(25.h(context)),
 
 
-
-
+                      signUpController.isLoading.value == true ?
+                      CustomLoaderButton().customLoaderButton(
+                        backgroundColor: Colors.transparent,
+                        loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                        height: 50,
+                        context: context,
+                      ) :
                       CustomButtonHelper.customRoundedButton(
                         context: context,
                         text: 'Sign Up',
                         textColor: Color.fromRGBO(255, 255, 255, 1),
                         fontWeight: FontWeight.w700,
                         gradientColors: [Color.fromRGBO(38, 50, 56, 1), Color.fromRGBO(28, 59, 71, 1)],
-                        onPressed: () {
-                          Get.off(()=>SignUpEmailVerifyView(email: signUpController.companyEmailController.value.text,),preventDuplicates: false);
+                        onPressed: () async {
+                          if(signUpController.companyNameController.value.text == "") {
+                            kSnackBar(message: "Please enter company full name", bgColor: AppColors.red);
+                          } else if(signUpController.nameController.value.text == "") {
+                            kSnackBar(message: "Please enter full name", bgColor: AppColors.red);
+                          } else if(signUpController.companyEmailController.value.text == "") {
+                            kSnackBar(message: "Please enter company email", bgColor: AppColors.red);
+                          } else if(signUpController.phoneNumberController.value.text == "") {
+                            kSnackBar(message: "Please enter company phone number", bgColor: AppColors.red);
+                          } else if(signUpController.passwordController.value.text == "") {
+                            kSnackBar(message: "Please enter password", bgColor: AppColors.red);
+                          } else if(signUpController.selectedFile.value.path == "") {
+                            kSnackBar(message: "Please select a company logo", bgColor: AppColors.red);
+                          } else if(signUpController.confirmPasswordController.value.text == "") {
+                            kSnackBar(message: "Please enter confirm password", bgColor: AppColors.red);
+                          } else if(signUpController.confirmPasswordController.value.text != signUpController.passwordController.value.text) {
+                            kSnackBar(message: "Password is not match", bgColor: AppColors.red);
+                          } else {
+                            Map<String,dynamic> data = {
+                              "name": signUpController.nameController.value.text,
+                              "company_name": signUpController.companyNameController.value.text,
+                              "email": signUpController.companyEmailController.value.text,
+                              "password": signUpController.passwordController.value.text,
+                              "phone": signUpController.phoneNumber.value,
+                              "logo": signUpController.imageUploadResponseModel.value.data?.url,
+                            };
+                            await signUpController.signUpController(data: data, email: signUpController.companyEmailController.value.text);
+                          }
                         },
                       ),
 

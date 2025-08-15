@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:construction_management_app/common/app_color/app_color.dart';
-import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
-import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:flutter/cupertino.dart';
 
 import "package:http/http.dart" as http;
@@ -34,12 +31,7 @@ class BaseClient {
     return response;
   }
 
-  static patchRequest({required String api, body}) async {
-    String token = LocalStorage.getData(key: AppConstant.token);
-    var headers = {
-      'Content-Type': "application/json",
-      "Authorization": "Bearer $token",
-    };
+  static patchRequest({required String api, body, headers}) async {
     debugPrint("API Hit: $api");
     debugPrint("body: $body");
     http.Response response = await http.patch(
@@ -50,16 +42,23 @@ class BaseClient {
     return response;
   }
 
-  static deleteRequest({required String api, body}) async {
-    String token = LocalStorage.getData(key: AppConstant.token);
-    var headers = {
-      'Content-Type': "application/json",
-      "Authorization": "Bearer $token",
-    };
+
+  static putRequest({required String api, body, headers}) async {
     debugPrint("API Hit: $api");
     debugPrint("body: $body");
+    http.Response response = await http.put(
+      Uri.parse(api),
+      body: body,
+      headers: headers,
+    );
+    return response;
+  }
+
+  static deleteRequest({required String api, body, headers}) async {
+    debugPrint("API Hit: $api");
     http.Response response = await http.delete(
       Uri.parse(api),
+      body: body,
       headers: headers,
     );
     return response;
@@ -78,6 +77,7 @@ class BaseClient {
           return response.body;
         }
       } else if (response.statusCode == 401) {
+        print(response.body);
         /* try {
             var response = await http.post(
               Uri.parse(ApiConstant.refreshToken),

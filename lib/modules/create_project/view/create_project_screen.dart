@@ -41,11 +41,14 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: SingleChildScrollView(
           child: Obx(
-            () =>
-                controller.isLoading.value
-                    ? CustomLoaderButton()
-                    : Column(
-                      children: [
+            () => controller.isLoading.value ?
+            CustomLoaderButton().customLoaderButton(
+              backgroundColor: Colors.blue,
+              loaderColor: Colors.yellow,
+              height: 50,
+              context: context,
+            ) : Column(
+              children: [
                         Card(
                           color: AppColors.white,
                           child: SizedBox(
@@ -317,8 +320,12 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                         Obx(
                           () =>
                               controller.isLoading.value
-                                  ? CustomLoaderButton()
-                                  : CustomButtonWidget(
+                                  ? CustomLoaderButton().customLoaderButton(
+                                backgroundColor: Colors.blue,
+                                loaderColor: Colors.yellow,
+                                height: 50,
+                                context: context,
+                              ) : CustomButtonWidget(
                                     onTap: () {
                                       if (controller.selectedSupervisor.value ==
                                           null) {

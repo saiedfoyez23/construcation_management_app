@@ -85,8 +85,12 @@ class ChangePasswordScreen extends StatelessWidget {
                 Obx(
                   () =>
                       controller.isLoading.value == true
-                          ? CustomLoaderButton()
-                          : CustomButtonWidget(
+                          ?CustomLoaderButton().customLoaderButton(
+                        backgroundColor: Colors.blue,
+                        loaderColor: Colors.yellow,
+                        height: 50,
+                        context: context,
+                      ) : CustomButtonWidget(
                             onTap: () {
                               controller.changePassword(
                                 oldPassword: controller.oldPassword.text,

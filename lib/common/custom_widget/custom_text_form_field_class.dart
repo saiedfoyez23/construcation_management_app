@@ -102,6 +102,7 @@ class CustomTextFormFieldClass {
           fontSize: fontSize.sp(context),
           color: textColor,
         ),
+        maxLength: 15,
         decoration: InputDecoration(
           hintText: hintText,
           labelText: labelText,

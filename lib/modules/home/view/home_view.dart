@@ -4,6 +4,7 @@ import 'package:construction_management_app/common/custom_widget/custom_button_w
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
 import 'package:construction_management_app/modules/create_project/controller/my_project_controller.dart';
 import 'package:construction_management_app/modules/create_project/view/all_job_screen.dart';
+import 'package:construction_management_app/modules/home/controller/home_controller.dart';
 import 'package:construction_management_app/modules/home/view/add_day_work.dart';
 import 'package:construction_management_app/modules/home/view/add_site_diary.dart';
 import 'package:construction_management_app/modules/home/view/widget/container_view_card.dart';
@@ -17,26 +18,15 @@ import 'package:get/get.dart';
 
 import '../../../common/common.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+class HomeView extends StatelessWidget {
+  HomeView({super.key});
 
-class _HomeScreenState extends State<HomeScreen> {
-  final MyProjectController controller = Get.put(MyProjectController());
-
-  @override
-  void initState() {
-    super.initState();
-    // Fetch projects when the screen initializes
-    controller.getMyProject();
-  }
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Obx(()=>SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -70,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             SpaceHelperClass.h(12.w(context)),
-            
+
             ImageHelperClass.customImageButtonContainer(
               context: context,
               height: 42,
@@ -87,73 +77,107 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SingleChildScrollView(
+          child: homeController.isLoading.value == true  ?
+          CustomLoaderButton().customLoaderButton(
+            backgroundColor: Colors.transparent,
+            loaderColor: Color.fromRGBO(38, 50, 56, 1),
+            height: 812,
+            context: context,
+          ) :
+          SingleChildScrollView(
             child: Column(
               children: [
+
                 Container(
-                  height: 170,
-                  width: double.infinity,
+                  width: 375.w(context),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.gray),
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    borderRadius: BorderRadius.circular(15.r(context)),
+                    border: Border.all(color: Color.fromRGBO(232, 232, 232, 0.7),width: 1.w(context))
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 25,
-                              backgroundImage: AssetImage(
-                                AppImages.darleneprofile,
-                              ),
+                  padding: EdgeInsets.symmetric(horizontal: 16.hpm(context),vertical: 24.vpm(context)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+
+
+                      Row(
+                        children: [
+
+
+                          CircleAvatar(
+                            radius: 48.r(context),
+                            backgroundImage: homeController.profileResponseModel.value.data?.user?.logo != null ?
+                            NetworkImage(homeController.profileResponseModel.value.data?.user?.logo) : null, // Set to null if no image URL
+                            backgroundColor: Colors.grey[300], // Fallback background color
+                            child: homeController.profileResponseModel.value.data?.user?.logo == null ?
+                            Icon(
+                              Icons.person, // Fallback icon if no image
+                              size: 48.r(context),
+                              color: Colors.white,
+                            ) : null,
+                          ),
+                  
+                  
+                          SpaceHelperClass.h(12.w(context)),
+
+                          
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+
+                                TextHelperClass.headingText(
+                                  context: context,
+                                  text: homeController.profileResponseModel.value.data?.user?.name ?? "",
+                                  fontSize: 20,
+                                  textColor: AppColors.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
+
+
+                                TextHelperClass.headingText(
+                                  context: context,
+                                  text: 'Company Admin',
+                                  fontSize: 16,
+                                  textColor: AppColors.blue174,
+                                  fontWeight: FontWeight.w400,
+                                ),
+
+
+                                TextHelperClass.headingText(
+                                  context: context,
+                                  text: 'Basic Account',
+                                  fontSize: 14,
+                                  textColor: AppColors.gray255,
+                                  fontWeight: FontWeight.w400,
+                                ),
+
+                              ],
                             ),
-                            const SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomTextWidget(
-                                    title: "Darlene Robertson",
-                                    color: AppColors.black,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  CustomTextWidget(
-                                    title: "Company Admin",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColors.blue,
-                                  ),
-                                  CustomTextWidget(
-                                    title: "Basic Account",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColors.subText,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        CustomButtonWidget(
-                          onTap: () {
-                            Get.to(() => const SubscriptionScreen());
-                          },
-                          height: 46,
-                          title: "Management Subscription",
-                          color: AppColors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          cardColor: AppColors.linerColor,
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+
+                      SpaceHelperClass.v(18.h(context)),
+
+
+                      CustomButtonHelper.customRoundedButton(
+                        context: context,
+                        text: 'Manage Subscription',
+                        fontSize: 17,
+                        textColor: Color.fromRGBO(255, 255, 255, 1),
+                        fontWeight: FontWeight.w500,
+                        gradientColors: [Color.fromRGBO(38, 50, 56, 1), Color.fromRGBO(28, 59, 71, 1)],
+                        onPressed: () async {
+                          Get.off(()=>SubscriptionScreen(),preventDuplicates: false);
+                        },
+                      ),
+                    ],
                   ),
                 ),
+
+
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -232,6 +256,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

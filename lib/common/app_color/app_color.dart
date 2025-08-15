@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class AppColors {
   static Color gray131 = Color.fromRGBO(117, 131, 141, 1);
   static Color gray145 = Color.fromRGBO(131, 145, 161, 1);
+  static Color gray255 = Color.fromRGBO(131, 131, 131, 1);
   static Color gray132 = Color.fromRGBO(126, 132, 146, 1);
   static Color gray193 = Color.fromRGBO(193, 193, 193, 1);
   static Color black35 = Color.fromRGBO(35, 47, 48, 1);
+  static Color black55 = Color.fromRGBO(6, 55, 73, 1);
   static Color black30 = Color.fromRGBO(9, 30, 66, 1);
   static Color black36 = Color.fromRGBO(36, 48, 69, 1);
   static Color black16 = Color.fromRGBO(16, 16, 16, 1);
@@ -18,6 +20,7 @@ class AppColors {
   static Color gray = Color(0xFFE5E7EB);
   static Color text = Color(0xFF063749);
   static Color blue = Color(0xFF1F93FF);
+  static Color blue174 = Color.fromRGBO(0, 174, 239, 1);
   static Color white = Color(0xFFFFFFFF);
   static Color red = Color(0xFFEF4444);
   static Color linerColor = Color(0xFF263238);

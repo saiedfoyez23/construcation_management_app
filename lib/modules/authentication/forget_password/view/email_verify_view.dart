@@ -120,29 +120,39 @@ class EmailVerifyView extends StatelessWidget {
                           height: 30,
                           context: context,
                           text: 'Resend Otp',
-                          onPressed: () {
-                            emailVerifyController.isResendOtpSend.value = true;
-                            Future.delayed(Duration(seconds: 1),() async {
-                              emailVerifyController.isResendOtpSend.value = false;
-                              emailVerifyController.timeCounter.value = 120;
-                              emailVerifyController.pinController.value.clear();
-                              await emailVerifyController.otpTimer();
-                            });
-
+                          onPressed: () async {
+                            Map<String,dynamic> data = {
+                              "email": "${email}"
+                            };
+                            await emailVerifyController.forgotPasswordResendOtpController(data: data);
                           },
                         ),
 
 
                         SpaceHelperClass.v(24.h(context)),
 
-
+                        emailVerifyController.isLoading.value == true ?
+                        CustomLoaderButton().customLoaderButton(
+                          backgroundColor: Colors.transparent,
+                          loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                          height: 50,
+                          context: context,
+                        ) :
                         CustomButtonHelper.customRoundedButton(
                           context: context,
                           text: 'Verify',
                           backgroundColor: Color.fromRGBO(220, 221, 223, 1),
                           fontWeight: FontWeight.w700,
-                          onPressed: () {
-                            Get.off(()=>NewPasswordView(),preventDuplicates: false);
+                          onPressed: () async {
+                            if(emailVerifyController.pinController.value.text == "") {
+                              kSnackBar(message: "Please enter full otp", bgColor: AppColors.red);
+                            } else {
+                              Map<String,dynamic> data = {
+                                "email": "${email}",
+                                "otp": emailVerifyController.pinController.value.text,
+                              };
+                              await emailVerifyController.forgotPasswordOtpVerifyController(data: data,email: email);
+                            }
                           },
                         ),
 

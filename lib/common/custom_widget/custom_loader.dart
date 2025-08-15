@@ -1,31 +1,48 @@
-import 'package:construction_management_app/common/app_color/app_color.dart';
+import 'package:construction_management_app/common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
 
-class CustomLoaderButton extends StatelessWidget {
-  const CustomLoaderButton({super.key});
 
-  @override
-  Widget build(BuildContext context) {
+class CustomLoaderButton {
+
+  Widget customLoaderButton({
+    Key? key,
+    required BuildContext context,
+    double height = 43,
+    Color backgroundColor = Colors.black,
+    Color loaderColor = Colors.white,
+    double loaderSize = 30.0,
+    double borderRadius = 6,
+  }) {
     return Container(
-      height: 43,
-      width: Get.width,
+      key: key,
+      height: height.h(context),
+      width: 375.w(context),
       decoration: BoxDecoration(
-        color: AppColors.black,
-        borderRadius: BorderRadius.circular(6),
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
-      child: Center(child: SpinKitDualRing(color: AppColors.white, size: 30.0)),
+      child: Center(
+        child: SpinKitDualRing(
+          color: loaderColor,
+          size: loaderSize,
+        ),
+      ),
     );
   }
-}
 
-class CustomLoader extends StatelessWidget {
-  final Color color;
-  const CustomLoader({super.key, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: SpinKitDualRing(color: color, size: 30.0));
+  Widget customLoader({
+    Key? key,
+    required Color color,
+    double size = 30.0,
+  }) {
+    return Center(
+      key: key,
+      child: SpinKitDualRing(
+        color: color,
+        size: size,
+      ),
+    );
   }
+
 }

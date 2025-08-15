@@ -1,9 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/app_color/app_color.dart';
+import '../../../../common/custom_widget/custom_snackbar.dart';
+import '../../../../data/api.dart';
+import '../../../../data/base_client.dart';
+import '../../sign_in/view/sign_in_screen.dart';
+
 class SignUpEmailVerifyController extends GetxController {
 
-  RxInt timeCounter = 120.obs;
+  RxInt timeCounter = 60.obs;
   RxString otp = "".obs;
   RxBool isLoading = false.obs;
   RxBool isResendOtpSend = false.obs;
@@ -30,6 +38,80 @@ class SignUpEmailVerifyController extends GetxController {
     });
   }
 
+
+
+  Future<void> signUpResendOtpController({required Map<String,dynamic> data,}) async {
+    try {
+      isResendOtpSend(true);
+
+      final headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.postRequest(
+          api: Api.signResendOtp,
+          headers: headers,
+          body: jsonEncode(data),
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        String message = responseBody['message'].toString();
+        kSnackBar(message: message, bgColor: AppColors.green);
+        timeCounter.value = 60;
+        pinController.value.clear();
+        await otpTimer();
+      } else {
+        isResendOtpSend(false);
+        throw 'Send data is failed!';
+      }
+    } catch (e) {
+      isResendOtpSend(false);
+      kSnackBar(message: "Send data is failed: $e", bgColor: AppColors.red);
+    } finally {
+      isResendOtpSend(false);
+    }
+  }
+
+
+  Future<void> signUpOtpVerifyController({
+    required Map<String,dynamic> data,
+  }) async {
+    try {
+      isLoading(true);
+
+      final headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.postRequest(
+          api: Api.signVerify,
+          headers: headers,
+          body: jsonEncode(data),
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        String message = responseBody['message'].toString();
+        kSnackBar(message: message, bgColor: AppColors.green);
+        Get.off(()=>SignInView(),preventDuplicates: false);
+      } else {
+        isLoading(false);
+        throw 'Send data is failed!';
+      }
+    } catch (e) {
+      isLoading(false);
+      kSnackBar(message: "Send data is failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
+    }
+  }
 
 
 }

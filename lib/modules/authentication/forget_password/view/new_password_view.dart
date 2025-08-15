@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import '../../sign_in/view/sign_in_screen.dart';
 
 class NewPasswordView extends StatelessWidget {
-  NewPasswordView({super.key});
+  NewPasswordView({super.key,required this.email});
 
   final NewPasswordController newPasswordController = Get.put(NewPasswordController());
-
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +101,7 @@ class NewPasswordView extends StatelessWidget {
                         SpaceHelperClass.v(16.h(context)),
 
 
+
                         CustomTextFormFieldClass.build(
                           context: context,
                           obscureText: newPasswordController.isConfirmObscureText.value,
@@ -127,15 +128,33 @@ class NewPasswordView extends StatelessWidget {
 
                         SpaceHelperClass.v(24.h(context)),
 
-
+                        newPasswordController.isLoading.value == true ?
+                        CustomLoaderButton().customLoaderButton(
+                          backgroundColor: Colors.transparent,
+                          loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                          height: 50,
+                          context: context,
+                        ) :
                         CustomButtonHelper.customRoundedButton(
                           context: context,
                           text: 'Reset Password',
                           textColor: Color.fromRGBO(255, 255, 255, 1),
                           fontWeight: FontWeight.w700,
                           gradientColors: [Color.fromRGBO(38, 50, 56, 1), Color.fromRGBO(28, 59, 71, 1)],
-                          onPressed: () {
-                            Get.off(()=>PasswordSuccessFullView(),preventDuplicates: false);
+                          onPressed: () async {
+                            if(newPasswordController.passwordController.value.text == "") {
+                              kSnackBar(message: "Please enter password", bgColor: AppColors.red);
+                            } else if(newPasswordController.confirmPasswordController.value.text == "") {
+                              kSnackBar(message: "Please enter confirm password", bgColor: AppColors.red);
+                            } else if(newPasswordController.confirmPasswordController.value.text != newPasswordController.passwordController.value.text) {
+                              kSnackBar(message: "Password is not match", bgColor: AppColors.red);
+                            } else {
+                              Map<String,dynamic> data = {
+                                "email": email,
+                                "password": newPasswordController.passwordController.value.text
+                              };
+                              await newPasswordController.setPasswordController(data: data);
+                            }
                           },
                         ),
 

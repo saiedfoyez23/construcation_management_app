@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
 import 'package:construction_management_app/modules/splash/view/welcome_screen_view.dart';
 import 'package:get/get.dart';
 
@@ -8,28 +11,66 @@ import '../../dashboard/view/dashboard_view.dart';
 class SplashScreenController extends GetxController {
 
 
+  Rx<LoginResponseModel> loginResponseModel = LoginResponseModel(success: null, message: null, data: null).obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    Future.delayed(Duration(milliseconds: 10),() async {
-      await redirectionFunction();
+    Future.delayed(Duration(seconds: 2),() async {
+      await checkTheUserLogin();
     });
   }
 
 
-  Future<void> redirectionFunction() async {
-    // Navigate to the main screen after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
-      var token = LocalStorage.getData(key: AppConstant.token);
-      Get.to(() => WelcomeScreenView());
-      //Get.to(() => DashboardView(index: 0,));
-      // if (token != '') {
-      //   Get.to(() => Dashboard()); // Navigate to the home screen
-      // } else {
-      //   Get.to(() => WelcomeScreen()); // Navigate to the home screen
-      // }
-    });
+  Future<void> checkTheUserLogin() async {
+    print(LocalStorage.getData(key: AppConstant.token));
+    if(LocalStorage.getData(key: AppConstant.token) != null) {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+      Map<String, dynamic> decodedToken = parseJwt(loginResponseModel.value.data!.accessToken!);
+      if(decodedToken['role'] == "company_admin") {
+        Get.off(()=>DashboardView(index: 0,),);
+      } else {
+        print("No Redirection");
+      }
+    } else {
+      Get.off(()=>WelcomeScreenView(),preventDuplicates: false);
+    }
+  }
+
+
+
+
+
+
+  static Map<String, dynamic> parseJwt(String token) {
+    final parts = token.split('.');
+    if (parts.length != 3) {
+      throw Exception('Invalid token');
+    }
+
+    final payload = _decodeBase64(parts[1]);
+    final payloadMap = json.decode(payload);
+    if (payloadMap is! Map<String, dynamic>) {
+      throw Exception('Invalid payload');
+    }
+
+    return payloadMap;
+  }
+
+  static String _decodeBase64(String str) {
+    String output = str.replaceAll('-', '+').replaceAll('_', '/');
+
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+      case 3:
+        output += '=' * (4 - output.length % 4);
+        break;
+    }
+
+    return utf8.decode(base64Url.decode(output));
   }
 
 

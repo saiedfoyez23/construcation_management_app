@@ -1,13 +1,15 @@
 class Api {
   /// base url
 
-  static const baseUrl = "http://10.10.10.17:5003/api/v1";
+  static const baseUrl = "http://172.252.13.83:5011/api/v1";
   //static const baseUrl = "http://10.10.10.17:5003/api/v1/employees";
   //static const imageUrl = "http://192.168.10.152:5005/";
 
   ///auth
   static const login = "$baseUrl/auth/login"; // done
+  static const uploadFiles = "$baseUrl/upload-files"; // done
   static const signup = "$baseUrl/auth/company-admin-signup"; // done
+  static const signResendOtp = "$baseUrl/auth/send-otp"; // done
   static const signVerify = "$baseUrl/auth/verify-otp"; // done
   static const forgetPassword = "$baseUrl/auth/send-otp"; // done
   static const forgetOtp = "$baseUrl/auth/verify-otp"; // done

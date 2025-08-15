@@ -67,24 +67,24 @@ class SignInView extends StatelessWidget {
                       SpaceHelperClass.v(20.h(context)),
 
 
-                      DropdownHelperClass.customDropdown(
-                        context: context,
-                        items: signInController.roles,
-                        selectedValue: signInController.selectedRole.value == "" ? null : signInController.selectedRole.value,
-                        onChanged: (String? newValue) {
-                          signInController.selectedRole.value = newValue!;
-                        },
-                        hintText: 'Select your role',
-                        width: 375,
-                      ),
+                      // DropdownHelperClass.customDropdown(
+                      //   context: context,
+                      //   items: signInController.roles,
+                      //   selectedValue: signInController.selectedRole.value == "" ? null : signInController.selectedRole.value,
+                      //   onChanged: (String? newValue) {
+                      //     signInController.selectedRole.value = newValue!;
+                      //   },
+                      //   hintText: 'Select your role',
+                      //   width: 375,
+                      // ),
 
 
-                      SpaceHelperClass.v(16.h(context)),
+                      //SpaceHelperClass.v(16.h(context)),
 
                       CustomTextFormFieldClass.build(
                         context: context,
                         controller: signInController.emailController.value,
-                        hintText: 'Enter company email address',
+                        hintText: 'Enter your email address',
                         keyboardType: TextInputType.emailAddress,
                       ),
 
@@ -96,7 +96,7 @@ class SignInView extends StatelessWidget {
                         context: context,
                         obscureText: signInController.isObscureText.value,
                         controller: signInController.passwordController.value,
-                        hintText: 'Enter Password',
+                        hintText: 'Enter your password Password',
                         keyboardType: TextInputType.text,
                         suffixIcon: IconButton(
                           onPressed: () async {
@@ -130,13 +130,29 @@ class SignInView extends StatelessWidget {
 
                       // Custom text button
 
-
+                      signInController.isLoading.value == true ?
+                      CustomLoaderButton().customLoaderButton(
+                        backgroundColor: Colors.transparent,
+                        loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                        height: 50,
+                        context: context,
+                      ) :
                       CustomButtonHelper.customRoundedButton(
                         context: context,
                         text: 'Log In',
                         backgroundColor: Color.fromRGBO(220, 221, 223, 1),
                         fontWeight: FontWeight.w700,
-                        onPressed: () {
+                        onPressed: () async {
+                          if(signInController.emailController.value.text == "") {
+                            kSnackBar(message: "Please enter email", bgColor: AppColors.red);
+                          } else if(signInController.passwordController.value.text == "") {
+                            kSnackBar(message: "Please enter password", bgColor: AppColors.red);
+                          } else {
+                            await signInController.signInController(
+                              email: signInController.emailController.value.text,
+                              password: signInController.passwordController.value.text,
+                            );
+                          }
                           print('Login button pressed');
                           // Add your login logic here
                         },

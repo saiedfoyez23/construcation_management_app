@@ -20,7 +20,7 @@ class ForgotPasswordView extends StatelessWidget {
         Get.off(()=>SignInView(),preventDuplicates: false);
       },
       child: Scaffold(
-        body: SafeArea(
+        body: Obx(()=>SafeArea(
           child: Container(
             height: 812.h(context),
             width: 375.w(context),
@@ -81,15 +81,27 @@ class ForgotPasswordView extends StatelessWidget {
 
                         SpaceHelperClass.v(24.h(context)),
 
-
+                        forgotPasswordController.isLoading.value == true ?
+                        CustomLoaderButton().customLoaderButton(
+                          backgroundColor: Colors.transparent,
+                          loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                          height: 50,
+                          context: context,
+                        ) :
                         CustomButtonHelper.customRoundedButton(
                           context: context,
                           text: 'Send Verification Code',
                           textColor: Color.fromRGBO(255, 255, 255, 1),
                           fontWeight: FontWeight.w700,
                           gradientColors: [Color.fromRGBO(38, 50, 56, 1), Color.fromRGBO(28, 59, 71, 1)],
-                          onPressed: () {
-                            Get.off(()=>EmailVerifyView(email: forgotPasswordController.emailController.value.text),preventDuplicates: false);
+                          onPressed: () async {
+                            Map<String,dynamic> data = {
+                              "email": forgotPasswordController.emailController.value.text
+                            };
+                            await forgotPasswordController.forgotPasswordController(
+                              data: data,
+                              email: forgotPasswordController.emailController.value.text,
+                            );
                           },
                         ),
 
@@ -99,15 +111,15 @@ class ForgotPasswordView extends StatelessWidget {
 
 
 
-                        ],
-                      ),
+                      ],
                     ),
+                  ),
                 )
 
               ],
             ),
           ),
-        ),
+        ),)
       ),
     );
   }

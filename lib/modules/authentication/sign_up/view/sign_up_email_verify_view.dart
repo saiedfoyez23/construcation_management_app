@@ -5,6 +5,8 @@ import 'package:construction_management_app/modules/authentication/sign_up/view/
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/custom_widget/custom_snackbar.dart';
+
 
 class SignUpEmailVerifyView extends StatelessWidget {
   SignUpEmailVerifyView({super.key,required this.email});
@@ -121,30 +123,40 @@ class SignUpEmailVerifyView extends StatelessWidget {
                           height: 30,
                           context: context,
                           text: 'Resend Otp',
-                          onPressed: () {
-                            signUpEmailVerifyController.isResendOtpSend.value = true;
-                            Future.delayed(Duration(seconds: 1),() async {
-                              signUpEmailVerifyController.isResendOtpSend.value = false;
-                              signUpEmailVerifyController.timeCounter.value = 120;
-                              signUpEmailVerifyController.pinController.value.clear();
-                              await signUpEmailVerifyController.otpTimer();
-                            });
-
+                          onPressed: () async {
+                            Map<String,dynamic> data = {
+                              "email": "${email}"
+                            };
+                            await signUpEmailVerifyController.signUpResendOtpController(data: data);
                           },
                         ),
 
 
                         SpaceHelperClass.v(24.h(context)),
 
-
+                        signUpEmailVerifyController.isLoading.value == true ?
+                        CustomLoaderButton().customLoaderButton(
+                          backgroundColor: Colors.transparent,
+                          loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                          height: 50,
+                          context: context,
+                        ) :
                         CustomButtonHelper.customRoundedButton(
                           context: context,
                           text: 'Verify',
                           backgroundColor: Color.fromRGBO(220, 221, 223, 1),
                           fontWeight: FontWeight.w700,
-                          onPressed: () {
-                            Get.off(()=>SignInView(),preventDuplicates: false);
-                            // Add your login logic here
+                          onPressed: () async {
+                            if( signUpEmailVerifyController.pinController.value.text == "") {
+                              kSnackBar(message: "Please enter full otp", bgColor: AppColors.red);
+                            } else {
+                              Map<String,dynamic> data = {
+                                "email": "${email}",
+                                "otp": signUpEmailVerifyController.pinController.value.text,
+                                "verify_account": true,
+                              };
+                              await signUpEmailVerifyController.signUpOtpVerifyController(data: data);
+                            }
                           },
                         ),
 
