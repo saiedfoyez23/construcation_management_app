@@ -1,81 +1,110 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class DropdownHelperClass {
+class CustomDropdownHelperClass<T> extends StatelessWidget {
+  final T? value;
+  final List<T> items;
+  final ValueChanged<T?> onChanged;
+  final String hintText;
+  final double? width;
+  final bool showDropdownIcon;
+  final String Function(T)? itemToString;
+  final Widget Function(T)? itemBuilder;
+  final EdgeInsetsGeometry? contentPadding;
+  final double iconSize;
+  final Color iconColor;
+  final TextStyle? hintStyle;
+  final TextStyle? itemStyle;
+  final TextStyle? selectedItemStyle;
+  final Color fillColor;
+  final Color borderColor;
+  final double borderRadius;
+  final double borderWidth;
 
+  const CustomDropdownHelperClass({
+    Key? key,
+    required this.value,
+    required this.items,
+    required this.onChanged,
+    this.hintText = "Select",
+    this.width,
+    this.showDropdownIcon = true,
+    this.itemToString,
+    this.itemBuilder,
+    this.contentPadding,
+    this.iconSize = 24,
+    this.iconColor = Colors.black,
+    this.hintStyle,
+    this.itemStyle,
+    this.selectedItemStyle,
+    this.fillColor = Colors.white,
+    this.borderColor = const Color.fromRGBO(229, 231, 235, 1),
+    this.borderRadius = 8,
+    this.borderWidth = 1,
+  }) : super(key: key);
 
-  static Widget customDropdown({
-    required BuildContext context,
-    required List<String> items,
-    required String? selectedValue,
-    required ValueChanged<String?> onChanged,
-    String hintText = 'Select your role',
-    double width = 329,
-    double height = 60,
-    Color borderColor = const Color.fromRGBO(239, 239, 239, 1),
-    Color backgroundColor = Colors.white,
-    Color textColor = const Color.fromRGBO(117, 131, 141, 1),
-    double fontSize = 16,
-    FontWeight fontWeight = FontWeight.w400,
-    double borderRadius = 100,
-    double iconSize = 24,
-    EdgeInsetsGeometry? padding,
-    bool isExpanded = true,
-  }) {
-    return Container(
-      width: width.w(context),
-      height: height.h(context),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius.r(context)),
-        border: Border.all(
-          color: borderColor,
-          width: 1,
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: DropdownButtonFormField<T>(
+        value: value,
+        icon: const SizedBox.shrink(),
+        isExpanded: true,
+        decoration: InputDecoration(
+          contentPadding: contentPadding ?? EdgeInsets.symmetric(
+            horizontal: 16.hpm(context),
+            vertical: 11.vpm(context),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius.r(context)),
+            borderSide: BorderSide(color: borderColor, width: borderWidth),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius.r(context)),
+            borderSide: BorderSide(color: borderColor, width: borderWidth),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius.r(context)),
+            borderSide: BorderSide(color: borderColor, width: borderWidth),
+          ),
+          suffixIcon: showDropdownIcon
+              ? Icon(
+            Icons.keyboard_arrow_down_outlined,
+            size: iconSize.r(context),
+            color: iconColor,
+          )
+              : null,
+          filled: true,
+          fillColor: fillColor,
+          hint: TextHelperClass.headingText(
+            context: context,
+            text: hintText,
+            fontSize: 16,
+            textColor: const Color.fromRGBO(35, 47, 48, 1),
+            fontWeight: FontWeight.w700,
+          ),
         ),
-        color: backgroundColor,
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedValue == "" ? null : selectedValue,
-          hint: Text(
-            hintText,
-            style: GoogleFonts.albertSans(
-              fontStyle: FontStyle.normal,
-              fontWeight: fontWeight,
-              fontSize: fontSize.sp(context),
-              color: textColor,
+        items: items.map((T item) {
+          return DropdownMenuItem<T>(
+            value: item,
+            child: itemBuilder != null
+                ? itemBuilder!(item)
+                : TextHelperClass.headingText(
+              context: context,
+              text: itemToString != null ? itemToString!(item) : item.toString(),
+              fontSize: 16,
+              textColor: AppColors.black,
+              fontWeight: FontWeight.w700,
             ),
-          ),
-          icon: Padding(
-            padding: EdgeInsets.only(left: 8.w(context)),
-            child: Icon(
-              Icons.keyboard_arrow_down,
-              size: iconSize.r(context),
-              color: textColor,
-            ),
-          ),
-          padding: padding ?? EdgeInsets.only(
-            right: 16.w(context),
-            top: 11.h(context),
-            bottom: 11.h(context),
-            left: 16.w(context),
-          ),
-          isExpanded: isExpanded,
-          items: items.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: GoogleFonts.albertSans(
-                  fontStyle: FontStyle.normal,
-                  fontWeight: fontWeight,
-                  fontSize: fontSize.sp(context),
-                  color: textColor,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
+          );
+        }).toList(),
+        onChanged: onChanged,
+        style: selectedItemStyle ?? TextStyle(
+          fontSize: 16.sp(context),
+          color: AppColors.black,
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
         ),
       ),
     );

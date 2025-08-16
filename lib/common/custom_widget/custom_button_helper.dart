@@ -180,4 +180,77 @@ class CustomButtonHelper {
   }
 
 
+  static Widget imageTextColumnButton({
+    required BuildContext context,
+    required String imagePath,
+    required String text,
+    required VoidCallback onTap,
+    double? width,
+    double? height,
+    double? imageSize,
+    double? borderRadius,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? textColor,
+    double? fontSize,
+    FontWeight? fontWeight,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? spaceBetween,
+  }) {
+    return Container(
+      width: width ?? 94.w(context),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Colors.white,
+        borderRadius: BorderRadius.circular(borderRadius ?? 12.r(context)),
+        boxShadow: [
+          BoxShadow(
+            color: shadowColor ?? const Color.fromRGBO(4, 6, 15, 0.05),
+            offset: const Offset(0, 4),
+            blurRadius: 60,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(borderRadius ?? 12.r(context)),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding ?? 8.hpm(context),
+              vertical: verticalPadding ?? 16.vpm(context),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ImageHelperClass.customImageContainer(
+                  context: context,
+                  height: imageSize ?? 25.h(context),
+                  width: imageSize ?? 25.w(context),
+                  imagePath: imagePath,
+                  imageFit: BoxFit.contain,
+                  fit: BoxFit.cover,
+                ),
+                SpaceHelperClass.v(spaceBetween ?? 8.h(context)),
+                TextHelperClass.headingText(
+                  alignment: Alignment.center,
+                  textAlign: TextAlign.center,
+                  context: context,
+                  text: text,
+                  fontSize: fontSize ?? 15,
+                  textColor: textColor ?? AppColors.black89,
+                  fontWeight: fontWeight ?? FontWeight.w500,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

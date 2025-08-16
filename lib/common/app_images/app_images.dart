@@ -52,6 +52,10 @@ class AppImages {
   static String indecator = "asset/icons/indecator.png";
   static String notificationCircle = "asset/icons/notification_circle.png";
   static String messageNotificationCircle = "asset/icons/message_notification_circle.png";
+  static const String addDayworks = "asset/icons/add_dayworks.png";
+  static const String addSiteDiary = "asset/icons/add_site_diary.png";
+  static const String location = "asset/icons/Location.png";
+  static const String sendIcon = "asset/icons/sendIcon.png";
 
   //////////////////////// icons /////////////////////////////
 }

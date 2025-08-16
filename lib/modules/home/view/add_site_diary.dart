@@ -7,6 +7,7 @@ import 'package:construction_management_app/common/custom_widget/custom_dropdown
 import 'package:construction_management_app/common/custom_widget/custom_text_field.dart';
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
 import 'package:construction_management_app/common/common_container/up_container_view_card.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,7 +72,7 @@ class _AddSiteDiaryState extends State<AddSiteDiary> {
         backgroundColor: AppColors.background,
         leading: GestureDetector(
           onTap: () {
-            Get.back();
+            Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
           },
           child: Icon(Icons.arrow_back),
         ),
