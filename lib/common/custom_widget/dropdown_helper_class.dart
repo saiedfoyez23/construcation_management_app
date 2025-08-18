@@ -77,12 +77,12 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
               : null,
           filled: true,
           fillColor: fillColor,
-          hint: TextHelperClass.headingText(
-            context: context,
-            text: hintText,
-            fontSize: 16,
-            textColor: const Color.fromRGBO(35, 47, 48, 1),
-            fontWeight: FontWeight.w700,
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontSize: 16.sp(context),
+            color: AppColors.black,
+            fontWeight: FontWeight.w500,
+            fontStyle: FontStyle.normal,
           ),
         ),
         items: items.map((T item) {
@@ -93,7 +93,7 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
                 : TextHelperClass.headingText(
               context: context,
               text: itemToString != null ? itemToString!(item) : item.toString(),
-              fontSize: 16,
+              fontSize: 20.sp(context),
               textColor: AppColors.black,
               fontWeight: FontWeight.w700,
             ),
@@ -103,7 +103,7 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
         style: selectedItemStyle ?? TextStyle(
           fontSize: 16.sp(context),
           color: AppColors.black,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           fontStyle: FontStyle.normal,
         ),
       ),

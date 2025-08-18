@@ -1,649 +1,1361 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
+import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-
-class AddSiteDiaryView extends StatefulWidget {
-  const AddSiteDiaryView({super.key});
-
-  @override
-  State<AddSiteDiaryView> createState() => _AddSiteDiaryViewState();
-}
-
-class _AddSiteDiaryViewState extends State<AddSiteDiaryView> {
-  String project = 'Green Valley School 0';
-  TextEditingController weatherConditionController = TextEditingController();
-  TextEditingController dateTimeController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController audioController = TextEditingController();
-  late stt.SpeechToText _speech;
-  bool _isListening = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _speech = stt.SpeechToText();
-  }
 
 
-  void _listen() async {
-    if (!_isListening) {
-      print("hello");
-      bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) => print('onError: $val'),
-      );
-      print(available);
-      if (available) {
-        setState(() => _isListening = true);
-        _speech.listen(
-          onResult: (val) => setState(() {
-            audioController.text = val.recognizedWords;
-          }),
-          pauseFor: Duration(seconds: 3),  // Pause after 3 seconds of silence to stop recording
-          listenFor: Duration(seconds: 30),  // Max listening time
-        );
-      }
-    } else {
-      setState(() => _isListening = false);
-      _speech.stop();
-    }
-  }
 
-  List<String> projects = [
-    'Green Valley School 0',
-    'Green Valley School 1',
-    'Green Valley School 2'
-  ];
+class AddSiteDiaryView  extends StatelessWidget {
+  AddSiteDiaryView ({super.key});
 
-  String supervisor = 'Jane Cooper';
+  final AddSiteDiaryController addSiteDiaryController = Get.put(AddSiteDiaryController());
 
-  String _description = 'Excavation of trench for pipeline along the eastern boundary.';
 
-  DateTime _date = DateTime(2025, 5, 10);
 
-  String _weather = 'Sunny';
 
-  String _taskName = '';
-
-  String _location = 'Site 5, Section A';
-
-  // Workforce
-  String _selectedWorker = 'Laborers';
-
-  int _workerQuantity = 1;
-
-  int _workerDuration = 4;
-
-  List<Map<String, dynamic>> _workforceList = [
-    {'type': 'Laborers', 'quantity': 4, 'duration': 4},
-    {'type': 'Engineer', 'quantity': 4, 'duration': 4},
-    {'type': 'Electrician', 'quantity': 2, 'duration': 4},
-  ];
-
-  // Equipment
-  String _selectedEquipment = 'Excavator';
-
-  int _equipmentQuantity = 1;
-
-  int _equipmentDuration = 4;
-
-  List<Map<String, dynamic>> _equipmentList = [
-    {'type': 'Excavator', 'quantity': 1, 'duration': 4},
-    {'type': 'Concrete Mixer', 'quantity': 1, 'duration': 4},
-  ];
-
-  // Photo
-  String? _photoUrl;
- // Start without photo
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          height: 812.h(context),
-          width: 375.w(context),
-          decoration: BoxDecoration(
-            color: AppColors.scaffoldBackGroundColor,
-          ),
-          child: CustomScrollView(
-            slivers: [
+        child: Obx(()=>Container(
+            height: 812.h(context),
+            width: 375.w(context),
+            decoration: BoxDecoration(
+              color: AppColors.scaffoldBackGroundColor,
+            ),
+            child: CustomScrollView(
+              slivers: [
 
-              CustomAppBarHelper.normalAppBar(
-                context: context,
-                onBackPressed: () {
-                  Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
-                },
-                title: 'Upload New',
-              ),
-        
-        
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      SpaceHelperClass.v(24.h(context)),
-
-                      Container(
-                        width: 375.w(context),
-                        padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Project Select",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
+                CustomAppBarHelper.normalAppBar(
+                  context: context,
+                  onBackPressed: () {
+                    Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                  },
+                  title: 'Upload New',
+                ),
 
 
-                            SpaceHelperClass.v(8.h(context)),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
+                        SpaceHelperClass.v(24.h(context)),
 
-                            CustomDropdownHelperClass<String>(
-                              value: project,
-                              items: projects,
-                              onChanged: (value) {
-                                setState(() => project = value!);
-                              },
-                              hintText: "Select project",
-                            ),
+                        Container(
+                          width: 375.w(context),
+                          padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.r(context)),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
 
-                            SpaceHelperClass.v(16.h(context)),
-                            
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Supervisor\'s Name",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "${supervisor}",
-                              fontSize: 20,
-                              textColor: AppColors.black38,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-
-
-                            SpaceHelperClass.v(16.h(context)),
-                            
-                            Container(
-                              width: 375.w(context),
-                              padding: EdgeInsets.symmetric(horizontal: 8.hpm(context), vertical:  6.vpm(context),),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8.r(context)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(4, 6, 15, 0.05),
-                                    blurRadius: 60,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "Project Select",
+                                fontSize: 20,
+                                textColor: AppColors.black65,
+                                fontWeight: FontWeight.w700,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
 
-                                  TextHelperClass.headingText(
-                                    context: context,
-                                    text: "Description",
-                                    fontSize: 20,
-                                    textColor: AppColors.black65,
-                                    fontWeight: FontWeight.w700,
-                                  ),
 
-                                  SpaceHelperClass.v(8.h(context)),
+                              SpaceHelperClass.v(8.h(context)),
 
-                                  CustomTextFormFieldClass.textFiledWithMaxLineBuild(
-                                    context: context,
-                                    controller: descriptionController,
-                                    hintText: "Write something.....",
-                                    contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 9.hpm(context),
-                                      vertical: 8.vpm(context),
+
+                              CustomDropdownHelperClass<String>(
+                                value: addSiteDiaryController.project.value == "" ? null : addSiteDiaryController.project.value,
+                                items:  addSiteDiaryController.projects,
+                                onChanged: (value) {
+                                  addSiteDiaryController.project.value = value!;
+                                },
+                                hintText: "Select project",
+                              ),
+
+                              SpaceHelperClass.v(16.h(context)),
+
+
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "Supervisor\'s Name",
+                                fontSize: 20,
+                                textColor: AppColors.black65,
+                                fontWeight: FontWeight.w700,
+                              ),
+
+
+                              SpaceHelperClass.v(8.h(context)),
+
+
+
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "${addSiteDiaryController.supervisor.value}",
+                                fontSize: 20,
+                                textColor: AppColors.black38,
+                                fontWeight: FontWeight.w500,
+                              ),
+
+
+
+                              SpaceHelperClass.v(16.h(context)),
+
+                              Container(
+                                width: 375.w(context),
+                                padding: EdgeInsets.symmetric(horizontal: 8.hpm(context), vertical:  6.vpm(context),),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8.r(context)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(4, 6, 15, 0.05),
+                                      blurRadius: 60,
+                                      offset: Offset(0, 4),
                                     ),
-                                    maxLines: 4,
-                                    borderRadius: 8,
-                                    borderColor: Color.fromRGBO(24, 147, 248, 1),
-                                  ),
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
+                                    TextHelperClass.headingText(
+                                      context: context,
+                                      text: "Description",
+                                      fontSize: 20,
+                                      textColor: AppColors.black65,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+
+                                    SpaceHelperClass.v(8.h(context)),
+
+                                    CustomTextFormFieldClass.textFiledWithMaxLineBuild(
+                                      context: context,
+                                      controller: addSiteDiaryController.descriptionController.value,
+                                      hintText: "Write something.....",
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 9.hpm(context),
+                                        vertical: 8.vpm(context),
+                                      ),
+                                      maxLines: 4,
+                                      borderRadius: 8,
+                                      borderColor: Color.fromRGBO(24, 147, 248, 1),
+                                    ),
 
 
-                                  SpaceHelperClass.v(16.h(context)),
+                                    SpaceHelperClass.v(16.h(context)),
 
-                                  Row(
-                                    children: [
+                                    Row(
+                                      children: [
 
 
-                                      Expanded(
-                                        child: CustomTextFormFieldClass.build(
-                                          context: context,
-                                          controller: audioController,
-                                          readOnly: true,
-                                          hintText: 'Ask Something..',
-                                          keyboardType: TextInputType.text,
-                                          borderRadius: 8,
-                                          contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 12.hpm(context),
-                                            vertical: 8.vpm(context),
-                                          ),
-                                          prefixIcon: IconButton(
-                                            onPressed: () async {
-                                              print("hello");
-                                              _listen();
-                                            },
-                                            icon: Icon(
-                                              Icons.mic,
-                                              color: _isListening ? Colors.red : Color.fromRGBO(117, 131, 141, 1),
-                                              size: 24.r(context),
+                                        Expanded(
+                                          child: CustomTextFormFieldClass.textFiledWithMaxLineBuild(
+                                            context: context,
+                                            controller: addSiteDiaryController.audioController.value,
+                                            maxLines: null,
+                                            minLines: null,
+                                            readOnly: true,
+                                            hintText: 'Ask Something...',
+                                            keyboardType: TextInputType.text,
+                                            borderRadius: 8,
+                                            contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 12.hpm(context),
+                                              vertical: 8.vpm(context),
+                                            ),
+                                            suffixIcon: IconButton(
+                                              onPressed: () async {
+                                                print("hello");
+                                                await addSiteDiaryController.speechListen();
+                                              },
+                                              icon: Icon(
+                                                Icons.mic,
+                                                color: addSiteDiaryController.isListening.value == true ? Colors.red : Color.fromRGBO(117, 131, 141, 1),
+                                                size: 24.r(context),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      
-                                      SpaceHelperClass.h(8.w(context)),
+
+                                        SpaceHelperClass.h(8.w(context)),
 
 
-                                      ImageHelperClass.customImageButtonContainer(
-                                        onPressed: () async {
-                                          if(audioController.text != "") {
-                                            descriptionController.text = audioController.text;
-                                            audioController.clear();
-                                          }
-                                        },
-                                        context: context,
-                                        height: 55,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(8.r(context)),
-                                        imagePath: AppImages.sendIcon,
-                                        imageFit: BoxFit.cover,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      
+                                        ImageHelperClass.customImageButtonContainer(
+                                          onPressed: () async {
+                                            if(addSiteDiaryController.audioController.value.text != "") {
+                                              addSiteDiaryController.descriptionController.value.text += "${addSiteDiaryController.audioController.value.text} . ";
+                                              addSiteDiaryController.audioController.value.clear();
+                                            }
+                                          },
+                                          context: context,
+                                          height: 55,
+                                          width: 50,
+                                          borderRadius: BorderRadius.circular(8.r(context)),
+                                          imagePath: AppImages.sendIcon,
+                                          imageFit: BoxFit.cover,
+                                          fit: BoxFit.contain,
+                                        ),
 
 
-                                    ],
+
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+
+                              SpaceHelperClass.v(16.h(context)),
+
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "Date",
+                                fontSize: 20,
+                                textColor: AppColors.black65,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              SpaceHelperClass.v(8.h(context)),
+
+
+                              CustomTextFormFieldClass.build(
+                                  context: context,
+                                  controller: addSiteDiaryController.dateTimeController.value,
+                                  hintText: "Select A Date",
+                                  borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 16.hpm(context),
+                                    vertical: 8.vpm(context),
                                   ),
-                                ],
+                                  borderRadius: 8,
+                                  suffixIcon: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8.vpm(context),
+                                      horizontal: 16.hpm(context),
+                                    ),
+                                    child: ImageHelperClass.customImageContainer(
+                                      context: context,
+                                      height: 24.h(context),
+                                      width: 24.w(context),
+                                      imagePath: AppImages.addSiteDiary,
+                                      imageFit: BoxFit.contain,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.text,
+                                  readOnly: true,
+                                  onTap: () async {
+                                    await addSiteDiaryController.pickDateTime(context: context);
+                                  }
                               ),
-                            ),
-                            
-                            
-                            SpaceHelperClass.v(16.h(context)),
 
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Date",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            SpaceHelperClass.v(8.h(context)),
+                              SpaceHelperClass.v(16.h(context)),
 
 
-                            CustomTextFormFieldClass.build(
-                              context: context,
-                              controller: dateTimeController,
-                              hintText: "Select A Date",
-                              borderColor: Color.fromRGBO(229, 231, 235, 1),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.hpm(context),
-                                vertical: 8.vpm(context),
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "Weather condition",
+                                fontSize: 20,
+                                textColor: AppColors.black65,
+                                fontWeight: FontWeight.w700,
                               ),
-                              borderRadius: 8,
-                              suffixIcon: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.vpm(context),
+
+                              SpaceHelperClass.v(8.h(context)),
+
+                              CustomTextFormFieldClass.build(
+                                context: context,
+                                controller: addSiteDiaryController.weatherConditionController.value,
+                                hintText: "Weather condition",
+                                borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                contentPadding: EdgeInsets.symmetric(
                                   horizontal: 16.hpm(context),
+                                  vertical: 8.vpm(context),
                                 ),
-                                child: ImageHelperClass.customImageContainer(
-                                  context: context,
-                                  height: 24.h(context),
-                                  width: 24.w(context),
-                                  imagePath: AppImages.addSiteDiary,
-                                  imageFit: BoxFit.contain,
-                                  fit: BoxFit.contain,
-                                ),
+                                borderRadius: 8,
+                                keyboardType: TextInputType.text,
                               ),
-                              keyboardType: TextInputType.text,
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: _date,
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (picked != null) {
-                                  setState(() {
-                                    _date = picked;
-                                    dateTimeController.text = DateFormat('MMMM dd, yyyy').format(_date);
-                                  });
-                                }
-                              }
-                            ),
-
-                            SpaceHelperClass.v(16.h(context)),
 
 
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Weather condition",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-                            SpaceHelperClass.v(8.h(context)),
-
-                            CustomTextFormFieldClass.build(
-                              context: context,
-                              controller: weatherConditionController,
-                              hintText: "Weather condition",
-                              borderColor: Color.fromRGBO(229, 231, 235, 1),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.hpm(context),
-                                vertical: 8.vpm(context),
-                              ),
-                              borderRadius: 8,
-                              keyboardType: TextInputType.text,
-                            ),
-
-
-                          ],
-                        ),
-                      ),
-
-
-                      SpaceHelperClass.v(24.h(context)),
-
-
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Add Task', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text('+ Add task', style: TextStyle(color: Colors.blue)),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Text('Task Name', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        decoration: InputDecoration(hintText: 'Enter task Name'),
-                        onChanged: (value) => _taskName = value,
-                      ),
-                      SizedBox(height: 24),
-                      Text('Workforce', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      SizedBox(height: 8),
-                      Text('Worker', style: TextStyle(fontWeight: FontWeight.bold)),
-                      DropdownButtonFormField<String>(
-                        value: _selectedWorker,
-                        items: ['Laborers', 'Engineer', 'Electrician'].map((String value) {
-                          return DropdownMenuItem<String>(value: value, child: Text(value));
-                        }).toList(),
-                        onChanged: (value) => setState(() => _selectedWorker = value!),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Quantity', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextFormField(
-                                  initialValue: _workerQuantity.toString(),
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) => _workerQuantity = int.tryParse(value) ?? 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextFormField(
-                                  initialValue: '$_workerDuration Hour',
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) => _workerDuration = int.tryParse(value.split(' ')[0]) ?? 4,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _workforceList.add({
-                              'type': _selectedWorker,
-                              'quantity': _workerQuantity,
-                              'duration': _workerDuration,
-                            });
-                          });
-                        },
-                        child: Text('+ Add New'),
-                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 48)),
-                      ),
-                      SizedBox(height: 8),
-                      ..._workforceList.map((item) => _buildAddedItem(
-                        '${item['quantity']} ${item['type']}',
-                        '${item['duration']} hour',
-                        Icons.people,
-                            () => setState(() => _workforceList.remove(item)),
-                      )),
-                      SizedBox(height: 24),
-                      Text('Equipment', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      SizedBox(height: 8),
-                      Text('Select', style: TextStyle(fontWeight: FontWeight.bold)),
-                      DropdownButtonFormField<String>(
-                        value: _selectedEquipment,
-                        items: ['Excavator', 'Concrete Mixer'].map((String value) {
-                          return DropdownMenuItem<String>(value: value, child: Text(value));
-                        }).toList(),
-                        onChanged: (value) => setState(() => _selectedEquipment = value!),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Quantity', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextFormField(
-                                  initialValue: _equipmentQuantity.toString(),
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) => _equipmentQuantity = int.tryParse(value) ?? 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextFormField(
-                                  initialValue: '$_equipmentDuration Hour',
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) => _equipmentDuration = int.tryParse(value.split(' ')[0]) ?? 4,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _equipmentList.add({
-                              'type': _selectedEquipment,
-                              'quantity': _equipmentQuantity,
-                              'duration': _equipmentDuration,
-                            });
-                          });
-                        },
-                        child: Text('+ Add New'),
-                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 48)),
-                      ),
-                      SizedBox(height: 8),
-                      ..._equipmentList.map((item) => _buildAddedItem(
-                        '${item['quantity']} ${item['type']}',
-                        '${item['duration']} hour',
-                        Icons.build,
-                            () => setState(() => _equipmentList.remove(item)),
-                      )),
-                      SizedBox(height: 24),
-                      Text('Site Capture', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      SizedBox(height: 16),
-                      if (_photoUrl == null)
-                        Center(
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.blue,
-                                ),
-                                child: IconButton(
-                                  icon: Icon(Icons.camera_alt, color: Colors.white, size: 40),
-                                  onPressed: () {
-                                    // Simulate capturing photo
-                                    setState(() => _photoUrl = 'https://via.placeholder.com/400x200?text=Excavator'); // Placeholder
-                                  },
-                                  padding: EdgeInsets.all(24),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text('Capture Photo', style: TextStyle(color: Colors.blue)),
                             ],
                           ),
-                        )
-                      else ...[
-                        Stack(
-                          alignment: Alignment.topRight,
+                        ),
+
+
+                        SpaceHelperClass.v(24.h(context)),
+
+
+
+                        Container(
+                          width: 375.w(context),
+                          padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.r(context)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromRGBO(4, 6, 15, 0.05),
+                                blurRadius: 60,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+
+
+                                  Expanded(
+                                    child: TextHelperClass.headingText(
+                                      context: context,
+                                      text: "Add task",
+                                      fontSize: 24,
+                                      textColor: Color.fromRGBO(31, 41, 55, 1), // Border color
+                                      fontWeight:FontWeight.w700,
+                                    ),
+                                  ),
+
+
+                                  SizedBox(
+                                    width: 74.w(context),
+                                    height: 24.h(context),
+                                    child: OutlinedButton(
+                                      onPressed: () async {
+                                        if(addSiteDiaryController.taskNameController.value.text == "") {
+                                          kSnackBar(message: "Enter task name", bgColor: AppColors.red);
+                                        } else if(addSiteDiaryController.workforceList.isEmpty == true) {
+                                          kSnackBar(message: "Add workers", bgColor: AppColors.red);
+                                        } else if(addSiteDiaryController.equipmentList.isEmpty == true) {
+                                          kSnackBar(message: "Add equipment", bgColor: AppColors.red);
+                                        } else {
+                                          addSiteDiaryController.taskList.add(
+                                            Task(
+                                              addSiteDiaryController.taskNameController.value.text,
+                                              addSiteDiaryController.workforceList,
+                                              addSiteDiaryController.equipmentList,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                          padding: EdgeInsets.symmetric(horizontal: 5.hpm(context),vertical: 4.vpm(context)), // left, top, right, bottom
+                                          side: const BorderSide(
+                                            color: Color.fromRGBO(24, 147, 248, 1), // Border color
+                                            width: 1,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4.r(context)), // Border radius
+                                          ),
+                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Prevents extra padding
+                                          minimumSize: Size(74.w(context),24.h(context),) // Forces exact size
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+
+                                          Icon(
+                                            Icons.add,
+                                            color: Color.fromRGBO(24, 147, 248, 1), // Border color
+                                            size: 16.r(context),
+                                          ),
+
+                                          Expanded(
+                                            child: TextHelperClass.headingText(
+                                              context: context,
+                                              text: "Add task",
+                                              fontSize: 12,
+                                              textColor: Color.fromRGBO(24, 147, 248, 1), // Border color
+                                              fontWeight:FontWeight.w400,
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+
+                              SpaceHelperClass.v(12.h(context)),
+
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "Task Name",
+                                fontSize: 15,
+                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                fontWeight: FontWeight.w700,
+                              ),
+
+                              SpaceHelperClass.v(8.h(context)),
+
+                              CustomTextFormFieldClass.build(
+                                context: context,
+                                controller: addSiteDiaryController.taskNameController.value,
+                                hintText: "Enter task Name",
+                                borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16.hpm(context),
+                                  vertical: 8.vpm(context),
+                                ),
+                                borderRadius: 8,
+                                keyboardType: TextInputType.text,
+                              ),
+
+                              SpaceHelperClass.v(12.h(context)),
+
+
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 16.lpm(context),
+                                  right: 16.rpm(context),
+                                  top: 16.tpm(context),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
+                                    TextHelperClass.headingText(
+                                      context: context,
+                                      text: 'Workforce',
+                                      fontSize: 24,
+                                      textColor: Color.fromRGBO(0, 0, 0, 1),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+
+                                    SpaceHelperClass.v(12.h(context)),
+
+
+                                    Row(
+                                      children: [
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+
+                                              TextHelperClass.headingText(
+                                                context: context,
+                                                text: 'Worker',
+                                                fontSize: 15,
+                                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+
+                                              SpaceHelperClass.v(8.h(context)),
+
+
+                                              CustomDropdownHelperClass<String>(
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 16.hpm(context),
+                                                  vertical: 8.vpm(context),
+                                                ),
+                                                value: addSiteDiaryController.selectedWorker.value == "" ? null : addSiteDiaryController.selectedWorker.value,
+                                                items: ['Laborers', 'Engineer', 'Electrician'],
+                                                onChanged: (value) {
+                                                  addSiteDiaryController.selectedWorker.value = value!;
+                                                },
+                                              ),
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SpaceHelperClass.h(8.w(context)),
+
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+
+                                              TextHelperClass.headingText(
+                                                context: context,
+                                                text: 'Quantity',
+                                                fontSize: 15,
+                                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+
+                                              SpaceHelperClass.v(8.h(context)),
+
+                                              CustomTextFormFieldClass.build(
+                                                context: context,
+                                                controller: addSiteDiaryController.workforceQuantityController.value,
+                                                hintText: 'Quantity',
+                                                borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 16.hpm(context),
+                                                  vertical: 8.vpm(context),
+                                                ),
+                                                borderRadius: 8,
+                                                suffixIcon: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 8.vpm(context),
+                                                    horizontal: 16.hpm(context),
+                                                  ),
+                                                  child: ImageHelperClass.customImageContainer(
+                                                    context: context,
+                                                    height: 12.h(context),
+                                                    width: 12.w(context),
+                                                    imagePath: AppImages.arrowSwapIcon,
+                                                    imageFit: BoxFit.contain,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+
+                                      ],
+                                    ),
+
+
+                                    SpaceHelperClass.v(12.h(context)),
+
+                                    TextHelperClass.headingText(
+                                      context: context,
+                                      text: 'Duration',
+                                      fontSize: 15,
+                                      textColor: Color.fromRGBO(75, 85, 99, 1),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+
+                                    SpaceHelperClass.v(8.h(context)),
+
+                                    CustomTextFormFieldClass.build(
+                                      context: context,
+                                      controller:  addSiteDiaryController.workForceDurationController.value,
+                                      hintText: 'Duration',
+                                      borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 16.hpm(context),
+                                        vertical: 8.vpm(context),
+                                      ),
+                                      borderRadius: 8,
+                                      suffixIcon: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 8.vpm(context),
+                                          horizontal: 16.hpm(context),
+                                        ),
+                                        child: ImageHelperClass.customImageContainer(
+                                          context: context,
+                                          height: 12.h(context),
+                                          width: 12.w(context),
+                                          imagePath: AppImages.arrowSwapIcon,
+                                          imageFit: BoxFit.contain,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                    ),
+
+                                    SpaceHelperClass.v(16.h(context)),
+
+
+                                    SizedBox(
+                                      width: 375.w(context),
+                                      height: 50.h(context),
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if(addSiteDiaryController.selectedWorker.value == "" ||
+                                              addSiteDiaryController.workforceQuantityController.value.text == "" ||
+                                              addSiteDiaryController.workForceDurationController.value.text == "") {
+                                            kSnackBar(message: "Please fill all field", bgColor: AppColors.red);
+                                          } else {
+                                            addSiteDiaryController.workforceList.add(
+                                              Workforce(
+                                                addSiteDiaryController.selectedWorker.value,
+                                                int.parse(addSiteDiaryController.workforceQuantityController.value.text),
+                                                int.parse(addSiteDiaryController.workForceDurationController.value.text),
+                                              ),
+                                            );
+                                            addSiteDiaryController.workforceList.refresh();
+                                            addSiteDiaryController.selectedWorker.value = "";
+                                            addSiteDiaryController.workforceQuantityController.value.clear();
+                                            addSiteDiaryController.workForceDurationController.value.clear();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromRGBO(24, 147, 248, 1), // Background color
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8.hpm(context),
+                                            vertical: 6.vpm(context),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4.r(context)),
+                                          ),
+                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          minimumSize: Size(265.w(context), 28.h(context)),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white, // White icon on blue background
+                                              size: 16.r(context),
+                                            ),
+
+                                            SpaceHelperClass.h(8.w(context)),
+
+                                            TextHelperClass.headingText(
+                                              width: 69.w(context),
+                                              context: context,
+                                              text: "Add New",
+                                              fontSize: 16,
+                                              textColor: Colors.white, // White text
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    SpaceHelperClass.v(12.h(context)),
+
+                                    ...addSiteDiaryController.workforceList.map((item) => _buildAddedItem(
+                                      '${item.quantity} ${item.type}',
+                                      '${item.duration} hour',
+                                      AppImages.workforceIcon,
+                                          () {
+                                        addSiteDiaryController.workforceList.remove(item);
+                                      },
+                                      true,
+                                      context,
+                                    )),
+
+
+                                  ],
+                                ),
+                              ),
+
+
+                              SpaceHelperClass.v(12.h(context)),
+
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 16.lpm(context),
+                                  right: 16.rpm(context),
+                                  top: 16.tpm(context),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
+                                    TextHelperClass.headingText(
+                                      context: context,
+                                      text: 'Equipment',
+                                      fontSize: 24,
+                                      textColor: Color.fromRGBO(0, 0, 0, 1),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+
+                                    SpaceHelperClass.v(12.h(context)),
+
+                                    Row(
+                                      children: [
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+
+                                              TextHelperClass.headingText(
+                                                context: context,
+                                                text: 'Select',
+                                                fontSize: 15,
+                                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+
+                                              SpaceHelperClass.v(8.h(context)),
+
+
+                                              CustomDropdownHelperClass<String>(
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 16.hpm(context),
+                                                  vertical: 8.vpm(context),
+                                                ),
+                                                value: addSiteDiaryController.selectedEquipment.value == "" ? null : addSiteDiaryController.selectedEquipment.value,
+                                                items: ['Excavator', 'Concrete Mixer'],
+                                                onChanged: (value) {
+                                                  addSiteDiaryController.selectedEquipment.value = value!;
+                                                },
+                                              ),
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SpaceHelperClass.h(8.w(context)),
+
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+
+                                              TextHelperClass.headingText(
+                                                context: context,
+                                                text: 'Quantity',
+                                                fontSize: 15,
+                                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+
+                                              SpaceHelperClass.v(8.h(context)),
+
+                                              CustomTextFormFieldClass.build(
+                                                context: context,
+                                                controller: addSiteDiaryController.equipmentQuantityController.value,
+                                                hintText: 'Quantity',
+                                                borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 16.hpm(context),
+                                                  vertical: 8.vpm(context),
+                                                ),
+                                                borderRadius: 8,
+                                                suffixIcon: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 8.vpm(context),
+                                                    horizontal: 16.hpm(context),
+                                                  ),
+                                                  child: ImageHelperClass.customImageContainer(
+                                                    context: context,
+                                                    height: 12.h(context),
+                                                    width: 12.w(context),
+                                                    imagePath: AppImages.arrowSwapIcon,
+                                                    imageFit: BoxFit.contain,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+
+                                      ],
+                                    ),
+
+                                    SpaceHelperClass.v(12.h(context)),
+
+
+                                    TextHelperClass.headingText(
+                                      context: context,
+                                      text: 'Duration',
+                                      fontSize: 15,
+                                      textColor: Color.fromRGBO(75, 85, 99, 1),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+
+                                    SpaceHelperClass.v(8.h(context)),
+
+                                    CustomTextFormFieldClass.build(
+                                      context: context,
+                                      controller: addSiteDiaryController.equipmentDurationController.value,
+                                      hintText: 'Duration',
+                                      borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 16.hpm(context),
+                                        vertical: 8.vpm(context),
+                                      ),
+                                      borderRadius: 8,
+                                      suffixIcon: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 8.vpm(context),
+                                          horizontal: 16.hpm(context),
+                                        ),
+                                        child: ImageHelperClass.customImageContainer(
+                                          context: context,
+                                          height: 12.h(context),
+                                          width: 12.w(context),
+                                          imagePath: AppImages.arrowSwapIcon,
+                                          imageFit: BoxFit.contain,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                    ),
+
+                                    SpaceHelperClass.v(16.h(context)),
+
+
+
+                                    SizedBox(
+                                      width: 375.w(context),
+                                      height: 50.h(context),
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if(addSiteDiaryController.selectedEquipment.value == "" ||
+                                              addSiteDiaryController.equipmentQuantityController.value.text == "" ||
+                                              addSiteDiaryController.equipmentDurationController.value.text == "") {
+                                            kSnackBar(message: "Please fill all field", bgColor: AppColors.red);
+                                          } else {
+                                            addSiteDiaryController.equipmentList.add(
+                                                Equipment(
+                                                  addSiteDiaryController.selectedEquipment.value,
+                                                  int.parse(addSiteDiaryController.equipmentQuantityController.value.text),
+                                                  int.parse(addSiteDiaryController.equipmentDurationController.value.text),
+                                                )
+                                            );
+                                            addSiteDiaryController.equipmentList.refresh();
+                                            addSiteDiaryController.selectedEquipment.value = "";
+                                            addSiteDiaryController.equipmentQuantityController.value.clear();
+                                            addSiteDiaryController.equipmentDurationController.value.clear();
+                                          }
+
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromRGBO(24, 147, 248, 1), // Background color
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8.hpm(context),
+                                            vertical: 6.vpm(context),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4.r(context)),
+                                          ),
+                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          minimumSize: Size(265.w(context), 28.h(context)),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white, // White icon on blue background
+                                              size: 16.r(context),
+                                            ),
+
+                                            SpaceHelperClass.h(8.w(context)),
+
+                                            TextHelperClass.headingText(
+                                              width: 69.w(context),
+                                              context: context,
+                                              text: "Add New",
+                                              fontSize: 16,
+                                              textColor: Colors.white, // White text
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    SpaceHelperClass.v(12.h(context)),
+
+                                    ...addSiteDiaryController.equipmentList.map((item) => _buildAddedItem(
+                                      '${item.quantity} ${item.type}',
+                                      '${item.duration} hour',
+                                      AppImages.equipmentIcon, () {
+                                      addSiteDiaryController.equipmentList.remove(item);
+                                    },
+                                      true,
+                                      context,
+                                    )),
+
+                                  ],
+                                ),
+                              ),
+
+
+
+                            ],
+                          ),
+                        ),
+
+                        SpaceHelperClass.v(24.h(context)),
+
+
+                        ...addSiteDiaryController.taskList.map((item) {
+                          return Obx(()=>Container(
+                            width: 375.w(context),
+                            margin: EdgeInsets.only(bottom: 8.bpm(context)),
+                            padding: EdgeInsets.symmetric(vertical: 14.vpm(context),horizontal: 16.hpm(context)),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.r(context)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(4, 6, 15, 0.05),
+                                  blurRadius: 60,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+
+
+                                    Expanded(
+                                      child: TextHelperClass.headingText(
+                                        context: context,
+                                        text: item.name,
+                                        fontSize: 24,
+                                        textColor: Color.fromRGBO(31, 41, 55, 1), // Border color
+                                        fontWeight:FontWeight.w700,
+                                      ),
+                                    ),
+
+
+                                    SizedBox(
+                                      width: 74.w(context),
+                                      height: 24.h(context),
+                                      child: OutlinedButton(
+                                        onPressed: () async {
+                                          addSiteDiaryController.taskList.remove(item);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(horizontal: 5.hpm(context),vertical: 4.vpm(context)), // left, top, right, bottom
+                                            side: const BorderSide(
+                                              color: Color.fromRGBO(239, 68, 68, 1), // Border color
+                                              width: 1,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(4.r(context)), // Border radius
+                                            ),
+                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Prevents extra padding
+                                            minimumSize: Size(74.w(context),24.h(context),) // Forces exact size
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+
+                                            Icon(
+                                              Icons.delete_outlined,
+                                              color: Color.fromRGBO(239, 68, 68, 1), // Border color
+                                              size: 16.r(context),
+                                            ),
+
+                                            Expanded(
+                                              child: TextHelperClass.headingText(
+                                                context: context,
+                                                text: "Remove",
+                                                fontSize: 12,
+                                                textColor: Color.fromRGBO(239, 68, 68, 1), // Border color
+                                                fontWeight:FontWeight.w400,
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+
+                                SpaceHelperClass.v(14.h(context)),
+
+                                TextHelperClass.headingText(
+                                  context: context,
+                                  text: "Workforce",
+                                  fontSize: 16,
+                                  textColor: Color.fromRGBO(0, 0, 0, 1), // Border color
+                                  fontWeight:FontWeight.w700,
+                                ),
+
+
+                                SpaceHelperClass.v(10.h(context)),
+
+
+                                ...item.workforce.map((item) {
+                                  return _buildAddedItem(
+                                    '${item.quantity} ${item.type}',
+                                    '${item.duration} hour',
+                                    AppImages.workforceIcon, () {
+                                    addSiteDiaryController.workforceList.remove(item);
+                                  },
+                                    false,
+                                    context,
+                                  );
+                                }),
+
+
+
+
+                                SpaceHelperClass.v(14.h(context)),
+
+
+                                TextHelperClass.headingText(
+                                  context: context,
+                                  text: "Equipment",
+                                  fontSize: 16,
+                                  textColor: Color.fromRGBO(0, 0, 0, 1), // Border color
+                                  fontWeight:FontWeight.w700,
+                                ),
+
+                                SpaceHelperClass.v(10.h(context)),
+
+
+                                ...item.equipment.map((item) {
+                                  return _buildAddedItem(
+                                    '${item.quantity} ${item.type}',
+                                    '${item.duration} hour',
+                                    AppImages.equipmentIcon, () {
+                                    addSiteDiaryController.workforceList.remove(item);
+                                  },
+                                    false,
+                                    context,
+                                  );
+                                }),
+
+
+
+
+                              ],
+                            ),
+                          ));
+                        }),
+
+
+                        SpaceHelperClass.v(24.h(context)),
+
+                        Container(
+                          width: 375.w(context),
+                          padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.r(context)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromRGBO(4, 6, 15, 0.05),
+                                blurRadius: 60,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              /// Title
+
+                              TextHelperClass.headingText(
+                                context: context,
+                                text: "Site Capture",
+                                fontSize: 24,
+                                textColor: Color.fromRGBO(31, 41, 55, 1), // Border color
+                                fontWeight:FontWeight.w700,
+                              ),
+
+
+
+
+                              SpaceHelperClass.v(12.h(context)),
+
+                              Container(
+                                width: 375.w(context),
+                                height: 160.h(context),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF3F4F6), // rgba(243, 244, 246, 1)
+                                  borderRadius: BorderRadius.circular(10.r(context)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xFF04060F).withOpacity(0.03), // rgba(4, 6, 15, 0.03)
+                                      blurRadius: 60,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    addSiteDiaryController.showImageSourceDialog(context: context);
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+
+                                      ImageHelperClass.customImageContainer(
+                                        context: context,
+                                        height: 101.h(context),
+                                        width: 101.w(context),
+                                        imagePath: AppImages.imageIcon,
+                                        imageFit: BoxFit.contain,
+                                        fit: BoxFit.cover,
+                                      ),
+
+                                      TextHelperClass.headingText(
+                                        alignment: Alignment.center,
+                                        textAlign: TextAlign.center,
+                                        context: context,
+                                        text: "Capture Photo",
+                                        fontSize: 16,
+                                        textColor: Color.fromRGBO(107, 114, 128, 1), // Border color
+                                        fontWeight:FontWeight.w500,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+
+                              SpaceHelperClass.v(12.h(context)),
+
+
+                              if (addSiteDiaryController.selectedImage.value.path != "")
+                                ImageHelperClass.customFileImageContainer(
+                                  context: context,
+                                  height: 192.h(context),
+                                  width: 374.w(context),
+                                  imagePath: addSiteDiaryController.selectedImage.value,
+                                  imageFit: BoxFit.contain,
+                                  fit: BoxFit.cover,
+                                ),
+
+
+                              SpaceHelperClass.v(12.h(context)),
+
+                              /// Location Section
+                              Container(
+                                width: 375.w(context),
+                                padding: EdgeInsets.symmetric(vertical: 8.vpm(context),horizontal: 16.hpm(context)),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: const Color(0xFFE5E7EB), // rgba(229, 231, 235, 1)
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.r(context)),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ImageHelperClass.customImageContainer(
+                                      context: context,
+                                      height: 24.h(context),
+                                      width: 24.w(context),
+                                      imagePath: AppImages.locationIcon,
+                                      imageFit: BoxFit.contain,
+                                      fit: BoxFit.cover,
+                                    ),
+
+                                    SpaceHelperClass.h(8.w(context)),
+
+
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+
+                                          TextHelperClass.headingText(
+                                            context: context,
+                                            text: "Location",
+                                            fontSize: 16,
+                                            textColor: Color.fromRGBO(0, 0, 0, 1), // Border color
+                                            fontWeight:FontWeight.w500,
+                                          ),
+
+
+                                          SpaceHelperClass.v(8.h(context)),
+
+                                          CustomTextFormFieldClass.build(
+                                            context: context,
+                                            controller: addSiteDiaryController.locationController.value,
+                                            hintText: "Enter Location",
+                                            borderColor: Colors.transparent,
+                                            contentPadding: EdgeInsets.symmetric(
+                                              vertical: 8.vpm(context),
+                                            ),
+                                            borderRadius: 8,
+                                            keyboardType: TextInputType.text,
+                                          ),
+
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              SpaceHelperClass.v(15.h(context)),
+
+                              CustomButtonHelper.customRoundedButton(
+                                context: context,
+                                text: "Recapture Photo",
+                                fontSize: 16,
+                                textColor: Color.fromRGBO(255, 255, 255, 1),
+                                fontWeight: FontWeight.w600,
+                                borderRadius: 8,
+                                backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                                onPressed: () {
+                                  addSiteDiaryController.showImageSourceDialog(context: context);
+                                },
+                              ),
+
+
+                            ],
+                          ),
+                        ),
+
+
+                        SpaceHelperClass.v(35.h(context)),
+
+
+                        Row(
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                _photoUrl!,
-                                height: 200,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+
+
+                            Expanded(
+                              child: CustomButtonHelper.customRoundedButton(
+                                context: context,
+                                text: "Save Log",
+                                fontSize: 16,
+                                textColor: Color.fromRGBO(255, 255, 255, 1),
+                                fontWeight: FontWeight.w600,
+                                borderRadius: 8,
+                                backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                                onPressed: () {
+                                  Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                                },
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => setState(() => _photoUrl = null),
+
+
+                            SpaceHelperClass.h(12.w(context)),
+
+                            Expanded(
+                              child: CustomButtonHelper.customRoundedButton(
+                                context: context,
+                                text: "Cancel",
+                                fontSize: 16,
+                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                fontWeight: FontWeight.w600,
+                                borderRadius: 8,
+                                backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                                borderWidth: 1,
+                                borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                onPressed: () {
+                                  Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                                },
+                              ),
                             ),
+
+
+
                           ],
                         ),
+
+
+                        SpaceHelperClass.v(35.h(context)),
+
+
+
                       ],
-                      if (_photoUrl != null) SizedBox(height: 8),
-                      if (_photoUrl != null)
-                        ElevatedButton(
-                          onPressed: () {
-                            // Simulate recapture
-                            setState(() => _photoUrl = 'https://via.placeholder.com/400x200?text=New+Photo');
-                          },
-                          child: Text('Recapture Photo'),
-                          style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 48)),
-                        ),
-                      SizedBox(height: 16),
-                      Text('Location', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        initialValue: _location,
-                        decoration: InputDecoration(prefixIcon: Icon(Icons.location_on)),
-                        onChanged: (value) => _location = value,
-                      ),
-                      SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text('Save Log'),
-                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 48)),
-                      ),
-                      SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text('Cancel'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey.shade200,
-                          foregroundColor: Colors.black54,
-                          minimumSize: Size(double.infinity, 48),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              )
-        
-            ],
-          )
-        ),
+                )
+
+              ],
+            )
+        )),
       ),
     );
   }
 
-  Widget _buildAddedItem(String title, String subtitle, IconData icon, VoidCallback onDelete) {
+  Widget _buildAddedItem(String title, String subtitle, String icon, Function() onDelete,bool isActionButton,BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      width: 375.w(context),
+      margin: EdgeInsets.only(bottom: 8.bpm(context)),
+      padding: EdgeInsets.only(
+        top: 9.tpm(context),
+        bottom: 9.bpm(context),
+        left: 12.lpm(context),
+        right: 12.r(context),
+      ),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(8),
+        color: Color(0xFFFDFDFD), // rgba(253, 253, 253, 1)
+        borderRadius: BorderRadius.circular(8.r(context)),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.05),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue),
-          SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title),
-              Text(subtitle, style: TextStyle(fontSize: 12)),
-            ],
+          ImageHelperClass.customImageContainer(
+            context: context,
+            height: 20.h(context),
+            width: 20.w(context),
+            imagePath: icon,
+            imageFit: BoxFit.contain,
+            fit: BoxFit.cover,
           ),
-          Spacer(),
-          IconButton(
-            icon: Icon(Icons.delete, color: Colors.red),
-            onPressed: onDelete,
+
+
+
+          SpaceHelperClass.h(12.w(context)),
+
+
+
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                TextHelperClass.headingText(
+                  context: context,
+                  text: title,
+                  fontSize: 16,
+                  textColor: Colors.black, // White text
+                  fontWeight: FontWeight.w500,
+                ),
+
+                TextHelperClass.headingText(
+                  context: context,
+                  text: subtitle,
+                  fontSize: 14,
+                  textColor: Colors.black, // White text
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
+            ),
           ),
+
+          if(isActionButton == true)...[
+            IconButton(
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.delete_outlined, color: Colors.red, size: 20),
+              onPressed: onDelete,
+            ),
+          ] else...[
+            SizedBox.shrink(),
+          ]
+
         ],
       ),
     );

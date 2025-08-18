@@ -56,6 +56,11 @@ class AppImages {
   static const String addSiteDiary = "asset/icons/add_site_diary.png";
   static const String location = "asset/icons/Location.png";
   static const String sendIcon = "asset/icons/sendIcon.png";
+  static const String arrowSwapIcon = "asset/icons/arrow-swap.png";
+  static const String equipmentIcon = "asset/icons/equipment.png";
+  static const String workforceIcon = "asset/icons/workforce.png";
+  static const String imageIcon = "asset/icons/image_icon.png";
+  static const String locationIcon = "asset/icons/location_icon.png";
 
   //////////////////////// icons /////////////////////////////
 }
