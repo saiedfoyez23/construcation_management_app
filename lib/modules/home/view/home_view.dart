@@ -1,8 +1,9 @@
 import 'package:construction_management_app/modules/create_project/view/all_job_screen.dart';
 import 'package:construction_management_app/modules/home/controller/home_controller.dart';
 import 'package:construction_management_app/modules/home/view/add_day_work.dart';
+import 'package:construction_management_app/modules/home/view/add_day_work_view.dart';
 import 'package:construction_management_app/modules/home/view/add_site_diary_view.dart';
-import 'package:construction_management_app/modules/home/view/widget/home_widget.dart';
+import 'package:construction_management_app/modules/home/widget/home_widget/home_widget.dart';
 import 'package:construction_management_app/modules/subscription/view/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,7 +80,7 @@ class HomeView extends StatelessWidget {
                             imagePath: AppImages.addDayworks,
                             text: "Add Dayworks",
                             onTap: () {
-                              Get.off(() => const AddDayWork(), preventDuplicates: false);
+                              Get.off(()=>AddDayWorkView(), preventDuplicates: false);
                             },
                           ),
 

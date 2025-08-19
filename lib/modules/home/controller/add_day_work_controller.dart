@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,7 +8,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class AddSiteDiaryController extends GetxController {
+import '../../../common/common.dart';
+import '../widget/add_site_diary_widget/add_site_diary_widget.dart';
+
+class AddDayWorkController extends GetxController {
+
 
   late stt.SpeechToText _speech;
   RxBool isListening = false.obs;
@@ -19,6 +22,7 @@ class AddSiteDiaryController extends GetxController {
   Rx<TextEditingController> audioController = TextEditingController().obs;
   Rx<TextEditingController> taskNameController = TextEditingController().obs;
   Rx<TextEditingController> locationController = TextEditingController().obs;
+  Rx<TextEditingController> metrialUsedController = TextEditingController().obs;
   Rx<TextEditingController> workforceQuantityController = TextEditingController().obs;
   Rx<TextEditingController> workForceDurationController = TextEditingController().obs;
   Rx<TextEditingController> equipmentQuantityController = TextEditingController().obs;
@@ -199,5 +203,7 @@ class AddSiteDiaryController extends GetxController {
       await fetchAddress();
     });
   }
-}
 
+
+
+}

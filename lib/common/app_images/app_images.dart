@@ -61,6 +61,7 @@ class AppImages {
   static const String workforceIcon = "asset/icons/workforce.png";
   static const String imageIcon = "asset/icons/image_icon.png";
   static const String locationIcon = "asset/icons/location_icon.png";
+  static const String searchNormal = "asset/icons/search-normal.png";
 
   //////////////////////// icons /////////////////////////////
 }
