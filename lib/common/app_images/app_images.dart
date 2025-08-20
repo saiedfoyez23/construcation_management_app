@@ -62,6 +62,9 @@ class AppImages {
   static const String imageIcon = "asset/icons/image_icon.png";
   static const String locationIcon = "asset/icons/location_icon.png";
   static const String searchNormal = "asset/icons/search-normal.png";
+  static const String messageSendIcon = "asset/icons/button (1).png";
+  static const String emailSendIcon = "asset/icons/email.png";
+  static const String phoneIcon = "asset/icons/phone.png";
 
   //////////////////////// icons /////////////////////////////
 }
