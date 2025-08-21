@@ -1,54 +1,89 @@
+import 'dart:convert';
+
 import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
-import 'package:construction_management_app/modules/create_project/model/get_my_project.dart';
+import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/create_project/model/get_all_project_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyProjectController extends GetxController {
   var isLoading = false.obs;
-  var myProjectList = <GetMyProjectModel>[].obs;
+  Rx<TextEditingController> searchController = TextEditingController().obs;
+  Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
+  Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
+  RxList<Map<String, dynamic>> projects = <Map<String, dynamic>>[
+    {
+      "title": "Green Valley School",
+      "address": "123 Oak St",
+      "logs": "12",
+      "days": "2",
+      "images": <String>[]
+    },
+    {
+      "title": "Highway Bridge Project",
+      "address": "123 Oak St",
+      "logs": "12",
+      "days": "2",
+      "images": <String>[
+        "https://picsum.photos/200/120?1",
+        "https://picsum.photos/200/120?2",
+        "https://picsum.photos/200/120?3",
+      ]
+    },
+    {
+      "title": "Highway Bridge Project",
+      "address": "123 Oak St",
+      "logs": "12",
+      "days": "2",
+      "images": <String>[
+        "https://picsum.photos/200/120?4",
+        "https://picsum.photos/200/120?5",
+        "https://picsum.photos/200/120?6",
+      ]
+    },
+  ].obs;
 
   @override
   void onInit() {
-    getMyProject();
     super.onInit();
+    isLoading(true);
+    Future.delayed(Duration(seconds: 1),() async {
+      getMyProject();
+    });
   }
 
   Future<void> getMyProject() async {
     try {
-      isLoading(true);
-
-      final token = await LocalStorage.getData(key: AppConstant.token);
-      if (token == null) {
-        debugPrint('No token found. Please log in.');
-        return;
-      }
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
       var headers = {
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
       };
 
-      final responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(api: Api.myProject, headers: headers),
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.myProject}",
+          headers: headers,
+        ),
       );
 
       if (responseBody != null) {
-        final project = GetMyProjectModel.fromJson(responseBody);
-        myProjectList.add(project);
+        print("hello ${jsonEncode(responseBody)}");
+        getAllProjectResponseModel.value = GetAllProjectResponseModel.fromJson(responseBody);
+        //kSnackBar(message: "Employee create successful", bgColor: AppColors.green);
       } else {
-        throw ('No data received from the server');
+        throw "Get profile is Failed!";
       }
     } catch (e) {
-      kSnackBar(
-        message: 'Error fetching employees: $e',
-        bgColor: AppColors.red,
-      );
-      debugPrint('Catch Error: $e');
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
     } finally {
       isLoading(false);
     }

@@ -1,6 +1,6 @@
-import 'package:construction_management_app/modules/create_project/view/all_job_screen.dart';
+import 'package:construction_management_app/modules/create_project/view/all_job_view.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/home/controller/home_controller.dart';
-import 'package:construction_management_app/modules/home/view/add_day_work.dart';
 import 'package:construction_management_app/modules/home/view/add_day_work_view.dart';
 import 'package:construction_management_app/modules/home/view/add_site_diary_view.dart';
 import 'package:construction_management_app/modules/home/widget/home_widget/home_widget.dart';
@@ -111,7 +111,7 @@ class HomeView extends StatelessWidget {
                             text: 'See All',
                             textColor: Color.fromRGBO(37, 99, 235, 1),
                             onPressed: () {
-                              Get.off(()=>AllJobScreen(),preventDuplicates: false);
+                              Get.off(()=>DashboardView(index: 1),preventDuplicates: false);
                             },
                           ),
                         ],
@@ -128,6 +128,11 @@ class HomeView extends StatelessWidget {
                             dailyLogsCount: 12,
                             dayWorksCount: 23,
                             projectId: "your_project_id_here",
+                            images: [
+                              "https://picsum.photos/200/120?4",
+                              "https://picsum.photos/200/120?5",
+                              "https://picsum.photos/200/120?6",
+                            ],
                           );
                         }),
                       ),

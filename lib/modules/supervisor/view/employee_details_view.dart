@@ -43,9 +43,7 @@ class EmployeeDetailsView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
                   child: Column(
                     children: [
-
                       SpaceHelperClass.v(12.h(context)),
-
                       Container(
                         width: 375.w(context),
                         padding: EdgeInsets.fromLTRB(

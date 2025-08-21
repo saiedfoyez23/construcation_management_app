@@ -112,6 +112,7 @@ class HomeWidgets {
     Color statsBackgroundColor = const Color.fromRGBO(242, 243, 245, 1),
     double? width,
     EdgeInsetsGeometry? margin,
+    List<String>? images,
   }) {
     return Container(
       width: width,
@@ -255,18 +256,56 @@ class HomeWidgets {
               SpaceHelperClass.h(16.w(context)),
 
               // View Details Button
-              Expanded(
-                child: CustomButtonHelper.customTextButton(
-                  context: context,
-                  fontSize: 14,
-                  text: 'View Details →',
-                  onPressed: () {
-                    Get.off(() => ProjectDetalisSiteScreen(projectId: projectId), preventDuplicates: false,);
-                  },
+              if(images == null || images.isEmpty == true) ...[
+                Expanded(
+                  child: CustomButtonHelper.customTextButton(
+                    context: context,
+                    fontSize: 14,
+                    text: 'View Details →',
+                    onPressed: () {
+                      Get.off(() => ProjectDetalisSiteScreen(projectId: projectId), preventDuplicates: false,);
+                    },
+                  ),
                 ),
-              ),
+              ] else...[
+                SpaceHelperClass.h(45.w(context)),
+              ]
             ],
           ),
+
+
+          if (images != null && images.isNotEmpty) ...[
+            SpaceHelperClass.v(12.h(context)),
+            SizedBox(
+              height: 90.h(context),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: images.length,
+                separatorBuilder: (_, __) => SpaceHelperClass.h(8.w(context)),
+                itemBuilder: (ctx, i) { 
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(5.r(context)),
+                    child: Image.network(
+                      images[i],
+                      width: 120.w(context),
+                      height: 90.h(context),
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+              ),
+            ),
+            SpaceHelperClass.v(12.h(context)),
+            CustomButtonHelper.customTextButton(
+              context: context,
+              fontSize: 18,
+              text: 'View Details →',
+              onPressed: () {
+                Get.off(() => ProjectDetalisSiteScreen(projectId: projectId), preventDuplicates: false,);
+              },
+            ),
+          ],
+
         ],
       ),
     );

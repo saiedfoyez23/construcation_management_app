@@ -27,7 +27,7 @@ class Api {
 
   /// Create
   static const createProject = "$baseUrl/projects"; //done
-  static const myProject = "$baseUrl/projects"; //done
+  static const myProject = "$baseUrl/projects?limit=1000000000&sort=-updatedAt"; //done
   static const updateSingleProject = "$baseUrl/projects"; //done
   static singleProjectDetails({required projectId}) =>
       "$baseUrl/projects/$projectId";

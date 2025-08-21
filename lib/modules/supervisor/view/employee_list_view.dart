@@ -1,7 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/supervisor/controller/create_employee_controller.dart';
 import 'package:construction_management_app/modules/supervisor/view/employee_details_view.dart';
-import 'package:construction_management_app/modules/supervisor/view/supervisor_detalis.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -84,7 +83,7 @@ class EmployeeListView extends StatelessWidget {
                             ),
                             content: SizedBox(
                               width: 375.w(context),
-                              height: 812.h(context),
+                              //height: 812.h(context),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -317,6 +316,7 @@ class EmployeeListView extends StatelessWidget {
                                             } else if(createEmployeeController.sendEmployeeType.value == "") {
                                               kSnackBar(message: "Please enter employee type", bgColor: AppColors.red);
                                             } else {
+                                              createEmployeeController.selectedIndex.value = 3;
                                               Map<String,dynamic> data = {
                                                 "type": createEmployeeController.sendEmployeeType.value, // supervisor or manager
                                                 "name": createEmployeeController.nameController.value.text,
@@ -502,7 +502,18 @@ class EmployeeListView extends StatelessWidget {
                 ),
               ) :
               Expanded(
-                child: PageView(
+                child: createEmployeeController.getAllCompanyEmployeeResponseModel.value.data?.data?.isEmpty == true ||
+                    createEmployeeController.getAllCompanyEmployeeResponseModel.value.data?.data == null ?
+                TextHelperClass.headingText(
+                  context: context,
+                  text: "No Employee Available",
+                  alignment: Alignment.center,
+                  textAlign: TextAlign.center,
+                  fontSize: 24,
+                  textColor: Color.fromRGBO(114, 114, 114, 1),
+                  fontWeight: FontWeight.w700,
+                ) :
+                PageView(
                   controller: createEmployeeController.pageController.value,
                   onPageChanged: (index) async {
                     print(index);

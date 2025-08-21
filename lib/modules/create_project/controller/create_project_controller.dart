@@ -1,139 +1,127 @@
 import 'dart:convert';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
-import 'package:construction_management_app/common/local_store/token_decoder.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
-import 'package:construction_management_app/modules/create_project/controller/my_project_controller.dart';
-import 'package:construction_management_app/modules/create_project/model/get-all-company-employe-model.dart';
-import 'package:construction_management_app/modules/create_project/view/all_job_screen.dart';
+import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
+import 'package:construction_management_app/modules/supervisor/model/get_all_company_employee_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../common/app_color/app_color.dart';
+import '../../../common/custom_widget/custom_snackbar.dart';
 
 class CreateProjectController extends GetxController {
-  var isLoading = false.obs;
-  var isLoadingNow = false.obs;
-  var supervisorList = <Datum>[].obs;
-  var errorMessage = ''.obs;
-  var selectedSupervisor =
-      Rxn<Datum>(); // Observable to store selected supervisor
-  var selectedManager = Rxn<Datum>(); // Observable to store selected manager
-  final MyProjectController myProjectController = Get.put(
-    MyProjectController(),
-  );
+  RxBool isLoading = false.obs;
+  RxBool isSubmit = false.obs;
+  RxBool isTypeLoading = false.obs;
+  Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
+  Rx<GetAllCompanyEmployeeResponseModel> getAllCompanyEmployeeResponseModel = GetAllCompanyEmployeeResponseModel().obs;
+  Rx<GetAllCompanyEmployee> supervisorCompanyEmployee = GetAllCompanyEmployee().obs;
+  Rx<GetAllCompanyEmployee> managerCompanyEmployee = GetAllCompanyEmployee().obs;
+  RxList<GetAllCompanyEmployee> getAllCompanyEmployeeList = <GetAllCompanyEmployee>[].obs;
+  RxList<GetAllCompanyEmployee> searchAllCompanyEmployeeList = <GetAllCompanyEmployee>[].obs;
+  Rx<TextEditingController> clientNameController = TextEditingController().obs;
+  Rx<TextEditingController> projectNameController = TextEditingController().obs;
+  Rx<TextEditingController> locationController = TextEditingController().obs;
+  Rx<TextEditingController> timelineController = TextEditingController().obs;
+  Rx<TextEditingController> noteController = TextEditingController().obs;
+  Rx<TextEditingController> searchController = TextEditingController().obs;
+  Rx<DateTime> date = DateTime.now().obs;
 
-  final TextEditingController clientName = TextEditingController();
-  final TextEditingController name = TextEditingController();
-  final TextEditingController location = TextEditingController();
-  final TextEditingController timeline = TextEditingController();
-  final TextEditingController note = TextEditingController();
+
+  Future<void> onRefreshVariable() async {
+    getAllCompanyEmployeeResponseModel = GetAllCompanyEmployeeResponseModel().obs;
+    searchAllCompanyEmployeeList.clear();
+    getAllCompanyEmployeeList.clear();
+  }
+
+
+  Future<void> pickDateTime({required BuildContext context}) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: date.value,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      date.value = picked;
+      timelineController.value.text = date.value.toString();
+    }
+  }
 
   // Method to set selected supervisor
-  void selectSupervisor(Datum supervisor) {
-    selectedSupervisor.value = supervisor;
-  }
 
-  // Method to set selected manager
-  void selectedManagers(Datum manager) {
-    selectedManager.value = manager;
-  }
 
-  Future postCreateProject({
-    required String clientname,
-    required String name,
-    required String location,
-    required String timeline,
-    required String note,
-    required String supervisor,
-    required String manager,
-  }) async {
+  Future<void> getAllCompanyEmployeeByTypeController({required String type}) async {
     try {
-      isLoading(true);
-      final token = await LocalStorage.getData(key: AppConstant.token);
+      isTypeLoading(true);
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
-      if (token == null || token.isEmpty) {
-        Get.snackbar('Error', 'Token not found. Please log in again.');
-        debugPrint("No token found in LocalStorage");
-        return;
-      }
-      var map = {
-        "client_name": clientname,
-        "name": name,
-        "location": location,
-        "timeline": timeline,
-        "note": note,
-        "supervisor": selectedSupervisor.value?.id.toString() ?? supervisor,
-        // Use selected supervisor ID
-        "manager": selectedManager.value?.id.toString() ?? manager,
-        // Use selected manager ID
-      };
       var headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
       };
 
-      String? project = getConstructionToken(token);
-      if (project == null) {
-        Get.snackbar('Error', 'Id not found');
-        return;
-      }
       dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.postRequest(
-          api: Api.createProject,
-          body: jsonEncode(map),
+        await BaseClient.getRequest(
+          api: "${Api.getAllCompanyEmployees}?type=${type}",
           headers: headers,
         ),
       );
+
       if (responseBody != null) {
-        await myProjectController.getMyProject();
-        Get.to(AllJobScreen());
+        print("hello ${jsonEncode(responseBody)}");
+        getAllCompanyEmployeeResponseModel.value = GetAllCompanyEmployeeResponseModel.fromJson(responseBody);
+        getAllCompanyEmployeeResponseModel.value.data?.data?.forEach((value) {
+          getAllCompanyEmployeeList.add(value);
+          searchAllCompanyEmployeeList.add(value);
+        });
+        //kSnackBar(message: "Employee create successful", bgColor: AppColors.green);
+      } else {
+        throw "Get profile is Failed!";
       }
     } catch (e) {
-      debugPrint("Catch Error ..... $e");
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
     } finally {
-      isLoading(false);
+      isTypeLoading(false);
     }
   }
 
-  Future<void> getCompanyEmploye() async {
+  Future<void> createProjectController({required Map<String,dynamic> data}) async {
     try {
-      isLoadingNow(true);
-      errorMessage('');
-
-      final token = await LocalStorage.getData(key: AppConstant.token);
-      if (token == null) {
-        errorMessage('No token found. Please log in.');
-        return;
-      }
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
       var headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
       };
 
-      final responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: Api.getAllCompanyEmployees,
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.postRequest(
+          api: Api.createProject,
           headers: headers,
+          body: jsonEncode(data),
         ),
       );
 
       if (responseBody != null) {
-        final employ = GetAllCompanyEmployeModel.fromJson(responseBody);
-        if (employ.success == true) {
-          supervisorList.assignAll(employ.data);
-        } else {
-          errorMessage(employ.message ?? 'Failed to fetch employees');
-        }
+        print("hello ${jsonEncode(responseBody)}");
+        Get.off(()=>DashboardView(index: 1),preventDuplicates: false);
+        kSnackBar(message: "Project create successful", bgColor: AppColors.green);
       } else {
-        errorMessage('No data received from the server');
+        throw "Project create is Failed!";
       }
     } catch (e) {
-      errorMessage('Error fetching employees: $e');
-      debugPrint('Catch Error: $e');
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Project create is Failed: $e", bgColor: AppColors.red);
     } finally {
-      isLoadingNow(false);
+      isSubmit(false);
     }
   }
+
+
 }

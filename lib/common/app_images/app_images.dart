@@ -65,6 +65,7 @@ class AppImages {
   static const String messageSendIcon = "asset/icons/button (1).png";
   static const String emailSendIcon = "asset/icons/email.png";
   static const String phoneIcon = "asset/icons/phone.png";
-
+  static const String locationIconLight = "asset/icons/location_icon_light.png";
+  static const String addMemberIcon = "asset/icons/Add_mamber.png";
   //////////////////////// icons /////////////////////////////
 }

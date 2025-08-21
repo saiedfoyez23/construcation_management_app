@@ -1,10 +1,9 @@
 import 'package:construction_management_app/common/app_images/app_images.dart';
-import 'package:construction_management_app/modules/create_project/view/all_job_screen.dart';
+import 'package:construction_management_app/modules/create_project/view/all_job_view.dart';
 import 'package:construction_management_app/modules/dashboard/controller/dashboard_controller.dart';
 import 'package:construction_management_app/modules/home/view/home_view.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
 import 'package:construction_management_app/modules/profile/view/profile_screen.dart';
-import 'package:construction_management_app/modules/supervisor/view/employ_list_screen.dart';
 import 'package:construction_management_app/modules/supervisor/view/employee_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +14,7 @@ class DashboardView extends StatelessWidget {
   final int index;
   final List<Widget> _screens = [
     HomeView(),
-    AllJobScreen(),
-    //EmployListScreen(),
+    AllJobView(),
     EmployeeListView(),
     GroupMessage(),
     ProfileScreen(),
