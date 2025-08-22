@@ -35,114 +35,129 @@ class HomeView extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.scaffoldBackGroundColor,
             ),
-            child: CustomScrollView(
-              slivers: [
+            child: RefreshIndicator(
+              onRefresh: () async {
+                Get.off(DashboardView(index: 0),preventDuplicates: false);
+              },
+              child: CustomScrollView(
+                slivers: [
 
-                CustomAppBarHelper().homePageAppBar(context),
-
-
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-
-
-                      HomeWidgets.profileCard(
-                        context: context,
-                        userName: homeController.profileResponseModel.value.data?.user?.name ?? "Guest User",
-                        userRole: "Company Admin",
-                        accountType: "Basic Account",
-                        profileImageUrl: homeController.profileResponseModel.value.data?.user?.logo,
-                        onManageSubscriptionPressed: () {
-                          Get.off(() => const SubscriptionScreen(), preventDuplicates: false);
-                        },
-                        width: 375.w(context), // Optional width parameter
-                      ),
+                  CustomAppBarHelper().homePageAppBar(context),
 
 
-                      SpaceHelperClass.v(10.h(context)),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          CustomButtonHelper.imageTextColumnButton(
-                            context: context,
-                            imagePath: AppImages.addSiteDiary,
-                            text: "Add Site Diary",
-                            onTap: () {
-                              Get.off(()=>AddSiteDiaryView(), preventDuplicates: false);
-                            },
-                          ),
-                          SpaceHelperClass.h(16.w(context)),
-
-                          CustomButtonHelper.imageTextColumnButton(
-                            context: context,
-                            imagePath: AppImages.addDayworks,
-                            text: "Add Dayworks",
-                            onTap: () {
-                              Get.off(()=>AddDayWorkView(), preventDuplicates: false);
-                            },
-                          ),
-
-                        ],
-                      ),
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
 
 
+                        HomeWidgets.profileCard(
+                          context: context,
+                          userName: homeController.profileResponseModel.value.data?.user?.name ?? "Guest User",
+                          userRole: "Company Admin",
+                          accountType: "Basic Account",
+                          profileImageUrl: homeController.profileResponseModel.value.data?.user?.logo,
+                          onManageSubscriptionPressed: () {
+                            Get.off(() => const SubscriptionScreen(), preventDuplicates: false);
+                          },
+                          width: 375.w(context), // Optional width parameter
+                        ),
 
-                      SpaceHelperClass.v(16.h(context)),
 
+                        SpaceHelperClass.v(10.h(context)),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
 
-                          Expanded(
-                            child: TextHelperClass.headingText(
+                            CustomButtonHelper.imageTextColumnButton(
                               context: context,
-                              text: "Active Jobs",
-                              fontSize: 20,
-                              textColor: AppColors.black,
-                              fontWeight: FontWeight.w700,
+                              imagePath: AppImages.addSiteDiary,
+                              text: "Add Site Diary",
+                              onTap: () {
+                                Get.off(()=>AddSiteDiaryView(), preventDuplicates: false);
+                              },
                             ),
-                          ),
+                            SpaceHelperClass.h(16.w(context)),
 
-                          CustomButtonHelper.customTextButton(
-                            context: context,
-                            text: 'See All',
-                            textColor: Color.fromRGBO(37, 99, 235, 1),
-                            onPressed: () {
-                              Get.off(()=>DashboardView(index: 1),preventDuplicates: false);
-                            },
-                          ),
-                        ],
-                      ),
+                            CustomButtonHelper.imageTextColumnButton(
+                              context: context,
+                              imagePath: AppImages.addDayworks,
+                              text: "Add Dayworks",
+                              onTap: () {
+                                Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                              },
+                            ),
 
-                      SpaceHelperClass.v(18.h(context)),
-
-                      Column(
-                        children: List.generate(10, (index) {
-                          return HomeWidgets.projectDetailsCard(
-                            context: context,
-                            projectName: 'Green Valley School',
-                            projectAddress: '123 Oak St',
-                            dailyLogsCount: 12,
-                            dayWorksCount: 23,
-                            projectId: "your_project_id_here",
-                            images: [
-                              "https://picsum.photos/200/120?4",
-                              "https://picsum.photos/200/120?5",
-                              "https://picsum.photos/200/120?6",
-                            ],
-                          );
-                        }),
-                      ),
+                          ],
+                        ),
 
 
-                    ],
-                  ),
-                )
 
-              ],
+                        SpaceHelperClass.v(16.h(context)),
+
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            Expanded(
+                              child: TextHelperClass.headingText(
+                                context: context,
+                                text: "Active Jobs",
+                                fontSize: 20,
+                                textColor: AppColors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+
+                            CustomButtonHelper.customTextButton(
+                              context: context,
+                              text: 'See All',
+                              textColor: Color.fromRGBO(37, 99, 235, 1),
+                              onPressed: () {
+                                Get.off(()=>DashboardView(index: 1),preventDuplicates: false);
+                              },
+                            ),
+                          ],
+                        ),
+
+                        SpaceHelperClass.v(18.h(context)),
+
+                        homeController.getAllProjectResponseModel.value.data?.data?.isEmpty == true ||
+                            homeController.getAllProjectResponseModel.value.data?.data == null ?
+                        TextHelperClass.headingText(
+                          context: context,
+                          text: "No Project Available",
+                          alignment: Alignment.center,
+                          textAlign: TextAlign.center,
+                          fontSize: 24,
+                          textColor: Color.fromRGBO(114, 114, 114, 1),
+                          fontWeight: FontWeight.w700,
+                        ) :
+                        Column(
+                          children: List.generate(homeController.getAllProjectResponseModel.value.data!.data!.length, (index) {
+                            return HomeWidgets.projectDetailsCard(
+                              context: context,
+                              projectName: homeController.getAllProjectResponseModel.value.data?.data?[index].name ?? "",
+                              projectAddress: homeController.getAllProjectResponseModel.value.data?.data?[index].location ?? "",
+                              dailyLogsCount: homeController.getAllProjectResponseModel.value.data?.data?[index].totalSiteDiary ?? "",
+                              dayWorksCount: homeController.getAllProjectResponseModel.value.data?.data?[index].totalDayWork ?? "",
+                              projectId: "your_project_id_here",
+                              images: homeController.getAllProjectResponseModel.value.data?.data?[index].dayWorkImages,
+                            );
+                          }),
+                        ),
+
+
+                        SpaceHelperClass.v(18.h(context)),
+
+
+                      ],
+                    ),
+                  )
+
+                ],
+              ),
             ),
           ),
         ),

@@ -36,4 +36,36 @@ class TextHelperClass {
       ),
     );
   }
+
+
+  static Widget headingTextWithoutWidth({
+    required BuildContext context,
+    required String text,
+    Alignment alignment = Alignment.centerLeft,
+    Color containerColor = Colors.transparent, // Default: transparent
+    TextAlign textAlign = TextAlign.start, // Default: left-align text
+    double fontSize = 24,
+    Color textColor = const Color.fromRGBO(35, 47, 48, 1),
+    FontWeight fontWeight = FontWeight.w700,
+    FontStyle fontStyle = FontStyle.normal,
+    TextOverflow textOverFlow = TextOverflow.visible,
+  }) {
+    return Container(
+      alignment: alignment,
+      decoration: BoxDecoration(
+        color: containerColor,
+      ),
+      child: Text(
+        text,
+        overflow: textOverFlow,
+        textAlign: textAlign, // Controls text alignment within container
+        style: GoogleFonts.albertSans(
+          fontSize: fontSize.sp(context),
+          color: textColor,
+          fontWeight: fontWeight,
+          fontStyle: fontStyle,
+        ),
+      ),
+    );
+  }
 }

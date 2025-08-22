@@ -94,17 +94,35 @@ class AllJobView extends StatelessWidget {
                   ),
                 ),
                 keyboardType: TextInputType.text,
-                onChanged: (value) async {},
+                onChanged: (value) async {
+                  await myProjectController.getMySearchProject(searchTerm: value!);
+                },
               ),
 
               SpaceHelperClass.v(18.h(context)),
 
               // Projects List
               Expanded(
-                child: ListView.builder(
+                child: myProjectController.getAllProjectResponseModel.value.data?.data?.isEmpty == true ||
+                    myProjectController.getAllProjectResponseModel.value.data?.data == null ?
+                TextHelperClass.headingText(
+                  context: context,
+                  text: "No Project Available",
+                  alignment: Alignment.center,
+                  textAlign: TextAlign.center,
+                  fontSize: 24,
+                  textColor: Color.fromRGBO(114, 114, 114, 1),
+                  fontWeight: FontWeight.w700,
+                ) : myProjectController.isSearchLoading.value == true ?
+                CustomLoaderButton().customLoaderButton(
+                  backgroundColor: Colors.transparent,
+                  loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                  height: 812,
+                  context: context,
+                ) :
+                ListView.builder(
                   itemCount: myProjectController.getAllProjectResponseModel.value.data?.data?.length,
                   itemBuilder: (context, index) {
-                    final project = myProjectController.projects[index];
                     return HomeWidgets.projectDetailsCard(
                       context: context,
                       projectName: myProjectController.getAllProjectResponseModel.value.data?.data?[index].name ?? "",

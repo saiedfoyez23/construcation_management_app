@@ -57,6 +57,7 @@ class User {
   var createdAt;
   var location;
   var logo;
+  var image;
   var name;
   var phone;
   var updatedAt;
@@ -68,6 +69,7 @@ class User {
     this.companyName,
     this.createdAt,
     this.location,
+    this.image,
     this.logo,
     this.name,
     this.phone,
@@ -81,6 +83,7 @@ class User {
     companyName = json['company_name'];
     createdAt = json['createdAt'];
     location = json['location'];
+    image = json['image'];
     logo = json['logo'];
     name = json['name'];
     phone = json['phone'];
@@ -95,6 +98,7 @@ class User {
     data['company_name'] = this.companyName;
     data['createdAt'] = this.createdAt;
     data['location'] = this.location;
+    data['image'] = this.image;
     data['logo'] = this.logo;
     data['name'] = this.name;
     data['phone'] = this.phone;

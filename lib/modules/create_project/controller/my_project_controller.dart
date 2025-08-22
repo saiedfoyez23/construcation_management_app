@@ -12,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyProjectController extends GetxController {
-  var isLoading = false.obs;
+  RxBool isLoading = false.obs;
+  RxBool isSearchLoading = false.obs;
   Rx<TextEditingController> searchController = TextEditingController().obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
@@ -53,7 +54,7 @@ class MyProjectController extends GetxController {
     super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
-      getMyProject();
+      await getMyProject();
     });
   }
 
@@ -88,4 +89,40 @@ class MyProjectController extends GetxController {
       isLoading(false);
     }
   }
+
+
+
+  Future<void> getMySearchProject({required String searchTerm}) async {
+    try {
+      isSearchLoading(true);
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.myProjectSearch}${searchTerm}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllProjectResponseModel.value = GetAllProjectResponseModel.fromJson(responseBody);
+        //kSnackBar(message: "Employee create successful", bgColor: AppColors.green);
+      } else {
+        throw "Get profile is Failed!";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isSearchLoading(false);
+    }
+  }
+
 }

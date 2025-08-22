@@ -67,5 +67,14 @@ class AppImages {
   static const String phoneIcon = "asset/icons/phone.png";
   static const String locationIconLight = "asset/icons/location_icon_light.png";
   static const String addMemberIcon = "asset/icons/Add_mamber.png";
+  static const String editBlueIcon = "asset/icons/edit_blue.png";
+  static const String editBlackIcon = "asset/icons/edit_black.png";
+  static const String whiteEditIcon = "asset/icons/white_edit_icon.png";
+  static const String editProfileIcon = "asset/icons/edit_profile.png";
+  static const String subscriptionIcon = "asset/icons/subscription.png";
+  static const String termsAndConditionsIcon = "asset/icons/terms_and_conditions.png";
+  static const String privacyAndPolicyIcon = "asset/icons/privacy_and_policy.png";
+  static const String changePasswordIcon = "asset/icons/change_password.png";
+  static const String logOutIcon = "asset/icons/log_out.png";
   //////////////////////// icons /////////////////////////////
 }

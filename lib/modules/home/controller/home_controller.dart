@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/create_project/model/get_all_project_response_model.dart';
 import 'package:construction_management_app/modules/home/model/profile_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ class HomeController extends GetxController {
 
   Rx<ProfileResponseModel> profileResponseModel = ProfileResponseModel().obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
+  Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
   RxBool isLoading = false.obs;
 
   @override
@@ -25,6 +27,7 @@ class HomeController extends GetxController {
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
       await getUserProfileController();
+      await getMyProject();
     });
   }
 
@@ -58,7 +61,7 @@ class HomeController extends GetxController {
       debugPrint("Catch Error.........$e");
       kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
     } finally {
-      isLoading(false);
+      //isLoading(false);
     }
   }
 
@@ -68,6 +71,38 @@ class HomeController extends GetxController {
       profileResponseModel.value = ProfileResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.getProfileResponse)));
     } else {
       profileResponseModel.value = ProfileResponseModel();
+    }
+  }
+
+  Future<void> getMyProject() async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.myProject}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllProjectResponseModel.value = GetAllProjectResponseModel.fromJson(responseBody);
+        //kSnackBar(message: "Employee create successful", bgColor: AppColors.green);
+      } else {
+        throw "Get profile is Failed!";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
     }
   }
 
