@@ -142,7 +142,7 @@ class HomeView extends StatelessWidget {
                               projectAddress: homeController.getAllProjectResponseModel.value.data?.data?[index].location ?? "",
                               dailyLogsCount: homeController.getAllProjectResponseModel.value.data?.data?[index].totalSiteDiary ?? "",
                               dayWorksCount: homeController.getAllProjectResponseModel.value.data?.data?[index].totalDayWork ?? "",
-                              projectId: "your_project_id_here",
+                              projectId: homeController.getAllProjectResponseModel.value.data?.data?[index].sId,
                               images: homeController.getAllProjectResponseModel.value.data?.data?[index].dayWorkImages,
                             );
                           }),

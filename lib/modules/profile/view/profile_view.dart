@@ -1,7 +1,13 @@
+import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/common/local_store/local_store.dart';
+import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
 import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/profile/controller/profile_controller.dart';
+import 'package:construction_management_app/modules/profile/view/change_password_view.dart';
 import 'package:construction_management_app/modules/profile/view/edit_profile_view.dart';
+import 'package:construction_management_app/modules/profile/view/privacy_and_policy.dart';
+import 'package:construction_management_app/modules/profile/view/terms_and_condition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -63,19 +69,39 @@ class ProfileView extends StatelessWidget {
                         Stack(
                           alignment: Alignment.bottomRight,
                           children: [
+                            profileController.imageFile.value.path == "" ?
                             CircleAvatar(
                               radius: 100.r(context),
-                              backgroundImage: NetworkImage(
-                                'https://www.example.com/placeholder-profile.jpg', // Replace with actual image URL or use AssetImage
-                              ),
+                              backgroundImage: profileController.profileResponseModel.value.data?.user?.image != null
+                                  ? NetworkImage(profileController.profileResponseModel.value.data?.user?.image) : null,
+                              backgroundColor: Colors.grey[300],
+                              child: profileController.profileResponseModel.value.data?.user?.image == null ?
+                              Icon(
+                                Icons.person,
+                                size: 48.r(context),
+                                color: Colors.white,
+                              ) : null,
+                            ) :
+                            CircleAvatar(
+                              radius: 100.r(context),
+                              backgroundImage: FileImage(profileController.imageFile.value),
                               backgroundColor: Colors.grey,
                             ),
                             Positioned(
                               bottom: 0,
-                              left: 121.lpm(context),
-                              right: 26.rpm(context),
+                              left: 111.lpm(context),
+                              right: 10.rpm(context),
                               child: ImageHelperClass.customImageButtonContainer(
-                                onPressed: () async {},
+                                onPressed: () async {
+                                  profileController.showImageSourceUploadDialog(
+                                    context: context,
+                                    name: profileController.profileResponseModel.value.data?.user?.name ?? "",
+                                    phone: profileController.profileResponseModel.value.data?.user?.phone ?? "",
+                                    companyName: profileController.profileResponseModel.value.data?.user?.companyName ?? "",
+                                    email: profileController.profileResponseModel.value.data?.user?.email ?? "",
+                                    location: profileController.profileResponseModel.value.data?.user?.location ?? "",
+                                  );
+                                },
                                 context: context,
                                 height: 42.h(context),
                                 width: 42.w(context),
@@ -116,7 +142,9 @@ class ProfileView extends StatelessWidget {
                           icon: AppImages.changePasswordIcon,
                           title: 'Change Password',
                           iconColor: Color.fromRGBO(41, 45, 50, 1),
-                          onTap: () async {},
+                          onTap: () async {
+                            Get.off(()=>ChangePasswordView(),preventDuplicates: false);
+                          },
                           context: context,
                         ),
                         _buildListItem(
@@ -130,21 +158,27 @@ class ProfileView extends StatelessWidget {
                           icon: AppImages.termsAndConditionsIcon,
                           title: 'Terms and conditions',
                           iconColor: Color.fromRGBO(41, 45, 50, 1),
-                          onTap: () async {},
+                          onTap: () async {
+                            Get.off(()=>TermsAndConditionView(),preventDuplicates: false);
+                          },
                           context: context,
                         ),
                         _buildListItem(
                           icon: AppImages.privacyAndPolicyIcon,
                           title: 'Privacy and Policy',
                           iconColor: Color.fromRGBO(41, 45, 50, 1),
-                          onTap: () async {},
+                          onTap: () async {
+                            Get.off(()=>PrivacyAndPolicy(),preventDuplicates: false);
+                          },
                           context: context,
                         ),
                         _buildListItem(
                           icon: AppImages.logOutIcon,
                           title: 'Log Out',
                           iconColor: Color.fromRGBO(41, 45, 50, 1),
-                          onTap: () async {},
+                          onTap: () async {
+                            showLogoutDialog(context);
+                          },
                           context: context,
                         ),
                       ],
@@ -210,6 +244,35 @@ class ProfileView extends StatelessWidget {
         trailing: Icon(Icons.chevron_right, color: iconColor,size: 32.r(context),),
         onTap: onTap,
       ),
+    );
+  }
+
+
+  void showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Are you sure you want to logout?"),
+          content: Text("You will be logged out of the app."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                LocalStorage.removeData(key: AppConstant.token);
+                LocalStorage.removeData(key: AppConstant.getProfileResponse);
+                Get.offAll(()=>SignInView());
+              },
+              child: Text("Logout"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

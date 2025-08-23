@@ -129,8 +129,8 @@ class AllJobView extends StatelessWidget {
                       projectAddress: myProjectController.getAllProjectResponseModel.value.data?.data?[index].location ?? "",
                       dailyLogsCount: int.parse(myProjectController.getAllProjectResponseModel.value.data!.data![index].totalSiteDiary.toString()),
                       dayWorksCount: int.parse(myProjectController.getAllProjectResponseModel.value.data!.data![index].totalDayWork.toString()),
-                      projectId: "your_project_id_here",
-                      images:myProjectController.getAllProjectResponseModel.value.data!.data![index].dayWorkImages,
+                      projectId: myProjectController.getAllProjectResponseModel.value.data!.data![index].sId,
+                      images: myProjectController.getAllProjectResponseModel.value.data!.data![index].dayWorkImages,
                     );
                   },
                 ),

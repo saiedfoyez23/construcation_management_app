@@ -78,6 +78,11 @@ class BaseClient {
         }
       } else if (response.statusCode == 401) {
         print(response.body);
+        kSnackBar(
+          message: json.decode(response.body)['message'].toString(),
+          bgColor: AppColors.red,
+        );
+        print(response.body);
         /* try {
             var response = await http.post(
               Uri.parse(ApiConstant.refreshToken),

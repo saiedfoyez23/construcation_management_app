@@ -3,7 +3,6 @@ import 'package:construction_management_app/modules/create_project/view/all_job_
 import 'package:construction_management_app/modules/dashboard/controller/dashboard_controller.dart';
 import 'package:construction_management_app/modules/home/view/home_view.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
-import 'package:construction_management_app/modules/profile/view/profile_screen.dart';
 import 'package:construction_management_app/modules/profile/view/profile_view.dart';
 import 'package:construction_management_app/modules/supervisor/view/employee_list_view.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ class DashboardView extends StatelessWidget {
     AllJobView(),
     EmployeeListView(),
     GroupMessage(),
-    //ProfileScreen(),
     ProfileView()
   ];
 

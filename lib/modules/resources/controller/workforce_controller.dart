@@ -120,7 +120,6 @@
 import 'dart:convert';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
-import 'package:construction_management_app/common/local_store/token_decoder.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/resources/model/workforce_model.dart';
@@ -151,14 +150,14 @@ class WorkforceController extends GetxController {
         return;
       }
 
-      String? project = getConstructionToken(token);
-      if (project == null) {
-        Get.snackbar('Error', 'Id not found');
-        return;
-      }
-      var data = [
-        {"quantity": quantity, "name": name, "project": project},
-      ];
+      //String? project = getConstructionToken(token);
+      // if (project == null) {
+      //   Get.snackbar('Error', 'Id not found');
+      //   return;
+      // }
+      // var data = [
+      //   {"quantity": quantity, "name": name, "project": project},
+      // ];
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -167,7 +166,7 @@ class WorkforceController extends GetxController {
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.postRequest(
           api: Api.postWorkforce,
-          body: jsonEncode(data),
+          //body: jsonEncode(data),
           headers: headers,
         ),
       );

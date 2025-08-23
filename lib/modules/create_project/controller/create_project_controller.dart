@@ -38,15 +38,13 @@ class CreateProjectController extends GetxController {
 
 
   Future<void> pickDateTime({required BuildContext context}) async {
-    DateTime? picked = await showDatePicker(
+    DateTimeRange? picked = await showDateRangePicker(
       context: context,
-      initialDate: date.value,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      date.value = picked;
-      timelineController.value.text = date.value.toString();
+      timelineController.value.text = "${picked.start}_${picked.end}";
     }
   }
 

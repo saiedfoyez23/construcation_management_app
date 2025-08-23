@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/create_project/controller/create_project_controller.dart';
 import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
@@ -1015,7 +1017,7 @@ class CreateProjectView extends StatelessWidget {
                                 "supervisor": createProjectController.supervisorCompanyEmployee.value.sId,
                                 "manager": createProjectController.managerCompanyEmployee.value.sId
                               };
-                              print(data);
+                              print(jsonEncode(data));
                               createProjectController.isSubmit.value = true;
                               await createProjectController.createProjectController(data: data);
                             }

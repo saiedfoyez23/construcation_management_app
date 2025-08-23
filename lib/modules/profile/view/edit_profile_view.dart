@@ -263,21 +263,18 @@ class EditProfileView extends StatelessWidget {
 
 
                       SpaceHelperClass.v(8.h(context)),
-                      CustomTextFormFieldClass.buildIntlPhoneField(
+
+                      CustomTextFormFieldClass.build(
                         context: context,
                         controller: profileController.phoneNumberController.value,
                         hintText: "Phone number",
-                        textColor: Color.fromRGBO(173, 174, 188, 1),
                         borderColor: Color.fromRGBO(229, 231, 235, 1),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 16.hpm(context),
-                          vertical: 12.vpm(context),
+                          vertical: 8.vpm(context),
                         ),
                         borderRadius: 8,
-                        initialCountryCode: 'US',
-                        onChanged: (phone) {
-                          profileController.phoneNumber.value = phone.completeNumber;
-                        },
+                        keyboardType: TextInputType.text,
                       ),
 
 
@@ -338,32 +335,28 @@ class EditProfileView extends StatelessWidget {
                         fontSize: 16,
                         gradientColors: [Color.fromRGBO(38, 50, 56, 1), Color.fromRGBO(28, 59, 71, 1)],
                         onPressed: () async {
-                          // if(createProjectController.clientNameController.value.text == "") {
-                          //   kSnackBar(message: "Please enter client name", bgColor: AppColors.red);
-                          // } else if(createProjectController.projectNameController.value.text == "") {
-                          //   kSnackBar(message: "Please enter project name", bgColor: AppColors.red);
-                          // } else if(createProjectController.locationController.value.text == "") {
-                          //   kSnackBar(message: "Please enter project location", bgColor: AppColors.red);
-                          // } else if(createProjectController.timelineController.value.text == "") {
-                          //   kSnackBar(message: "Please enter timeline", bgColor: AppColors.red);
-                          // } else if(createProjectController.supervisorCompanyEmployee.value.name == null) {
-                          //   kSnackBar(message: "Please select supervisor", bgColor: AppColors.red);
-                          // } else if(createProjectController.managerCompanyEmployee.value.name == null) {
-                          //   kSnackBar(message: "Please select manager", bgColor: AppColors.red);
-                          // } else {
-                          //   Map<String,dynamic> data = {
-                          //     "client_name": createProjectController.clientNameController.value.text,
-                          //     "name": createProjectController.projectNameController.value.text,
-                          //     "location": createProjectController.locationController.value.text,
-                          //     "timeline": createProjectController.timelineController.value.text,
-                          //     "note": createProjectController.noteController.value.text,
-                          //     "supervisor": createProjectController.supervisorCompanyEmployee.value.sId,
-                          //     "manager": createProjectController.managerCompanyEmployee.value.sId
-                          //   };
-                          //   print(data);
-                          //   createProjectController.isSubmit.value = true;
-                          //   await createProjectController.createProjectController(data: data);
-                          // }
+                          if(profileController.nameController.value.text == "") {
+                            kSnackBar(message: "Please enter name", bgColor: AppColors.red);
+                          } else if(profileController.companyController.value.text == "") {
+                            kSnackBar(message: "Please enter company name", bgColor: AppColors.red);
+                          } else if(profileController.locationController.value.text == "") {
+                            kSnackBar(message: "Please enter company location", bgColor: AppColors.red);
+                          } else if(profileController.phoneNumberController.value.text == "") {
+                            kSnackBar(message: "Please enter phone number", bgColor: AppColors.red);
+                          } else if(profileController.emailController.value.text == "") {
+                            kSnackBar(message: "Please enter email", bgColor: AppColors.red);
+                          } else {
+                            profileController.isSubmit.value = true;
+                            await profileController.updateProfileController(
+                              name: profileController.nameController.value.text,
+                              phone: profileController.phoneNumberController.value.text,
+                              companyName: profileController.companyController.value.text,
+                              email: profileController.emailController.value.text,
+                              location: profileController.locationController.value.text,
+                              image: profileController.imageFile.value,
+                              logo: profileController.logoFile.value,
+                            );
+                          }
                         },
                       ),
 

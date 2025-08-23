@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
@@ -9,25 +8,31 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/home/model/profile_response_model.dart';
-import 'package:construction_management_app/modules/profile/model/get_company_profile_model.dart';
+import 'package:construction_management_app/modules/profile/model/get_all_setting_data_response_model.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import "package:http/http.dart"as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 
 class ProfileController extends GetxController {
-  var profileData = Rx<GetCompanyProfileModel?>(null);
 
   RxBool isLoading = false.obs;
   RxBool isSubmit = false.obs;
 
+  RxBool isObscureText = true.obs;
+  RxBool isConfirmObscureText = true.obs;
+
+  Rx<TextEditingController> passwordController = TextEditingController().obs;
+  Rx<TextEditingController> confirmPasswordController = TextEditingController().obs;
+
   Rx<ProfileResponseModel> profileResponseModel = ProfileResponseModel().obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
+  Rx<GetAllSettingDataResponseModel> getAllSettingDataResponseModel = GetAllSettingDataResponseModel().obs;
   Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> companyController = TextEditingController().obs;
   Rx<TextEditingController> locationController = TextEditingController().obs;
@@ -41,6 +46,7 @@ class ProfileController extends GetxController {
     super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
+      await getContentController();
       await getUserProfileController();
     });
   }
@@ -145,67 +151,140 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> myProfileController() async {
+
+  void showImageSourceUploadDialog({
+    required BuildContext context,
+    required String name,
+    required String phone,
+    required String companyName,
+    required String email,
+    required String location,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select Image Source'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () async {
+                Navigator.pop(context);
+                await pickImageUpload(
+                  source: ImageSource.camera,
+                  name: name,
+                  phone: phone,
+                  companyName: companyName,
+                  email: email,
+                  location: location,
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () async {
+                Navigator.pop(context);
+                await pickImageUpload(
+                  source: ImageSource.gallery,
+                  name: name,
+                  phone: phone,
+                  companyName: companyName,
+                  email: email,
+                  location: location,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Future<void> pickImageUpload({
+    required ImageSource source,
+    required String name,
+    required String phone,
+    required String companyName,
+    required String email,
+    required String location,
+  }) async {
     try {
       isLoading(true);
-
-      final token = await LocalStorage.getData(key: AppConstant.token);
-      if (token == null || token.isEmpty) {
-        kSnackBar(
-          message: "No token found. Please log in again.",
-          bgColor: AppColors.red,
+      print("call");
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile != null) {
+        imageFile.value = File(pickedFile.path);
+        await updateImageController(
+          image: imageFile.value,
+          name: name,
+          phone: phone,
+          companyName: companyName,
+          email: email,
+          location: location,
         );
-        return;
-      }
-
-      var headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
-
-      final responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(api: Api.companyProfile, headers: headers),
-      );
-
-      if (responseBody != null) {
-        profileData.value = GetCompanyProfileModel.fromJson(responseBody);
-        kSnackBar(
-          message: profileData.value?.message ?? "Profile fetched successfully",
-          bgColor: AppColors.green,
-        );
-      } else {
-        kSnackBar(message: "Failed to fetch profile!", bgColor: AppColors.red);
       }
     } catch (e) {
-      debugPrint("Error fetching profile: $e");
-      kSnackBar(message: "Error: ${e.toString()}", bgColor: AppColors.red);
-    } finally {
-      isLoading(false);
+      kSnackBar(message: 'Error: ${e.toString()}', bgColor: AppColors.red);
     }
   }
 
-  Future<void> updateProfileController({
-    File? image,
-    File? logo
+
+  Future<void> updateImageController({
+    required File image,
+    File? logo,
+    required String name,
+    required String phone,
+    required String companyName,
+    required String email,
+    required String location,
   }) async {
     try {
+
+      print(image.path);
+      print(logo?.path);
+
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+
       // Create multipart request
       var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(Api.uploadFiles),
+        'PUT',
+        Uri.parse(Api.profileUpdate),
       );
 
+      request.headers.addAll(headers);
+
+
       // Get file extension and MIME type
-      String fileExtension = file.path.split('.').last.toLowerCase();
-      String mimeType = CustomMimeType.getMimeType(file.path);
+
+      request.fields['payload'] = jsonEncode({
+        'name': name,
+        'phone': phone,
+        'company_name': companyName, // Convert to string explicitly
+        'location': location,
+        "email": email,
+      });
+
+
+      String mimeType = CustomMimeType.getMimeType(image!.path);
       MediaType contentType = MediaType.parse(mimeType);
 
       // Add file to request with proper MIME type
       request.files.add(
         await http.MultipartFile.fromPath(
-          'file', // Field name expected by server
-          file.path,
-          filename: file.path.split('/').last,
+          'image', // Field name expected by server
+          image.path,
+          filename: image.path.split('/').last,
           contentType: contentType,
         ),
       );
@@ -224,7 +303,7 @@ class ProfileController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'] ?? 'File upload failed';
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        imageUploadResponseModel.value = ImageUploadResponseModel.fromJson(responseData);
+        await getUserProfileController();
       } else {
         // Handle server error
         String errorMessage = responseData['message'] ?? 'File upload failed';
@@ -237,94 +316,187 @@ class ProfileController extends GetxController {
     } finally {}
   }
 
-  Future<void> putProfileController({
+
+  Future<void> updateProfileController({
     File? image,
     File? logo,
     required String name,
     required String phone,
-    required dynamic companyname, // Consider changing to String if possible
+    required String companyName,
+    required String email,
     required String location,
-    required Function(String) onSuccess,
-    required Function(String) onFail,
-    required Function(String) onExceptionFail,
   }) async {
     try {
-      isLoading(true);
 
-      // Validate inputs
-      if (name.isEmpty ||
-          phone.isEmpty ||
-          (companyname == null || companyname.toString().isEmpty) ||
-          location.isEmpty) {
-        onFail("All text fields are required.");
-        return;
-      }
+      print(image?.path);
+      print(logo?.path);
 
-      final token = await LocalStorage.getData(key: AppConstant.token);
-      if (token == null || token.isEmpty) {
-        onFail("No token found. Please log in again.");
-        return;
-      }
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
-      var request = http.MultipartRequest('PUT', Uri.parse(Api.profileUpdate));
-      request.headers.addAll({
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer $token',
-      });
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
 
-      // Ensure companyname is a string
+
+      // Create multipart request
+      var request = http.MultipartRequest(
+        'PUT',
+        Uri.parse(Api.profileUpdate),
+      );
+
+      request.headers.addAll(headers);
+
+
+      // Get file extension and MIME type
+
       request.fields['payload'] = jsonEncode({
         'name': name,
-        'contact_number': phone,
-        'companyname': companyname.toString(), // Convert to string explicitly
+        'phone': phone,
+        'company_name': companyName, // Convert to string explicitly
         'location': location,
+        "email": email,
       });
 
-      if (image != null) {
-        final mimeType = lookupMimeType(image.path) ?? 'image/jpeg';
+      if(image?.path != "") {
+        String mimeType = CustomMimeType.getMimeType(image!.path);
+        MediaType contentType = MediaType.parse(mimeType);
+
+        // Add file to request with proper MIME type
         request.files.add(
           await http.MultipartFile.fromPath(
-            'image',
+            'image', // Field name expected by server
             image.path,
-            contentType: MediaType.parse(mimeType),
+            filename: image.path.split('/').last,
+            contentType: contentType,
           ),
         );
       }
 
-      if (logo != null) {
-        final mimeType = lookupMimeType(logo.path) ?? 'image/jpeg';
+
+      if(logo?.path != "") {
+        String mimeType = CustomMimeType.getMimeType(logo!.path);
+        MediaType contentType = MediaType.parse(mimeType);
+
+        // Add file to request with proper MIME type
         request.files.add(
           await http.MultipartFile.fromPath(
-            'logo',
+            'logo', // Field name expected by server
             logo.path,
-            contentType: MediaType.parse(mimeType),
+            filename: logo.path.split('/').last,
+            contentType: contentType,
           ),
         );
       }
 
+
+      // Send request
       var response = await request.send();
+
+      // Process response
       String responseBody = await response.stream.bytesToString();
+      var responseData = jsonDecode(responseBody);
 
-      log("Profile update response: $responseBody");
-
-      final responseData = jsonDecode(responseBody);
+      debugPrint('Upload Response: ${jsonEncode(responseData)}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        profileData.value = GetCompanyProfileModel.fromJson(responseData);
-        onSuccess(responseData['message'] ?? "Profile updated successfully");
-        await myProfileController();
+        // Handle successful upload
+        String successMessage = responseData['message'] ?? 'File upload failed';
+        kSnackBar(message: successMessage, bgColor: AppColors.green);
+        Get.off(DashboardView(index: 4,),preventDuplicates: false);
       } else {
-        String errorMessage = responseData['message'] ?? "Failed to update profile";
-        if (responseData['errorSources'] != null && responseData['errorSources'].isNotEmpty) {
-          errorMessage += ": ${responseData['errorSources'][0]['message']}";
-        }
-        onFail(errorMessage);
+        // Handle server error
+        String errorMessage = responseData['message'] ?? 'File upload failed';
+        kSnackBar(message: errorMessage, bgColor: AppColors.red);
       }
     } catch (e) {
-      log("Error updating profile: $e");
-      onExceptionFail(e.toString());
+      // Handle exceptions
+      debugPrint('Upload error: $e');
+      kSnackBar(message: "${e}", bgColor: AppColors.red);
     } finally {
-      isLoading(false);
+      isSubmit(false);
+    }
+  }
+
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+
+      Map<String,dynamic> data = {
+        "old_password": oldPassword,
+        "new_password": newPassword
+      };
+
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.postRequest(
+          api: Api.changePassword,
+          body: jsonEncode(data),
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        String message = responseBody['message'].toString();
+        kSnackBar(message: message, bgColor: AppColors.green);
+        LocalStorage.removeData(key: AppConstant.token);
+        LocalStorage.removeData(key: AppConstant.getProfileResponse);
+        Get.offAll(()=>SignInView());
+      } else {
+        throw 'Reset password failed!';
+      }
+    } catch (e) {
+      debugPrint("Catch Error:::::::: $e");
+      kSnackBar(message: "Error changing password: $e", bgColor: AppColors.red);
+    } finally {
+      isSubmit(false);
+    }
+  }
+
+  Future<void> getContentController() async {
+    try {
+      isLoading(true);
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: Api.setting,
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        //String message = responseBody['message'].toString();
+        //kSnackBar(message: message, bgColor: AppColors.green);
+        getAllSettingDataResponseModel.value = GetAllSettingDataResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed!";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
     }
   }
 }

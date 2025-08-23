@@ -30,6 +30,7 @@ class Api {
   static const myProject = "$baseUrl/projects?limit=1000000000&sort=-updatedAt"; //done
   static const myProjectSearch = "$baseUrl/projects?limit=1000000000&searchTerm="; //done
   static const updateSingleProject = "$baseUrl/projects"; //done
+  static const projectDetails = "$baseUrl/projects"; //done
   static singleProjectDetails({required projectId}) =>
       "$baseUrl/projects/$projectId";
 

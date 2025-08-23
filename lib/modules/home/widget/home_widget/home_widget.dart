@@ -1,4 +1,5 @@
 import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/modules/project_details/view/project_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -263,7 +264,7 @@ class HomeWidgets {
                     fontSize: 14,
                     text: 'View Details →',
                     onPressed: () {
-                      Get.off(() => ProjectDetalisSiteScreen(projectId: projectId), preventDuplicates: false,);
+                      Get.off(()=>ProjectDetailsView(projectId: projectId), preventDuplicates: false,);
                     },
                   ),
                 ),
@@ -301,7 +302,7 @@ class HomeWidgets {
               fontSize: 18,
               text: 'View Details →',
               onPressed: () {
-                Get.off(() => ProjectDetalisSiteScreen(projectId: projectId), preventDuplicates: false,);
+                Get.off(() => ProjectDetailsView(projectId: projectId), preventDuplicates: false,);
               },
             ),
           ],
