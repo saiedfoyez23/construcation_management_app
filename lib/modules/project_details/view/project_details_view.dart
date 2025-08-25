@@ -1,9 +1,11 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/project_details/controller/project_view_controller.dart';
+import 'package:construction_management_app/modules/resources/view/resources_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../dashboard/view/dashboard_view.dart';
+import '../../resources/view/project_detalis_resources.dart';
 
 class ProjectDetailsView extends StatelessWidget {
   ProjectDetailsView({super.key,required this.projectId});
@@ -328,6 +330,61 @@ class ProjectDetailsView extends StatelessWidget {
                             ),
 
 
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  width: 107.w(context),
+                                  height: 30.h(context),
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      //_handleAddTask(controller: controller);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 5.hpm(context),
+                                        vertical: 4.vpm(context),
+                                      ),
+                                      backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4.r(context)),
+                                      ),
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      minimumSize: Size(107.w(context), 30.h(context)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+
+                                        ImageHelperClass.customImageContainer(
+                                          context: context,
+                                          height: 12.h(context),
+                                          width: 12.w(context),
+                                          imagePath: AppImages.messageCircleIcon,
+                                          imageFit: BoxFit.contain,
+                                          fit: BoxFit.cover,
+                                        ),
+
+                                        SpaceHelperClass.h(8.w(context)),
+
+                                        Expanded(
+                                          child: TextHelperClass.headingText(
+                                            context: context,
+                                            text: "Message Team",
+                                            fontSize: 12,
+                                            textColor: Color.fromRGBO(255, 255, 255, 1),
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+
 
 
 
@@ -336,6 +393,94 @@ class ProjectDetailsView extends StatelessWidget {
                           ],
                         ),
                       ),
+
+                      SpaceHelperClass.v(16.h(context)),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          CustomButtonHelper.imageTextColumnButton(
+                            context: context,
+                            width: 101.w(context),
+                            imagePath: AppImages.addSiteDiary,
+                            text: "Site Diary",
+                            onTap: () {
+                              //Get.off(()=>AddSiteDiaryView(), preventDuplicates: false);
+                            },
+                          ),
+
+                          SpaceHelperClass.h(16.w(context)),
+
+                          CustomButtonHelper.imageTextColumnButton(
+                            context: context,
+                            width: 101.w(context),
+                            imagePath: AppImages.addDayworks,
+                            text: "Dayworks",
+                            onTap: () {
+                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                            },
+                          ),
+
+                          SpaceHelperClass.h(16.w(context)),
+
+                          CustomButtonHelper.imageTextColumnButton(
+                            context: context,
+                            width: 101.w(context),
+                            imagePath: AppImages.planningBlackIcon,
+                            text: "Planning",
+                            onTap: () {
+                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                            },
+                          ),
+
+                        ],
+                      ),
+
+                      SpaceHelperClass.v(16.h(context)),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          CustomButtonHelper.imageTextColumnButton(
+                            context: context,
+                            width: 101.w(context),
+                            imagePath: AppImages.resourcesBlackIcon,
+                            text: "Resources",
+                            onTap: () {
+                              Get.off(()=>ResourcesView(projectId: projectId),preventDuplicates: false);
+                            },
+                          ),
+
+                          SpaceHelperClass.h(16.w(context)),
+
+                          CustomButtonHelper.imageTextColumnButton(
+                            context: context,
+                            width: 101.w(context),
+                            imagePath: AppImages.checkSheetBlackIcon,
+                            text: "Checksheet",
+                            onTap: () {
+                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                            },
+                          ),
+
+                          SpaceHelperClass.h(16.w(context)),
+
+                          CustomButtonHelper.imageTextColumnButton(
+                            context: context,
+                            width: 101.w(context),
+                            imagePath: AppImages.toolsBlackIcon,
+                            text: "Tools",
+                            onTap: () {
+                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                            },
+                          ),
+
+                        ],
+                      ),
+
+                      SpaceHelperClass.v(16.h(context)),
 
 
 

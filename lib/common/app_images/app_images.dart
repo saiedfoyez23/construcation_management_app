@@ -75,6 +75,13 @@ class AppImages {
   static const String termsAndConditionsIcon = "asset/icons/terms_and_conditions.png";
   static const String privacyAndPolicyIcon = "asset/icons/privacy_and_policy.png";
   static const String changePasswordIcon = "asset/icons/change_password.png";
+  static const String dayWorkBlackIcon = "asset/icons/day_work_black.png";
+  static const String checkSheetBlackIcon = "asset/icons/check_sheet_black.png";
+  static const String planningBlackIcon = "asset/icons/planning_black.png";
+  static const String resourcesBlackIcon = "asset/icons/resources_black.png";
+  static const String siteDiaryIcon = "asset/icons/site_diary.png";
+  static const String toolsBlackIcon = "asset/icons/tools_black.png";
+  static const String messageCircleIcon = "asset/icons/message-circle.png";
   static const String logOutIcon = "asset/icons/log_out.png";
   //////////////////////// icons /////////////////////////////
 }

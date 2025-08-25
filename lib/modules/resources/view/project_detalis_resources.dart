@@ -5,7 +5,7 @@ import 'package:construction_management_app/common/custom_widget/custom_text_wid
 import 'package:construction_management_app/modules/calculator_tools/view/project_detalis_tool.dart';
 import 'package:construction_management_app/modules/check_list/view/project_detalis_checklist.dart';
 import 'package:construction_management_app/modules/day_work/view/project_detalis_day_work.dart';
-import 'package:construction_management_app/modules/resources/controller/workforce_controller.dart';
+//import 'package:construction_management_app/modules/resources/controller/workforce_controller.dart';
 import 'package:construction_management_app/modules/resources/view/widget/new_equipment_dialog.dart';
 import 'package:construction_management_app/modules/resources/view/widget/new_workforce_dailog.dart';
 import 'package:construction_management_app/modules/resources/view/widget/project_detalis_resource_card.dart';
@@ -27,7 +27,7 @@ class ProjectDetalisResources extends StatefulWidget {
 class _ProjectDetalisResourcesState extends State<ProjectDetalisResources> {
   @override
   Widget build(BuildContext context) {
-    WorkforceController controller = Get.put(WorkforceController());
+    //WorkforceController controller = Get.put(WorkforceController());
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -326,27 +326,27 @@ class _ProjectDetalisResourcesState extends State<ProjectDetalisResources> {
                           ],
                         ),
                         SizedBox(height: 10),
-                        Obx(
-                          () => ListView.builder(
-                            itemCount: controller.workforceList.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              var workforce = controller.workforceList[index];
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5,
-                                ),
-                                child: ResourcesViewCard(
-                                  image: AppImages.person,
-                                  text: workforce.data?.name ?? "",
-                                  title:
-                                      workforce.data?.quantity.toString() ?? '',
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+                        // Obx(
+                        //   () => ListView.builder(
+                        //     itemCount: controller.workforceList.length,
+                        //     physics: NeverScrollableScrollPhysics(),
+                        //     shrinkWrap: true,
+                        //     itemBuilder: (context, index) {
+                        //       var workforce = controller.workforceList[index];
+                        //       return Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //           vertical: 5,
+                        //         ),
+                        //         child: ResourcesViewCard(
+                        //           image: AppImages.person,
+                        //           text: workforce.data?.name ?? "",
+                        //           title:
+                        //               workforce.data?.quantity.toString() ?? '',
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

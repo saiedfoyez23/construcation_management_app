@@ -200,6 +200,7 @@ class CustomButtonHelper {
   }) {
     return Container(
       width: width ?? 94.w(context),
+      height: 102.w(context),
       decoration: BoxDecoration(
         color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(borderRadius ?? 12.r(context)),

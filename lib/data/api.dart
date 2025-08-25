@@ -17,9 +17,15 @@ class Api {
   static const resetForgetPassword =
       "$baseUrl/auth/reset-forgotten-password"; // done
   static const changePassword = "$baseUrl/auth/change-password"; // done
+
+
   /// workforce
   static const postWorkforce = "$baseUrl/workforces";
   static const getProjectWorkforce = "$baseUrl/workforces/all";
+
+  /// workforce
+  static const postEquipments = "$baseUrl/equipments";
+  static const getProjectEquipments = "$baseUrl/equipments/all";
 
   /// profile
   static const companyProfile = "$baseUrl/company-admins/profile"; // done
