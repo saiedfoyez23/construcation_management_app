@@ -1,4 +1,7 @@
 import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/modules/calculator_tools/view/calculator_view.dart';
+import 'package:construction_management_app/modules/calculator_tools/view/widget/calculate_view_card.dart';
+import 'package:construction_management_app/modules/folder/view/folder_view.dart';
 import 'package:construction_management_app/modules/project_details/controller/project_view_controller.dart';
 import 'package:construction_management_app/modules/resources/view/resources_view.dart';
 import 'package:flutter/material.dart';
@@ -224,7 +227,9 @@ class ProjectDetailsView extends StatelessWidget {
                           title: "Folders",
                           folderCount: projectViewController.getProjectDetailsResponseModel.value.data?.folder.toString() ?? "",
                           iconColor: Color.fromRGBO(41, 45, 50, 1),
-                          onTap: () async {}
+                          onTap: () async {
+                            Get.off(()=>FolderView(projectId: projectId),preventDuplicates: false);
+                          }
                       ),
 
                       SpaceHelperClass.v(16.h(context)),
@@ -473,7 +478,7 @@ class ProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.toolsBlackIcon,
                             text: "Tools",
                             onTap: () {
-                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                              Get.off(()=>CalculatorView(projectId: projectId,), preventDuplicates: false);
                             },
                           ),
 
@@ -481,6 +486,7 @@ class ProjectDetailsView extends StatelessWidget {
                       ),
 
                       SpaceHelperClass.v(16.h(context)),
+
 
 
 

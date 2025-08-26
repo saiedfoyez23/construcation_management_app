@@ -82,6 +82,10 @@ class AppImages {
   static const String siteDiaryIcon = "asset/icons/site_diary.png";
   static const String toolsBlackIcon = "asset/icons/tools_black.png";
   static const String messageCircleIcon = "asset/icons/message-circle.png";
+  static const String uploadImageIcon = "asset/icons/upload_image.png";
+  static const String deleteFileIcon = "asset/icons/delete_file.png";
+  static const String folderEditIcon = "asset/icons/folder_edit.png";
+  static const String fileIcon = "asset/icons/file_icon.png";
   static const String logOutIcon = "asset/icons/log_out.png";
   //////////////////////// icons /////////////////////////////
 }

@@ -381,7 +381,7 @@ import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/common/common_container/container_view.dart';
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
 import 'package:construction_management_app/data/dummy_data.dart';
-import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
+//import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
 import 'package:construction_management_app/modules/site_diary/controller/singel_project_controller.dart';
 import 'package:construction_management_app/modules/site_diary/view/all_site_diary_screen.dart';
 import 'package:construction_management_app/modules/site_diary/view/edit_log_screen.dart';
@@ -553,10 +553,10 @@ class _ProjectDetalisSiteScreenState extends State<ProjectDetalisSiteScreen> {
                               ),
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () => Get.to(() => AllFolderScreen()),
-                            child: Icon(Icons.arrow_forward_ios, size: 18),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () => Get.to(() => AllFolderScreen()),
+                          //   child: Icon(Icons.arrow_forward_ios, size: 18),
+                          // ),
                         ],
                       ),
                     ),

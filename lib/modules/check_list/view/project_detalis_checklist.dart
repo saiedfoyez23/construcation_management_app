@@ -9,7 +9,7 @@ import 'package:construction_management_app/modules/check_list/view/widget/check
 import 'package:construction_management_app/modules/check_list/view/widget/checklist_inspection_card.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/project_detalis_checklist.dart';
 import 'package:construction_management_app/modules/day_work/view/project_detalis_day_work.dart';
-import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
+//import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
 import 'package:construction_management_app/modules/resources/view/project_detalis_resources.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/project_detalis_planning.dart';
@@ -141,7 +141,7 @@ class _ProjectDetalisChecklistState extends State<ProjectDetalisChecklist> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => AllFolderScreen());
+                            //Get.to(() => AllFolderScreen());
                           },
                           child: Icon(Icons.arrow_forward_ios, size: 18),
                         ),

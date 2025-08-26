@@ -19,11 +19,17 @@ class Api {
   static const changePassword = "$baseUrl/auth/change-password"; // done
 
 
+  ///folders
+  static const postFolder = "$baseUrl/folders";
+  static const getAllFolder = "$baseUrl/folders/project";
+  static const postFile = "$baseUrl/folders";
+  static const getFolderDetails = "$baseUrl/folders";
+
   /// workforce
   static const postWorkforce = "$baseUrl/workforces";
   static const getProjectWorkforce = "$baseUrl/workforces/all";
 
-  /// workforce
+  /// equipments
   static const postEquipments = "$baseUrl/equipments";
   static const getProjectEquipments = "$baseUrl/equipments/all";
 

@@ -12,7 +12,7 @@ import 'package:construction_management_app/modules/calculator_tools/view/widget
 import 'package:construction_management_app/modules/calculator_tools/view/widget/tool_team_card.dart';
 import 'package:construction_management_app/modules/calculator_tools/view/widget/tool_timeline_card.dart';
 import 'package:construction_management_app/modules/check_list/view/project_detalis_checklist.dart';
-import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
+//import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
 import 'package:construction_management_app/modules/resources/view/project_detalis_resources.dart';
 import 'package:construction_management_app/modules/site_diary/view/project_detalis_site.dart';
@@ -144,7 +144,7 @@ class _ProjectDetalisToolState extends State<ProjectDetalisTool> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => AllFolderScreen());
+                            //Get.to(() => AllFolderScreen());
                           },
                           child: Icon(Icons.arrow_forward_ios, size: 18),
                         ),

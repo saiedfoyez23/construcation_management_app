@@ -8,7 +8,7 @@ import 'package:construction_management_app/modules/day_work/view/widget/day_wor
 import 'package:construction_management_app/modules/day_work/view/widget/green_view_card.dart';
 import 'package:construction_management_app/modules/day_work/view/widget/project_detalis_day_card.dart';
 import 'package:construction_management_app/modules/day_work/view/widget/team_view_card.dart';
-import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
+//import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
 import 'package:construction_management_app/modules/resources/view/project_detalis_resources.dart';
 import 'package:construction_management_app/modules/site_diary/view/project_detalis_site.dart';
@@ -142,7 +142,7 @@ class _ProjectDetalisDayWorkScreenState
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => AllFolderScreen());
+                            //Get.to(() => AllFolderScreen());
                           },
                           child: Icon(Icons.arrow_forward_ios, size: 18),
                         ),
