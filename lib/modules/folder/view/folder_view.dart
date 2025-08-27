@@ -30,8 +30,7 @@ class FolderView extends StatelessWidget {
           ) :
           RefreshIndicator(
             onRefresh: () async {
-              folderController.isLoading.value = true;
-              await folderController.getAllCompanyEmployeeController(projectId: projectId);
+              Get.off(()=>FolderView(projectId: projectId),preventDuplicates: false);
             },
             child: CustomScrollView(
               slivers: [
@@ -234,6 +233,7 @@ class FolderView extends StatelessWidget {
 
                         CustomTextFormFieldClass.build(
                           context: context,
+
                           controller: folderController.searchController.value,
                           hintText: "Search Folder...",
                           textColor: Color.fromRGBO(173, 174, 188, 1),
@@ -256,10 +256,10 @@ class FolderView extends StatelessWidget {
                               fit: BoxFit.contain,
                             ),
                           ),
-                          keyboardType: TextInputType.text,
                           onChanged: (folderValue) async {
                             if(folderValue == "") {
-                              folderController.getAllFoldersSearchResponseList = folderController.getAllFoldersResponseList;
+                              folderController.getAllFoldersSearchResponseList.value = folderController.getAllFoldersResponseList;
+                              folderController.getAllFoldersSearchResponseList.refresh();
                             } else {
                               folderController.getAllFoldersSearchResponseList.value = folderController.getAllFoldersSearchResponseList.where((value)=>value.name.toString().toLowerCase().contains(folderValue.toString().toLowerCase()) == true).toList();
                             }
@@ -274,7 +274,27 @@ class FolderView extends StatelessWidget {
                   ),
                 ),
 
+                folderController.getAllFoldersSearchResponseList.isEmpty == true ?
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
 
+
+                      SpaceHelperClass.v(50.h(context)),
+
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "No Folder Available",
+                        alignment: Alignment.center,
+                        textAlign: TextAlign.center,
+                        fontSize: 24,
+                        textColor: Color.fromRGBO(114, 114, 114, 1),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ],
+                  ),
+                ):
                 SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (context,int index) {

@@ -2,15 +2,12 @@ import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/common/common_container/container_view.dart';
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
-import 'package:construction_management_app/modules/calculator_tools/view/project_detalis_tool.dart';
 import 'package:construction_management_app/modules/check_list/view/project_detalis_checklist.dart';
 import 'package:construction_management_app/modules/day_work/view/project_detalis_day_work.dart';
-//import 'package:construction_management_app/modules/resources/controller/workforce_controller.dart';
 import 'package:construction_management_app/modules/resources/view/widget/new_equipment_dialog.dart';
 import 'package:construction_management_app/modules/resources/view/widget/new_workforce_dailog.dart';
 import 'package:construction_management_app/modules/resources/view/widget/project_detalis_resource_card.dart';
 import 'package:construction_management_app/modules/resources/view/widget/resources_available_card.dart';
-import 'package:construction_management_app/modules/resources/view/widget/resources_view_card.dart';
 import 'package:construction_management_app/modules/site_diary/view/project_detalis_site.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/project_detalis_planning.dart';
 import 'package:flutter/material.dart';
@@ -263,17 +260,17 @@ class _ProjectDetalisResourcesState extends State<ProjectDetalisResources> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProjectDetalisTool());
-                        },
-                        child: ProjectDetalisResourcesCard(
-                          image: AppImages.planning,
-                          name: "Tools",
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(() => ProjectDetalisTool());
+                    //     },
+                    //     child: ProjectDetalisResourcesCard(
+                    //       image: AppImages.planning,
+                    //       name: "Tools",
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 16),

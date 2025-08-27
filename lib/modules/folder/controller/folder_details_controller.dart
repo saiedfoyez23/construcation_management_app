@@ -24,6 +24,8 @@ class FolderDetailsController extends GetxController {
   Rx<TextEditingController> searchController = TextEditingController().obs;
   Rx<TextEditingController> folderNameController = TextEditingController().obs;
   Rx<GetFoldersDetailsResponseModel> getFoldersDetailsResponseModel = GetFoldersDetailsResponseModel().obs;
+  RxList<GetFoldersDetails> getFileList = <GetFoldersDetails>[].obs;
+  RxList<GetFoldersDetails> getFileSearchList = <GetFoldersDetails>[].obs;
   RxBool isLoading = false.obs;
   RxBool isDelete = false.obs;
   String folderId;
@@ -79,6 +81,10 @@ class FolderDetailsController extends GetxController {
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
         getFoldersDetailsResponseModel.value = GetFoldersDetailsResponseModel.fromJson(responseBody);
+        getFoldersDetailsResponseModel.value.data?.files?.forEach((value) {
+          getFileList.add(value);
+          getFileSearchList.add(value);
+        });
         //kSnackBar(message: "Employee create successful", bgColor: AppColors.green);
       } else {
         throw "Folder Retrieve is Failed!";
@@ -91,6 +97,41 @@ class FolderDetailsController extends GetxController {
     }
 
   }
+
+  Future<void> updateFileNameController({required Map<String,dynamic> data,required String folderId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.patchRequest(
+          api: "${Api.postFile}/${folderId}/name",
+          headers: headers,
+          body: jsonEncode(data),
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        Get.back();
+        await getFolderDetailsController(folderId: folderId);
+        kSnackBar(message: "File Name Change Successful", bgColor: AppColors.green);
+      } else {
+        throw "File name change is Failed!";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "File name change is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isSubmit(false);
+    }
+  }
+
 
   // Function to download a file from an API using HTTP and open it afterward
   Future<void> downloadAndOpenFile(String apiUrl, String fileName) async {
@@ -195,6 +236,7 @@ class FolderDetailsController extends GetxController {
         Get.back();
         String successMessage = responseData['message'] ?? 'File upload failed';
         kSnackBar(message: successMessage, bgColor: AppColors.green);
+        await getFolderDetailsController(folderId: folderId);
       } else {
         // Handle server error
         String errorMessage = responseData['message'] ?? 'File upload failed';

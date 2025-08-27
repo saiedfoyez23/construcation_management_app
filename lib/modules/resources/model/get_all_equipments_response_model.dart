@@ -31,6 +31,7 @@ class GetAllEquipmentsResponse {
   var sId;
   var project;
   var name;
+  var initialQuantity;
   var quantity;
   var isDeleted;
   var createdAt;
@@ -41,6 +42,7 @@ class GetAllEquipmentsResponse {
     this.sId,
     this.project,
     this.name,
+    this.initialQuantity,
     this.quantity,
     this.isDeleted,
     this.createdAt,
@@ -53,6 +55,7 @@ class GetAllEquipmentsResponse {
     project = json['project'];
     name = json['name'];
     quantity = json['quantity'];
+    initialQuantity = json['initial_quantity'];
     isDeleted = json['is_deleted'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -65,6 +68,7 @@ class GetAllEquipmentsResponse {
     data['project'] = this.project;
     data['name'] = this.name;
     data['quantity'] = this.quantity;
+    data['initial_quantity'] = this.initialQuantity;
     data['is_deleted'] = this.isDeleted;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;

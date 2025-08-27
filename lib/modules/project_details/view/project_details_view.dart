@@ -1,14 +1,11 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/calculator_tools/view/calculator_view.dart';
-import 'package:construction_management_app/modules/calculator_tools/view/widget/calculate_view_card.dart';
 import 'package:construction_management_app/modules/folder/view/folder_view.dart';
 import 'package:construction_management_app/modules/project_details/controller/project_view_controller.dart';
 import 'package:construction_management_app/modules/resources/view/resources_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../dashboard/view/dashboard_view.dart';
-import '../../resources/view/project_detalis_resources.dart';
 
 class ProjectDetailsView extends StatelessWidget {
   ProjectDetailsView({super.key,required this.projectId});

@@ -30,8 +30,7 @@ class FolderDetailsView extends StatelessWidget {
           ),
           child: RefreshIndicator(
             onRefresh: () async {
-              folderDetailsController.isLoading.value = true;
-              await folderDetailsController.getFolderDetailsController(folderId: folderId);
+              Get.off(FolderDetailsView(projectId: projectId, folderId: folderId),preventDuplicates: false);
             },
             child: CustomScrollView(
               slivers: [
@@ -284,7 +283,145 @@ class FolderDetailsView extends StatelessWidget {
                           title: folderDetailsController.getFoldersDetailsResponseModel.value.data?.name ?? "",
                           folderCount: folderDetailsController.getFoldersDetailsResponseModel.value.data!.files!.length.toString(),
                           onTap: () async {},
-                          onPressed: () async {},
+                          onPressed: () async {
+                            folderDetailsController.folderNameController.value.text = folderDetailsController.getFoldersDetailsResponseModel.value.data?.name ?? "";
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                return Obx(()=>AlertDialog(
+                                  backgroundColor: AppColors.white,
+                                  insetPadding: EdgeInsets.only(
+                                    left: 21.lpm(context),
+                                    right: 21.rpm(context),
+                                    top: 56.tpm(context),
+                                    bottom: 56.bpm(context),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 24.hpm(context),vertical: 24.vpm(context)),
+                                  scrollable: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r(context)),
+                                    side: const BorderSide(
+                                      color: Color.fromRGBO(229, 231, 235, 1),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  content: SizedBox(
+                                    width: 375.w(context),
+                                    //height: 812.h(context),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+
+                                        TextHelperClass.headingText(
+                                          context: context,
+                                          text: "Edit Folder",
+                                          fontSize: 22,
+                                          textColor: AppColors.black255,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+
+
+
+
+                                        SpaceHelperClass.v(16.h(context)),
+                                        TextHelperClass.headingText(
+                                          context: context,
+                                          text: "Folder Name",
+                                          fontSize: 16,
+                                          textColor: Color.fromRGBO(75, 85, 99, 1),
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                        SpaceHelperClass.v(8.h(context)),
+                                        CustomTextFormFieldClass.build(
+                                          context: context,
+                                          controller: folderDetailsController.folderNameController.value,
+                                          hintText: "Enter folder name",
+                                          textColor: Color.fromRGBO(173, 174, 188, 1),
+                                          borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 16.hpm(context),
+                                            vertical: 12.vpm(context),
+                                          ),
+                                          borderRadius: 8,
+                                          keyboardType: TextInputType.text,
+                                        ),
+
+
+
+                                        SpaceHelperClass.v(16.h(context)),
+
+
+                                        Row(
+                                          children: [
+
+
+                                            Expanded(
+                                              child: CustomButtonHelper.customRoundedButton(
+                                                context: context,
+                                                text: "Cancel",
+                                                fontSize: 16,
+                                                textColor: Color.fromRGBO(75, 85, 99, 1),
+                                                fontWeight: FontWeight.w600,
+                                                borderRadius: 8,
+                                                backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                                                borderWidth: 1,
+                                                borderColor: Color.fromRGBO(229, 231, 235, 1),
+                                                onPressed: () async {
+                                                  Get.back();
+                                                },
+                                              ),
+                                            ),
+
+                                            SpaceHelperClass.h(12.w(context)),
+
+
+                                            Expanded(
+                                              child: folderDetailsController.isSubmit.value == true ?
+                                              CustomLoaderButton().customLoaderButton(
+                                                backgroundColor: Colors.transparent,
+                                                loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                                                height: 50,
+                                                context: context,
+                                              ) :
+                                              CustomButtonHelper.customRoundedButton(
+                                                context: context,
+                                                text: "Update",
+                                                fontSize: 16,
+                                                textColor: Color.fromRGBO(255, 255, 255, 1),
+                                                fontWeight: FontWeight.w600,
+                                                borderRadius: 8,
+                                                backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                                                onPressed: () async {
+                                                  if(folderDetailsController.folderNameController.value.text == "") {
+                                                    kSnackBar(message: "Please enter folder name", bgColor: AppColors.red);
+                                                  } else {
+                                                    Map<String,dynamic> data = {
+                                                      "name": folderDetailsController.folderNameController.value.text,
+                                                    };
+                                                    print(data);
+                                                    folderDetailsController.isSubmit.value = true;
+                                                    await folderDetailsController.updateFileNameController(data: data,folderId: folderId);
+                                                  }
+                                                },
+                                              ),
+                                            ),
+
+
+
+                                          ],
+                                        ),
+
+
+                                        SpaceHelperClass.v(24.h(context)),
+
+                                      ],
+                                    ),
+                                  ),
+                                ));
+                              },
+                            );
+                          },
                         ),
 
                         SpaceHelperClass.v(18.h(context)),
@@ -292,7 +429,7 @@ class FolderDetailsView extends StatelessWidget {
                         CustomTextFormFieldClass.build(
                           context: context,
                           controller: folderDetailsController.searchController.value,
-                          hintText: "Search Folder...",
+                          hintText: "Search File...",
                           textColor: Color.fromRGBO(173, 174, 188, 1),
                           borderColor: Color.fromRGBO(229, 231, 235, 1),
                           contentPadding: EdgeInsets.symmetric(
@@ -314,8 +451,13 @@ class FolderDetailsView extends StatelessWidget {
                             ),
                           ),
                           keyboardType: TextInputType.text,
-                          onChanged: (folderValue) async {
-
+                          onChanged: (fileValue) async {
+                            if(fileValue == "") {
+                              folderDetailsController.getFileSearchList.value = folderDetailsController.getFileList;
+                              folderDetailsController.getFileSearchList.refresh();
+                            } else {
+                              folderDetailsController.getFileSearchList.value =  folderDetailsController.getFileSearchList.where((value)=>value.name.toString().toLowerCase().contains(fileValue.toString().toLowerCase()) == true).toList();
+                            }
                           },
                         ),
 
@@ -338,7 +480,7 @@ class FolderDetailsView extends StatelessWidget {
                             child: _buildListFileItem(
                               context: context,
                               icon: AppImages.fileIcon,
-                              title: folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?[index].name ?? "",
+                              title: folderDetailsController.getFileSearchList[index].name ?? "",
                               onTap: () async {},
                               onPressed: () async {
                                 showDialog(
@@ -430,7 +572,7 @@ class FolderDetailsView extends StatelessWidget {
                                                     folderDetailsController.isDelete.value = true;
                                                     await folderDetailsController.deleteFileController(
                                                       folderId: folderId,
-                                                      url: folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?[index].url,
+                                                      url: folderDetailsController.getFileSearchList[index].url,
                                                     );
                                                   },
                                                 ),
@@ -473,15 +615,15 @@ class FolderDetailsView extends StatelessWidget {
                               },
                               iconColor: Color.fromRGBO(239, 68, 68, 1),
                               onDownloadPressed: () async {
-                                await folderDetailsController.downloadAndOpenFile(folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?[index].url ?? "", folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?[index].name ?? "");
+                                await folderDetailsController.downloadAndOpenFile(folderDetailsController.getFileSearchList[index].url ?? "", folderDetailsController.getFileSearchList[index].name ?? "");
                               },
                               onOpenPressed: () async {
-                                await folderDetailsController.downloadAndOpenFile(folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?[index].url ?? "", folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?[index].name ?? "");
+                                await folderDetailsController.downloadAndOpenFile(folderDetailsController.getFileSearchList[index].url ?? "", folderDetailsController.getFileSearchList[index].name ?? "");
                               }
                             ),
                           );
                         },
-                      childCount: folderDetailsController.getFoldersDetailsResponseModel.value.data?.files?.length
+                      childCount: folderDetailsController.getFileSearchList.length
                     )
                 )
 

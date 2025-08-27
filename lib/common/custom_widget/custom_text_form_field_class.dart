@@ -11,7 +11,7 @@ class CustomTextFormFieldClass {
     required BuildContext context,
     String? hintText,
     TextEditingController? controller,
-    TextInputType? keyboardType,
+    TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
     bool readOnly = false,
     Widget? prefixIcon,

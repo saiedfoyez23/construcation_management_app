@@ -2,14 +2,12 @@ import 'package:construction_management_app/common/app_color/app_color.dart';
 import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/common/common_container/container_view.dart';
 import 'package:construction_management_app/common/custom_widget/custom_text_widget.dart';
-import 'package:construction_management_app/modules/calculator_tools/view/project_detalis_tool.dart';
 import 'package:construction_management_app/modules/check_list/view/ducting_report_screen.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/check_list_team_card.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/check_list_timeline_card.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/checklist_inspection_card.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/project_detalis_checklist.dart';
 import 'package:construction_management_app/modules/day_work/view/project_detalis_day_work.dart';
-//import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
 import 'package:construction_management_app/modules/resources/view/project_detalis_resources.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/project_detalis_planning.dart';
@@ -262,17 +260,17 @@ class _ProjectDetalisChecklistState extends State<ProjectDetalisChecklist> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProjectDetalisTool());
-                        },
-                        child: ProjectDetalisChecklistCard(
-                          image: AppImages.planning,
-                          name: "Tools",
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(() => ProjectDetalisTool());
+                    //     },
+                    //     child: ProjectDetalisChecklistCard(
+                    //       image: AppImages.planning,
+                    //       name: "Tools",
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 16),

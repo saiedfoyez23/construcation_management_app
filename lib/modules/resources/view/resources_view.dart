@@ -297,7 +297,7 @@ class ResourcesView extends StatelessWidget {
                                 return SizedBox.shrink();
                               } else {
                                 return _buildAddedItem(
-                                  title: "${value.quantity} ${value.name}",
+                                  title: "${value.initialQuantity} ${value.name}",
                                   icon: AppImages.workforceIcon,
                                   context: context,
                                   isActionButton: true,
@@ -561,7 +561,7 @@ class ResourcesView extends StatelessWidget {
                             ...resourcesController.getAllEquipmentsResponseModel.value.data!.map((value) {
                               if(value.isDeleted == false) {
                                 return _buildAddedItem(
-                                  title: "${value.quantity} ${value.name}",
+                                  title: "${value.initialQuantity} ${value.name}",
                                   icon: AppImages.equipmentIcon,
                                   context: context,
                                   isActionButton: true,
@@ -581,9 +581,157 @@ class ResourcesView extends StatelessWidget {
                         ),
                       ),
 
+                      SpaceHelperClass.v(20.h(context)),
 
 
-                      SpaceHelperClass.v(35.h(context)),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(235, 246, 255, 1),
+                          borderRadius: BorderRadius.circular(12.r(context)),
+                        ),
+                        child: Column(
+                          children: [
+
+                            Row(
+                              children: [
+                                ImageHelperClass.customImageContainer(
+                                  context: context,
+                                  height: 20.h(context),
+                                  width: 20.w(context),
+                                  imagePath: AppImages.delay,
+                                  imageFit: BoxFit.contain,
+                                  fit: BoxFit.cover,
+                                ),
+
+
+                                SpaceHelperClass.h(12.w(context)),
+
+
+                                Expanded(
+                                  child: TextHelperClass.headingText(
+                                    context: context,
+                                    text: "Available Workforce",
+                                    fontSize: 18,
+                                    textColor: Color.fromRGBO(31, 41, 55, 1), // White text
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
+                            SpaceHelperClass.v(20.h(context)),
+
+                            Container(
+                              width: 375.w(context),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                              ),
+                              child: Wrap(
+
+                                children: [
+                              
+                                  ...resourcesController.getAllWorkforcesResponseModel.value.data!.map((value) {
+                                    if(value.isDeleted == true) {
+                                      return SizedBox.shrink();
+                                    } else {
+                                      return TextHelperClass.headingTextWithoutWidth(
+                                        context: context,
+                                        text: "${value.quantity} ${value.name} , ",
+                                        fontSize: 18,
+                                        textColor: Color.fromRGBO(31, 41, 55, 1), // White text
+                                        fontWeight: FontWeight.w500,
+                                      );
+                                    }
+                                  })
+
+
+                                ],
+                              ),
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
+                      SpaceHelperClass.v(20.h(context)),
+
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(235, 246, 255, 1),
+                          borderRadius: BorderRadius.circular(12.r(context)),
+                        ),
+                        child: Column(
+                          children: [
+
+                            Row(
+                              children: [
+                                ImageHelperClass.customImageContainer(
+                                  context: context,
+                                  height: 20.h(context),
+                                  width: 20.w(context),
+                                  imagePath: AppImages.delay,
+                                  imageFit: BoxFit.contain,
+                                  fit: BoxFit.cover,
+                                ),
+
+
+                                SpaceHelperClass.h(12.w(context)),
+
+                                Expanded(
+                                  child: TextHelperClass.headingText(
+                                    context: context,
+                                    text: "Available Equipments",
+                                    fontSize: 18,
+                                    textColor: Color.fromRGBO(31, 41, 55, 1), // White text
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
+                            SpaceHelperClass.v(20.h(context)),
+
+
+                            Container(
+                              width: 375.w(context),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                              ),
+                              child: Wrap(
+
+                                children: [
+
+                                  ...resourcesController.getAllEquipmentsResponseModel.value.data!.map((value) {
+                                    if(value.isDeleted == true) {
+                                      return SizedBox.shrink();
+                                    } else {
+                                      return TextHelperClass.headingTextWithoutWidth(
+                                        context: context,
+                                        text: "${value.quantity} ${value.name} , ",
+                                        fontSize: 18,
+                                        textColor: Color.fromRGBO(31, 41, 55, 1), // White text
+                                        fontWeight: FontWeight.w500,
+                                      );
+                                    }
+                                  })
+
+
+                                ],
+                              ),
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
+
+                      SpaceHelperClass.v(20.h(context)),
 
 
 

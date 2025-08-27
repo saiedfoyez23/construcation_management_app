@@ -32,6 +32,7 @@ class GetAllWorkforcesResponse {
   var project;
   var name;
   var quantity;
+  var initialQuantity;
   var isDeleted;
   var createdAt;
   var updatedAt;
@@ -42,6 +43,7 @@ class GetAllWorkforcesResponse {
     this.project,
     this.name,
     this.quantity,
+    this.initialQuantity,
     this.isDeleted,
     this.createdAt,
     this.updatedAt,
@@ -53,6 +55,7 @@ class GetAllWorkforcesResponse {
     project = json['project'];
     name = json['name'];
     quantity = json['quantity'];
+    initialQuantity = json['initial_quantity'];
     isDeleted = json['is_deleted'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -65,6 +68,7 @@ class GetAllWorkforcesResponse {
     data['project'] = this.project;
     data['name'] = this.name;
     data['quantity'] = this.quantity;
+    data['initial_quantity'] = this.initialQuantity;
     data['is_deleted'] = this.isDeleted;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;

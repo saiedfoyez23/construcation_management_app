@@ -40,13 +40,17 @@ class FolderController extends GetxController {
   Future<void> refreshVariable() async {
     searchController.value.clear();
     folderNameController.value.clear();
+  }
+
+  void cleanList() {
     getAllFoldersSearchResponseList.clear();
     getAllFoldersResponseList.clear();
   }
 
-  Future<void> refreshList() async {
-    getAllFoldersSearchResponseList.clear();
-    getAllFoldersResponseList.clear();
+
+  void refreshList() {
+    getAllFoldersSearchResponseList.refresh();
+    getAllFoldersResponseList.refresh();
   }
 
 
@@ -54,7 +58,6 @@ class FolderController extends GetxController {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
-      await refreshList();
 
       var headers = {
         'Content-Type': 'application/json',

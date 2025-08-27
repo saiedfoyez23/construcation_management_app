@@ -1,14 +1,14 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/calculator_tools/controller/concrete_volume_calculator_controller.dart';
+import 'package:construction_management_app/modules/calculator_tools/controller/load_estimator_controller.dart';
 import 'package:construction_management_app/modules/calculator_tools/view/calculator_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ConcreteVolumeCalculatorView extends StatelessWidget {
-  ConcreteVolumeCalculatorView({super.key,required this.projectId});
+class LoadEstimatorView extends StatelessWidget {
+  LoadEstimatorView({super.key,required this.projectId});
 
   final String projectId;
-  final ConcreteVolumeCalculatorController concreteVolumeCalculatorController = Get.put(ConcreteVolumeCalculatorController());
+  final LoadEstimatorController loadEstimatorController = Get.put(LoadEstimatorController());
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,9 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                 onBackPressed: () {
                   Get.off(()=>CalculatorView(projectId: projectId),preventDuplicates: false);
                 },
-                title: "Concrete Volume Calculator",
+                title: "Load Estimator",
               ),
+
 
               SliverToBoxAdapter(
                 child: Padding(
@@ -53,7 +54,7 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                             // Duration Field
                             TextHelperClass.headingText(
                               context: context,
-                              text: 'Length(meters)',
+                              text: 'Total Volume',
                               fontSize: 15,
                               textColor: Color.fromRGBO(75, 85, 99, 1),
                               fontWeight: FontWeight.w500,
@@ -61,7 +62,7 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                             SpaceHelperClass.v(8.h(context)),
                             _buildDurationField(
                               context: context,
-                              controller: concreteVolumeCalculatorController.lengthController.value,
+                              controller: loadEstimatorController.totalVolumeController.value,
                               hintText: "0.00",
                             ),
 
@@ -70,7 +71,7 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                             // Duration Field
                             TextHelperClass.headingText(
                               context: context,
-                              text: 'Width(meters)',
+                              text: 'Total Capacity',
                               fontSize: 15,
                               textColor: Color.fromRGBO(75, 85, 99, 1),
                               fontWeight: FontWeight.w500,
@@ -78,55 +79,32 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                             SpaceHelperClass.v(8.h(context)),
                             _buildDurationField(
                               context: context,
-                              controller: concreteVolumeCalculatorController.widthController.value,
-                              hintText: "0.00",
-                            ),
-
-
-
-                            SpaceHelperClass.v(16.h(context)),
-
-                            // Duration Field
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: 'Depth(meters)',
-                              fontSize: 15,
-                              textColor: Color.fromRGBO(75, 85, 99, 1),
-                              fontWeight: FontWeight.w500,
-                            ),
-                            SpaceHelperClass.v(8.h(context)),
-                            _buildDurationField(
-                              context: context,
-                              controller: concreteVolumeCalculatorController.depthController.value,
-                              hintText: "0.00",
+                              controller: loadEstimatorController.truckCapacityController.value,
+                              hintText: "6-8 truck capacity",
                             ),
 
                             SpaceHelperClass.v(16.h(context)),
 
                             CustomButtonHelper.customRoundedButton(
                               context: context,
-                              text: "Calculate Volume",
+                              text: "Calculate Trucks Required",
                               fontSize: 16,
                               textColor: Color.fromRGBO(255, 255, 255, 1),
                               fontWeight: FontWeight.w600,
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () {
-                                if(concreteVolumeCalculatorController.lengthController.value.text == "") {
-                                  kSnackBar(message: "Please enter length", bgColor: AppColors.red);
-                                } else if(concreteVolumeCalculatorController.widthController.value.text == "") {
-                                  kSnackBar(message: "Please enter width", bgColor: AppColors.red);
-                                } else if(concreteVolumeCalculatorController.depthController.value.text == "") {
-                                  kSnackBar(message: "Please enter depth", bgColor: AppColors.red);
+                                if(loadEstimatorController.totalVolumeController.value.text == "") {
+                                  kSnackBar(message: "Please enter total volume", bgColor: AppColors.red);
+                                } else if(loadEstimatorController.truckCapacityController.value.text == "") {
+                                  kSnackBar(message: "Please enter truck capacity", bgColor: AppColors.red);
                                 } else {
-                                  concreteVolumeCalculatorController.isCalculate.value = true;
-                                  concreteVolumeCalculatorController.length.value = double.parse(concreteVolumeCalculatorController.lengthController.value.text);
-                                  concreteVolumeCalculatorController.width.value = double.parse(concreteVolumeCalculatorController.widthController.value.text);
-                                  concreteVolumeCalculatorController.depth.value = double.parse(concreteVolumeCalculatorController.depthController.value.text);
-                                  concreteVolumeCalculatorController.calculatorValue(
-                                    length: concreteVolumeCalculatorController.length.value,
-                                    width: concreteVolumeCalculatorController.width.value,
-                                    depth: concreteVolumeCalculatorController.depth.value,
+                                  loadEstimatorController.isCalculate.value = true;
+                                  loadEstimatorController.totalVolume.value = double.parse(loadEstimatorController.totalVolumeController.value.text);
+                                  loadEstimatorController.truckCapacity.value = double.parse(loadEstimatorController.truckCapacityController.value.text);
+                                  loadEstimatorController.calculatorValue(
+                                    totalVolume: loadEstimatorController.totalVolume.value,
+                                    truckCapacity: loadEstimatorController.truckCapacity.value,
                                   );
                                 }
                               },
@@ -135,7 +113,7 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
 
                             SpaceHelperClass.v(16.h(context)),
 
-                            concreteVolumeCalculatorController.isCalculate.value == false ?
+                            loadEstimatorController.isCalculate.value == false ?
                             SizedBox.shrink() :
                             Container(
                               width: 375.w(context),
@@ -166,7 +144,7 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                                       Expanded(
                                         child: TextHelperClass.headingText(
                                           context: context,
-                                          text: 'Volume:',
+                                          text: 'Truck Load Estimate:',
                                           fontSize: 20,
                                           textColor: Color.fromRGBO(75, 85, 99, 1),
                                           fontWeight: FontWeight.w500,
@@ -180,11 +158,10 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
                                           textAlign: TextAlign.end,
                                           alignment: Alignment.bottomRight,
                                           context: context,
-                                          text: "${concreteVolumeCalculatorController.calculatorValue(
-                                            length: concreteVolumeCalculatorController.length.value,
-                                            width: concreteVolumeCalculatorController.width.value,
-                                            depth: concreteVolumeCalculatorController.depth.value,
-                                          ).toStringAsFixed(3)} m³",
+                                          text: "${loadEstimatorController.calculatorValue(
+                                            totalVolume: loadEstimatorController.totalVolume.value,
+                                            truckCapacity: loadEstimatorController.truckCapacity.value,
+                                          ).value.ceil()} truck loads",
                                           fontSize: 20,
                                           textColor: Color.fromRGBO(17, 24, 39, 1),
                                           fontWeight: FontWeight.w500,
@@ -221,7 +198,6 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
     );
   }
 
-
   Widget _buildDurationField({
     required BuildContext context,
     required TextEditingController controller,
@@ -254,8 +230,5 @@ class ConcreteVolumeCalculatorView extends StatelessWidget {
       keyboardType: TextInputType.number,
     );
   }
-
-
-
 
 }

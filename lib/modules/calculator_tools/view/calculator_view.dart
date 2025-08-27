@@ -1,6 +1,9 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/calculator_tools/view/concrete_value_calculator.dart';
+import 'package:construction_management_app/modules/calculator_tools/view/asphalt_volume_and_tonne_calculator_view.dart';
 import 'package:construction_management_app/modules/calculator_tools/view/concrete_volume_calculator_view.dart';
+import 'package:construction_management_app/modules/calculator_tools/view/load_estimator_view.dart';
+import 'package:construction_management_app/modules/calculator_tools/view/pipe_bedding_trench_fill_calculator_view.dart';
+import 'package:construction_management_app/modules/calculator_tools/view/stone_calculator_view.dart';
 import 'package:construction_management_app/modules/project_details/view/project_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +36,7 @@ class CalculatorView extends StatelessWidget {
         
               CustomAppBarHelper.normalAppBar(
                 context: context,
+                height: 70,
                 onBackPressed: () {
                   Get.off(()=>ProjectDetailsView(projectId: projectId),preventDuplicates: false);
                 },
@@ -55,6 +59,14 @@ class CalculatorView extends StatelessWidget {
                         onTap: () async {
                           if(index == 0) {
                             Get.off(()=>ConcreteVolumeCalculatorView(projectId: projectId,),preventDuplicates: false);
+                          } else if(index == 1) {
+                            Get.off(()=>AsphaltVolumeAndTonneCalculatorView(projectId: projectId),preventDuplicates: false);
+                          } else if(index == 2) {
+                            Get.off(()=>StoneCalculatorView(projectId: projectId),preventDuplicates: false);
+                          } else if(index == 3) {
+                            Get.off(()=>PipeBeddingTrenchFillCalculatorView(projectId: projectId),preventDuplicates: false);
+                          } else if(index == 4) {
+                            Get.off(()=>LoadEstimatorView(projectId: projectId),preventDuplicates: false);
                           }
                         },
                         child: Container(
