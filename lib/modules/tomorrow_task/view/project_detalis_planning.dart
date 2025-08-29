@@ -6,7 +6,6 @@ import 'package:construction_management_app/data/dummy_data.dart';
 import 'package:construction_management_app/modules/check_list/view/project_detalis_checklist.dart';
 import 'package:construction_management_app/modules/day_work/view/project_detalis_day_work.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
-import 'package:construction_management_app/modules/resources/view/project_detalis_resources.dart';
 import 'package:construction_management_app/modules/site_diary/view/project_detalis_site.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/tomorrow_task_screen.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/widget/project_detalis_tomorrow_card.dart';
@@ -274,17 +273,17 @@ class _ProjectDetalisPlanningScreenState
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProjectDetalisResources());
-                        },
-                        child: ProjectDetalisTomorrowCard(
-                          image: AppImages.planning,
-                          name: "Resources",
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(() => ProjectDetalisResources());
+                    //     },
+                    //     child: ProjectDetalisTomorrowCard(
+                    //       image: AppImages.planning,
+                    //       name: "Resources",
+                    //     ),
+                    //   ),
+                    // ),
                     Expanded(
                       child: GestureDetector(
                         onTap: () {

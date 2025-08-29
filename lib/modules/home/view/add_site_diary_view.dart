@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
@@ -32,14 +33,20 @@ class AddSiteDiaryView  extends StatelessWidget {
                   onBackPressed: () {
                     Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
                   },
-                  title: 'Upload New',
+                  title: 'Add Site Diary',
                 ),
 
 
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
-                    child: Column(
+                    child: addSiteDiaryController.isLoading.value == true  ?
+                    CustomLoaderButton().customLoaderButton(
+                      backgroundColor: Colors.transparent,
+                      loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                      height: 812,
+                      context: context,
+                    ) : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
@@ -68,16 +75,21 @@ class AddSiteDiaryView  extends StatelessWidget {
 
                         ImageAndLocationWidget().imageAndLocationBuilder(context: context, controller: addSiteDiaryController),
 
-
                         SpaceHelperClass.v(35.h(context)),
-
 
                         Row(
                           children: [
 
 
                             Expanded(
-                              child: CustomButtonHelper.customRoundedButton(
+                              child: addSiteDiaryController.isSubmit.value == true ?
+                              CustomLoaderButton().customLoaderButton(
+                                backgroundColor: Colors.transparent,
+                                loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                                height: 50,
+                                context: context,
+                              ) :
+                              CustomButtonHelper.customRoundedButton(
                                 context: context,
                                 text: "Save Log",
                                 fontSize: 16,
@@ -85,8 +97,62 @@ class AddSiteDiaryView  extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 borderRadius: 8,
                                 backgroundColor: Color.fromRGBO(24, 147, 248, 1),
-                                onPressed: () {
-                                  Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                                onPressed: () async {
+                                  if(addSiteDiaryController.getProjectDetailsResponseModel.value.data == null) {
+                                    kSnackBar(message: "Please select a project", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.nameController.value.text == ""){
+                                    kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.descriptionController.value.text == "") {
+                                    kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.dateTimeController.value.text == "") {
+                                    kSnackBar(message: "Please select a date", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.weatherConditionController.value.text == "") {
+                                    kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.locationController.value.text == "") {
+                                    kSnackBar(message: "Please enter location", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.taskList.isEmpty == true) {
+                                    kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
+                                  } else if(addSiteDiaryController.selectedImage.value.path == "") {
+                                    kSnackBar(message: "Please select a image", bgColor: AppColors.red);
+                                  } else {
+                                    addSiteDiaryController.isSubmit.value = true;
+                                    List<Map<String, dynamic>> tasksToJson(List<Task> tasks) {
+                                      return tasks.map((task) {
+                                        return {
+                                          "name": task.name,
+                                          "workforces": task.workforce.map((wf) {
+                                            return {
+                                              "workforce": wf.typeId,
+                                              "quantity": wf.quantity,
+                                              "duration": "${wf.duration} hours",
+                                            };
+                                          }).toList(),
+                                          "equipments": task.equipment.map((eq) {
+                                            return {
+                                              "equipment": eq.typeId,
+                                              "quantity": eq.quantity,
+                                              "duration": "${eq.duration} hours",
+                                            };
+                                          }).toList(),
+                                        };
+                                      }).toList();
+                                    }
+
+                                    Map<String,dynamic> payload = {
+                                      "name": addSiteDiaryController.nameController.value.text,
+                                      "project": addSiteDiaryController.getProjectDetailsResponseModel.value.data?.sId ?? "",
+                                      "description": addSiteDiaryController.descriptionController.value.text,
+                                      "date": addSiteDiaryController.dateTimeController.value.text,
+                                      "weather_condition": addSiteDiaryController.weatherConditionController.value.text,
+                                      "duration": "0 hours",
+                                      "tasks": tasksToJson(addSiteDiaryController.taskList),
+                                      "location": addSiteDiaryController.locationController.value.text,
+                                    };
+                                    print(jsonEncode(payload));
+                                    //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                                    await addSiteDiaryController.crateSiteDiaryController(payload: payload, image: addSiteDiaryController.selectedImage.value);
+                                  }
+
                                 },
                               ),
                             ),

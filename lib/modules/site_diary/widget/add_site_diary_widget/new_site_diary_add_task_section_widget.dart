@@ -4,13 +4,15 @@ import 'package:construction_management_app/modules/home/controller/add_site_dia
 import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
 import 'package:construction_management_app/modules/resources/model/get_all_equipments_response_model.dart';
 import 'package:construction_management_app/modules/resources/model/get_all_workforces_response_model.dart';
+import 'package:construction_management_app/modules/site_diary/controller/new_site_diary_controller.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_widget.dart';
 import 'package:flutter/material.dart';
 
-class AddTaskSectionWidget {
+class NewSiteDiaryAddTaskSectionWidget {
 
-  Widget addTaskSectionBuilder({
+  Widget newSiteDiaryAddTaskSectionBuilder({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -143,7 +145,7 @@ class AddTaskSectionWidget {
 // Helper function for Workforce section
   Widget _buildWorkforceSection({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return Padding(
       padding: EdgeInsets.only(
@@ -273,7 +275,10 @@ class AddTaskSectionWidget {
   }
 
 // Helper function for Equipment section
-  Widget _buildEquipmentSection({required BuildContext context,required AddSiteDiaryController controller,}) {
+  Widget _buildEquipmentSection({
+    required BuildContext context,
+    required NewSiteDiaryController controller,
+  }) {
     return Padding(
       padding: EdgeInsets.only(
         left: 16.lpm(context),
@@ -598,7 +603,7 @@ class AddTaskSectionWidget {
 
 // Handler functions
   void _handleAddTask({
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     if (controller.taskNameController.value.text.isEmpty) {
       kSnackBar(message: "Enter task name", bgColor: AppColors.red);
@@ -608,7 +613,7 @@ class AddTaskSectionWidget {
       kSnackBar(message: "Add equipment", bgColor: AppColors.red);
     } else {
       controller.taskList.add(
-        Task(
+        NewSiteDiaryTask(
           controller.taskNameController.value.text,
           List.from(controller.workforceList),
           List.from(controller.equipmentList),
@@ -621,7 +626,7 @@ class AddTaskSectionWidget {
   }
 
   void _handleAddWorkforce({
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     if (controller.selectedWorkforces.value.name == null ||
         controller.workforceQuantityController.value.text.isEmpty ||
@@ -631,7 +636,7 @@ class AddTaskSectionWidget {
       kSnackBar(message: "${controller.selectedWorkforces.value.quantity} ${controller.selectedWorkforces.value.name} is available", bgColor: AppColors.red);
     } else {
       controller.workforceList.add(
-        Workforce(
+        NewSiteDiaryWorkforce(
           controller.selectedWorkforces.value.sId,
           int.parse(controller.workforceQuantityController.value.text),
           int.parse(controller.workForceDurationController.value.text),
@@ -645,7 +650,7 @@ class AddTaskSectionWidget {
   }
 
   void _handleAddEquipment({
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     if (controller.selectedEquipment.value.name == null ||
         controller.equipmentQuantityController.value.text.isEmpty ||
@@ -655,7 +660,7 @@ class AddTaskSectionWidget {
       kSnackBar(message: "${controller.selectedEquipment.value.quantity} ${controller.selectedEquipment.value.name} is available", bgColor: AppColors.red);
     } else {
       controller.equipmentList.add(
-        Equipment(
+        NewSiteDiaryEquipment(
           controller.selectedEquipment.value.sId,
           int.parse(controller.equipmentQuantityController.value.text),
           int.parse(controller.equipmentDurationController.value.text),

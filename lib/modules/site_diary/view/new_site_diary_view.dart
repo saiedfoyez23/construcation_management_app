@@ -1,93 +1,83 @@
 import 'dart:convert';
 
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
-import 'package:construction_management_app/modules/home/controller/add_day_work_controller.dart';
-import 'package:construction_management_app/modules/home/widget/add_day_work_widget/add_day_work_widget.dart';
-import 'package:construction_management_app/modules/home/widget/add_day_work_widget/add_task_section_day_work_widget.dart';
-import 'package:construction_management_app/modules/home/widget/add_day_work_widget/image_and_location_day_work_widget.dart';
-import 'package:construction_management_app/modules/home/widget/add_day_work_widget/task_details_day_work_widget.dart';
-import 'package:construction_management_app/modules/home/widget/add_day_work_widget/material_used_widget.dart';
-import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
+import 'package:construction_management_app/modules/project_details/view/project_details_view.dart';
+import 'package:construction_management_app/modules/site_diary/controller/new_site_diary_controller.dart';
+import 'package:construction_management_app/modules/site_diary/view/site_diary_view.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_add_task_section_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_image_and_location_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_task_details_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+class NewSiteDiaryView extends StatelessWidget {
+  NewSiteDiaryView({super.key,required this.projectId});
 
-class AddDayWorkView extends StatelessWidget {
-  AddDayWorkView({super.key});
-
-  final AddDayWorkController addDayWorkController = Get.put(AddDayWorkController());
-
+  final String projectId;
 
   @override
   Widget build(BuildContext context) {
+    NewSiteDiaryController newSiteDiaryController = Get.put(NewSiteDiaryController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
-        child: Obx(()=>Container(
+        child: Container(
           height: 812.h(context),
           width: 375.w(context),
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: CustomScrollView(
+          child: Obx(()=> newSiteDiaryController.isLoading.value == true  ?
+          CustomLoaderButton().customLoaderButton(
+            backgroundColor: Colors.transparent,
+            loaderColor: Color.fromRGBO(38, 50, 56, 1),
+            height: 812,
+            context: context,
+          ) :
+          CustomScrollView(
             slivers: [
-
+        
+        
+        
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 onBackPressed: () {
-                  Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                  Get.off(()=>ProjectDetailsView(projectId: projectId),preventDuplicates: false);
                 },
-                title: 'Add Day Works',
+                title: "New Site Diary",
               ),
-
-
+        
+        
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
-                  child: addDayWorkController.isLoading.value == true  ?
-                  CustomLoaderButton().customLoaderButton(
-                    backgroundColor: Colors.transparent,
-                    loaderColor: Color.fromRGBO(38, 50, 56, 1),
-                    height: 812,
-                    context: context,
-                  ) :
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
                     children: [
 
                       SpaceHelperClass.v(24.h(context)),
 
+                      NewSiteDiaryWidget.projectSelectionAndDescriptionBuilder(context: context, controller: newSiteDiaryController),
 
-                      AddDayWorkWidget.projectSelectionAndDescriptionDayWorkBuilder(
-                        context: context,
-                        controller: addDayWorkController,
-                      ),
 
                       SpaceHelperClass.v(24.h(context)),
 
-                      AddTaskSectionWidgetDayWork().addTaskSectionDayWorkBuilder(context: context, controller: addDayWorkController),
+
+
+
+                      NewSiteDiaryAddTaskSectionWidget().newSiteDiaryAddTaskSectionBuilder(context: context,controller: newSiteDiaryController),
 
                       SpaceHelperClass.v(24.h(context)),
 
-                      ...addDayWorkController.taskList.map((item) {
-                        return TaskDetailsDayWorkWidget().taskDetailsDayWorkBuilder(
+                      ...newSiteDiaryController.taskList.map((item) {
+                        return NewSiteDiaryTaskDetailsWidget().newSiteDiaryTaskDetailsBuilder(
                           context: context,
-                          controller: addDayWorkController,
+                          controller: newSiteDiaryController,
                           item: item,
                         );
                       }),
 
 
-                      MaterialUsedWidget().materialsUsedSection(
-                        context: context,
-                        controller: addDayWorkController,
-                      ),
-
-
-                      SpaceHelperClass.v(24.h(context)),
-
-
-                      ImageAndLocationDayWorkWidget().imageAndLocationDayWorkBuilder(context: context, controller: addDayWorkController),
+                      NewSiteDiaryImageAndLocationWidget().newSiteDiaryImageAndLocationBuilder(context: context, controller: newSiteDiaryController),
 
                       SpaceHelperClass.v(35.h(context)),
 
@@ -96,7 +86,7 @@ class AddDayWorkView extends StatelessWidget {
 
 
                           Expanded(
-                            child: addDayWorkController.isSubmit.value == true ?
+                            child: newSiteDiaryController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -112,25 +102,24 @@ class AddDayWorkView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(addDayWorkController.getProjectDetailsResponseModel.value.data == null) {
-                                  kSnackBar(message: "Please select a project", bgColor: AppColors.red);
-                                } else if(addDayWorkController.nameController.value.text == ""){
+                                if(newSiteDiaryController.nameController.value.text == ""){
                                   kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
-                                } else if(addDayWorkController.descriptionController.value.text == "") {
+                                } else if(newSiteDiaryController.descriptionController.value.text == "") {
                                   kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
-                                } else if(addDayWorkController.dateTimeController.value.text == "") {
+                                } else if(newSiteDiaryController.dateTimeController.value.text == "") {
                                   kSnackBar(message: "Please select a date", bgColor: AppColors.red);
-                                } else if(addDayWorkController.weatherConditionController.value.text == "") {
+                                } else if(newSiteDiaryController.weatherConditionController.value.text == "") {
                                   kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
-                                } else if(addDayWorkController.locationController.value.text == "") {
+                                } else if(newSiteDiaryController.locationController.value.text == "") {
                                   kSnackBar(message: "Please enter location", bgColor: AppColors.red);
-                                } else if(addDayWorkController.taskList.isEmpty == true) {
+                                } else if(newSiteDiaryController.taskList.isEmpty == true) {
                                   kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
-                                } else if(addDayWorkController.selectedImage.value.path == "") {
+                                } else if(newSiteDiaryController.selectedImage.value.path == "") {
                                   kSnackBar(message: "Please select a image", bgColor: AppColors.red);
                                 } else {
-                                  addDayWorkController.isSubmit.value = true;
-                                  List<Map<String, dynamic>> tasksToJson(List<Task> tasks) {
+                                  newSiteDiaryController.isSubmit.value = true;
+
+                                  List<Map<String, dynamic>> tasksToJson(List<NewSiteDiaryTask> tasks) {
                                     return tasks.map((task) {
                                       return {
                                         "name": task.name,
@@ -153,24 +142,24 @@ class AddDayWorkView extends StatelessWidget {
                                   }
 
                                   Map<String,dynamic> payload = {
-                                    "name": addDayWorkController.nameController.value.text,
-                                    "project": addDayWorkController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                                    "description": addDayWorkController.descriptionController.value.text,
-                                    "date": addDayWorkController.dateTimeController.value.text,
-                                    "weather_condition": addDayWorkController.weatherConditionController.value.text,
+                                    "name": newSiteDiaryController.nameController.value.text,
+                                    "project": newSiteDiaryController.getProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "description": newSiteDiaryController.descriptionController.value.text,
+                                    "date": newSiteDiaryController.dateTimeController.value.text,
+                                    "weather_condition": newSiteDiaryController.weatherConditionController.value.text,
                                     "duration": "0 hours",
-                                    "tasks": tasksToJson(addDayWorkController.taskList),
-                                    "location": addDayWorkController.locationController.value.text,
-                                    "materials": addDayWorkController.metrialUsedController.value.text,
+                                    "tasks": tasksToJson(newSiteDiaryController.taskList),
+                                    "location": newSiteDiaryController.locationController.value.text,
                                   };
                                   print(jsonEncode(payload));
                                   //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
-                                  await addDayWorkController.createDayWorksController(payload: payload, image: addDayWorkController.selectedImage.value);
+                                  await newSiteDiaryController.crateSiteDiaryController(payload: payload, image: newSiteDiaryController.selectedImage.value,projectId: projectId);
                                 }
 
                               },
                             ),
                           ),
+
 
                           SpaceHelperClass.h(12.w(context)),
 
@@ -186,7 +175,7 @@ class AddDayWorkView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                                Get.off(()=>SiteDiaryView(projectId: projectId),preventDuplicates: false);
                               },
                             ),
                           ),
@@ -198,17 +187,21 @@ class AddDayWorkView extends StatelessWidget {
 
 
                       SpaceHelperClass.v(35.h(context)),
-
-
-
+        
+        
                     ],
                   ),
                 ),
-              )
-
+              ),
+        
+        
+        
+        
+        
+        
             ],
-          ),
-        )),
+          )),
+        ),
       ),
     );
   }

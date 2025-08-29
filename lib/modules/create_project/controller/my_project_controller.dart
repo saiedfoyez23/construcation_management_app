@@ -17,37 +17,6 @@ class MyProjectController extends GetxController {
   Rx<TextEditingController> searchController = TextEditingController().obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
-  RxList<Map<String, dynamic>> projects = <Map<String, dynamic>>[
-    {
-      "title": "Green Valley School",
-      "address": "123 Oak St",
-      "logs": "12",
-      "days": "2",
-      "images": <String>[]
-    },
-    {
-      "title": "Highway Bridge Project",
-      "address": "123 Oak St",
-      "logs": "12",
-      "days": "2",
-      "images": <String>[
-        "https://picsum.photos/200/120?1",
-        "https://picsum.photos/200/120?2",
-        "https://picsum.photos/200/120?3",
-      ]
-    },
-    {
-      "title": "Highway Bridge Project",
-      "address": "123 Oak St",
-      "logs": "12",
-      "days": "2",
-      "images": <String>[
-        "https://picsum.photos/200/120?4",
-        "https://picsum.photos/200/120?5",
-        "https://picsum.photos/200/120?6",
-      ]
-    },
-  ].obs;
 
   @override
   void onInit() {

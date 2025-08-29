@@ -1,7 +1,20 @@
+
+
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:construction_management_app/common/app_constant/app_constant.dart';
+import 'package:construction_management_app/common/local_store/local_store.dart';
+import 'package:construction_management_app/data/api.dart';
+import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/create_project/model/get_all_project_response_model.dart';
+import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
+import 'package:construction_management_app/modules/project_details/model/get_project_details_response_model.dart';
+import 'package:construction_management_app/modules/resources/model/get_all_equipments_response_model.dart';
+import 'package:construction_management_app/modules/resources/model/get_all_workforces_response_model.dart';
+import 'package:construction_management_app/modules/site_diary/view/site_diary_view.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,42 +22,27 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-import '../../../common/app_constant/app_constant.dart';
 import '../../../common/common.dart';
-import '../../../common/local_store/local_store.dart';
-import '../../../data/api.dart';
-import '../../../data/base_client.dart';
-import '../../create_project/model/get_all_project_response_model.dart';
-import '../../dashboard/view/dashboard_view.dart';
-import '../../project_details/model/get_project_details_response_model.dart';
-import '../../resources/model/get_all_equipments_response_model.dart';
-import '../../resources/model/get_all_workforces_response_model.dart';
-import '../widget/add_site_diary_widget/add_site_diary_widget.dart';
 
-class AddDayWorkController extends GetxController {
+class NewSiteDiaryController extends GetxController {
 
   late stt.SpeechToText _speech;
   RxBool isListening = false.obs;
   RxBool isSubmit = false.obs;
-
-
+  Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> weatherConditionController = TextEditingController().obs;
   Rx<TextEditingController> dateTimeController = TextEditingController().obs;
-  Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> descriptionController = TextEditingController().obs;
   Rx<TextEditingController> audioController = TextEditingController().obs;
   Rx<TextEditingController> taskNameController = TextEditingController().obs;
   Rx<TextEditingController> locationController = TextEditingController().obs;
-  Rx<TextEditingController> metrialUsedController = TextEditingController().obs;
   Rx<TextEditingController> workforceQuantityController = TextEditingController().obs;
   Rx<TextEditingController> workForceDurationController = TextEditingController().obs;
   Rx<TextEditingController> equipmentQuantityController = TextEditingController().obs;
   Rx<TextEditingController> equipmentDurationController = TextEditingController().obs;
-  Rx<DateTime> date = DateTime.now().obs;
-  RxString supervisor = 'Jane Cooper'.obs;
+
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
   Rx<GetAllProject> selectSingleProject = GetAllProject().obs;
@@ -60,141 +58,15 @@ class AddDayWorkController extends GetxController {
   Rx<GetAllWorkforcesResponseModel> getAllWorkforcesResponseModel = GetAllWorkforcesResponseModel().obs;
 
 
+  Rx<DateTime> date = DateTime.now().obs;
+
   // Equipment
 
-  RxList<Workforce> workforceList = <Workforce>[].obs;
-  RxList<Equipment> equipmentList = <Equipment>[].obs;
-  RxList<Task> taskList = <Task>[].obs;
+  RxList<NewSiteDiaryWorkforce> workforceList = <NewSiteDiaryWorkforce>[].obs;
+  RxList<NewSiteDiaryEquipment> equipmentList = <NewSiteDiaryEquipment>[].obs;
+  RxList<NewSiteDiaryTask> taskList = <NewSiteDiaryTask>[].obs;
 
   Rx<File> selectedImage = File("").obs;
-
-
-  Future<void> getMyProject() async {
-    try {
-      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
-
-      var headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
-      };
-
-      dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: "${Api.myProject}",
-          headers: headers,
-        ),
-      );
-
-      if (responseBody != null) {
-        print("hello ${jsonEncode(responseBody)}");
-        getAllProjectResponseModel.value = GetAllProjectResponseModel.fromJson(responseBody);
-      } else {
-        throw "Get profile is Failed!";
-      }
-    } catch (e) {
-      debugPrint("Catch Error.........$e");
-      kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
-    } finally {
-      isLoading(false);
-    }
-  }
-
-
-  Future<void> getProjectDetailsController({required String projectId}) async {
-    try {
-      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
-
-      var headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
-      };
-
-      dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: "${Api.projectDetails}/${projectId}",
-          headers: headers,
-        ),
-      );
-
-      if (responseBody != null) {
-        print("hello ${jsonEncode(responseBody)}");
-        getProjectDetailsResponseModel.value = GetProjectDetailsResponseModel.fromJson(responseBody);
-      } else {
-        throw "Data retrieve is Failed";
-      }
-    } catch (e) {
-      debugPrint("Catch Error.........$e");
-      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
-    } finally {
-      isLoading(false);
-    }
-  }
-
-
-  Future<void> getAllWorkforceController({required String projectId}) async {
-    try {
-      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
-
-      var headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
-      };
-
-      dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: "${Api.getProjectWorkforce}/${projectId}",
-          headers: headers,
-        ),
-      );
-
-      if (responseBody != null) {
-        print("hello ${jsonEncode(responseBody)}");
-        getAllWorkforcesResponseModel.value = GetAllWorkforcesResponseModel.fromJson(responseBody);
-      } else {
-        throw "Data retrieve is Failed";
-      }
-    } catch (e) {
-      debugPrint("Catch Error.........$e");
-      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
-    } finally {
-      //isLoading(false);
-    }
-  }
-
-
-  Future<void> getAllEquipmentsController({required String projectId}) async {
-    try {
-      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
-
-      var headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
-      };
-
-      dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: "${Api.getProjectEquipments}/${projectId}",
-          headers: headers,
-        ),
-      );
-
-      if (responseBody != null) {
-        print("hello ${jsonEncode(responseBody)}");
-        getAllEquipmentsResponseModel.value = GetAllEquipmentsResponseModel.fromJson(responseBody);
-      } else {
-        throw "Data retrieve is Failed";
-      }
-    } catch (e) {
-      debugPrint("Catch Error.........$e");
-      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
-    } finally {
-      isLoading(false);
-    }
-  }
 
 
   Future<void> speechListen() async {
@@ -341,9 +213,106 @@ class AddDayWorkController extends GetxController {
   }
 
 
-  Future<void> createDayWorksController({
+  Future<void> getProjectDetailsController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.projectDetails}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getProjectDetailsResponseModel.value = GetProjectDetailsResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
+    }
+  }
+
+
+  Future<void> getAllWorkforceController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.getProjectWorkforce}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllWorkforcesResponseModel.value = GetAllWorkforcesResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
+    }
+  }
+
+
+  Future<void> getAllEquipmentsController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.getProjectEquipments}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllEquipmentsResponseModel.value = GetAllEquipmentsResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+  Future<void> crateSiteDiaryController({
     required Map<String,dynamic> payload,
     required File image,
+    required String projectId,
   }) async {
     try {
 
@@ -359,7 +328,7 @@ class AddDayWorkController extends GetxController {
       // Create multipart request
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(Api.createDayWorks),
+        Uri.parse(Api.createSiteDiary),
       );
 
       request.headers.addAll(headers);
@@ -397,7 +366,7 @@ class AddDayWorkController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+        Get.off(()=>SiteDiaryView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -413,7 +382,8 @@ class AddDayWorkController extends GetxController {
   }
 
 
-
+  String projectId;
+  NewSiteDiaryController({required this.projectId});
 
   @override
   void onInit() {
@@ -423,10 +393,10 @@ class AddDayWorkController extends GetxController {
     _speech = stt.SpeechToText();
     Future.delayed(Duration(seconds: 1),() async {
       await fetchAddress();
-      await getMyProject();
+      await getProjectDetailsController(projectId: projectId);
+      await getAllWorkforceController(projectId: projectId);
+      await getAllEquipmentsController(projectId: projectId);
     });
   }
-
-
 
 }

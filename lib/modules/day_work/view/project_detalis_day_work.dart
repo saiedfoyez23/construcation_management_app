@@ -10,7 +10,6 @@ import 'package:construction_management_app/modules/day_work/view/widget/project
 import 'package:construction_management_app/modules/day_work/view/widget/team_view_card.dart';
 //import 'package:construction_management_app/modules/folder/view/all_folder_screen.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
-import 'package:construction_management_app/modules/resources/view/project_detalis_resources.dart';
 import 'package:construction_management_app/modules/site_diary/view/project_detalis_site.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/project_detalis_planning.dart';
 import 'package:flutter/material.dart';
@@ -242,17 +241,17 @@ class _ProjectDetalisDayWorkScreenState
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProjectDetalisResources());
-                        },
-                        child: ProjectDetalisDayCard(
-                          image: AppImages.planning,
-                          name: "Resources",
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(() => ProjectDetalisResources());
+                    //     },
+                    //     child: ProjectDetalisDayCard(
+                    //       image: AppImages.planning,
+                    //       name: "Resources",
+                    //     ),
+                    //   ),
+                    // ),
                     Expanded(
                       child: GestureDetector(
                         onTap: () {},

@@ -1,15 +1,17 @@
 import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
 import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
+import 'package:construction_management_app/modules/site_diary/controller/new_site_diary_controller.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../common/common.dart';
 
 
-class TaskDetailsWidget {
+class NewSiteDiaryTaskDetailsWidget {
 
-  Widget taskDetailsBuilder({
+  Widget newSiteDiaryTaskDetailsBuilder({
     required BuildContext context,
-    required AddSiteDiaryController controller,
-    required Task item,
+    required NewSiteDiaryController controller,
+    required NewSiteDiaryTask item,
   }) {
     return Container(
       width: 375.w(context),
@@ -81,8 +83,8 @@ class TaskDetailsWidget {
 // Helper Widget for Remove Task Button
   Widget _buildRemoveTaskButton({
     required BuildContext context,
-    required AddSiteDiaryController controller,
-    required Task item,
+    required NewSiteDiaryController controller,
+    required NewSiteDiaryTask item,
   }) {
     return SizedBox(
       width: 74.w(context),
@@ -133,8 +135,8 @@ class TaskDetailsWidget {
 // Helper Widget for Workforce Details Section
   Widget _buildWorkforceDetailsSection({
     required BuildContext context,
-    required Task item,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryTask item,
+    required NewSiteDiaryController controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,8 +166,8 @@ class TaskDetailsWidget {
 // Helper Widget for Equipment Details Section
   Widget _buildEquipmentDetailsSection({
     required BuildContext context,
-    required Task item,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryTask item,
+    required NewSiteDiaryController controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -3,6 +3,8 @@ import 'package:construction_management_app/modules/calculator_tools/view/calcul
 import 'package:construction_management_app/modules/folder/view/folder_view.dart';
 import 'package:construction_management_app/modules/project_details/controller/project_view_controller.dart';
 import 'package:construction_management_app/modules/resources/view/resources_view.dart';
+import 'package:construction_management_app/modules/site_diary/view/all_site_diary_screen.dart';
+import 'package:construction_management_app/modules/site_diary/view/site_diary_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../dashboard/view/dashboard_view.dart';
@@ -408,7 +410,7 @@ class ProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.addSiteDiary,
                             text: "Site Diary",
                             onTap: () {
-                              //Get.off(()=>AddSiteDiaryView(), preventDuplicates: false);
+                              Get.off(()=>SiteDiaryView(projectId: projectId), preventDuplicates: false);
                             },
                           ),
 

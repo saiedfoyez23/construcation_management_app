@@ -1,14 +1,14 @@
-import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
+import 'package:construction_management_app/modules/home/controller/add_day_work_controller.dart';
 import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../common/common.dart';
 
 
-class TaskDetailsWidget {
+class TaskDetailsDayWorkWidget {
 
-  Widget taskDetailsBuilder({
+  Widget taskDetailsDayWorkBuilder({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required AddDayWorkController controller,
     required Task item,
   }) {
     return Container(
@@ -81,7 +81,7 @@ class TaskDetailsWidget {
 // Helper Widget for Remove Task Button
   Widget _buildRemoveTaskButton({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required AddDayWorkController controller,
     required Task item,
   }) {
     return SizedBox(
@@ -134,7 +134,7 @@ class TaskDetailsWidget {
   Widget _buildWorkforceDetailsSection({
     required BuildContext context,
     required Task item,
-    required AddSiteDiaryController controller,
+    required AddDayWorkController controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +165,7 @@ class TaskDetailsWidget {
   Widget _buildEquipmentDetailsSection({
     required BuildContext context,
     required Task item,
-    required AddSiteDiaryController controller,
+    required AddDayWorkController controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

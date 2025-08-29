@@ -8,6 +8,7 @@ import 'package:construction_management_app/modules/profile/view/change_password
 import 'package:construction_management_app/modules/profile/view/edit_profile_view.dart';
 import 'package:construction_management_app/modules/profile/view/privacy_and_policy.dart';
 import 'package:construction_management_app/modules/profile/view/terms_and_condition_view.dart';
+import 'package:construction_management_app/modules/subscription/view/subscription_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -151,7 +152,9 @@ class ProfileView extends StatelessWidget {
                           icon: AppImages.subscriptionIcon,
                           title: 'Subscription',
                           iconColor: Color.fromRGBO(41, 45, 50, 1),
-                          onTap: () async {},
+                          onTap: () async {
+                            Get.off(()=>SubscriptionView(isHome: false),preventDuplicates: false);
+                          },
                           context: context,
                         ),
                         _buildListItem(

@@ -1,10 +1,9 @@
-import 'package:construction_management_app/modules/create_project/view/all_job_view.dart';
 import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/home/controller/home_controller.dart';
 import 'package:construction_management_app/modules/home/view/add_day_work_view.dart';
 import 'package:construction_management_app/modules/home/view/add_site_diary_view.dart';
 import 'package:construction_management_app/modules/home/widget/home_widget/home_widget.dart';
-import 'package:construction_management_app/modules/subscription/view/subscription_screen.dart';
+import 'package:construction_management_app/modules/subscription/view/subscription_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/common.dart';
@@ -57,7 +56,7 @@ class HomeView extends StatelessWidget {
                           accountType: "Basic Account",
                           profileImageUrl: homeController.profileResponseModel.value.data?.user?.logo,
                           onManageSubscriptionPressed: () {
-                            Get.off(() => const SubscriptionScreen(), preventDuplicates: false);
+                            Get.off(()=>SubscriptionView(isHome: true),preventDuplicates: false);
                           },
                           width: 375.w(context), // Optional width parameter
                         ),

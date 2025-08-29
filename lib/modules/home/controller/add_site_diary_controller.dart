@@ -1,18 +1,34 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/create_project/model/get_all_project_response_model.dart';
+import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/home/widget/add_site_diary_widget/add_site_diary_widget.dart';
+import 'package:construction_management_app/modules/project_details/model/get_project_details_response_model.dart';
+import 'package:construction_management_app/modules/resources/model/get_all_equipments_response_model.dart';
+import 'package:construction_management_app/modules/resources/model/get_all_workforces_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+
+import '../../../common/app_constant/app_constant.dart';
+import '../../../common/local_store/local_store.dart';
+import '../../../data/api.dart';
+import '../../../data/base_client.dart';
 
 class AddSiteDiaryController extends GetxController {
 
   late stt.SpeechToText _speech;
   RxBool isListening = false.obs;
+  RxBool isSubmit = false.obs;
+  Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> weatherConditionController = TextEditingController().obs;
   Rx<TextEditingController> dateTimeController = TextEditingController().obs;
   Rx<TextEditingController> descriptionController = TextEditingController().obs;
@@ -23,23 +39,29 @@ class AddSiteDiaryController extends GetxController {
   Rx<TextEditingController> workForceDurationController = TextEditingController().obs;
   Rx<TextEditingController> equipmentQuantityController = TextEditingController().obs;
   Rx<TextEditingController> equipmentDurationController = TextEditingController().obs;
-  Rx<DateTime> date = DateTime.now().obs;
-  RxString supervisor = 'Jane Cooper'.obs;
-  // Equipment
-  Rx<String> selectedEquipment = "".obs;
+
+  Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
+  Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
+  Rx<GetAllProject> selectSingleProject = GetAllProject().obs;
+  RxBool isLoading = false.obs;
+
+  Rx<GetProjectDetailsResponseModel> getProjectDetailsResponseModel = GetProjectDetailsResponseModel().obs;
+
+
+  Rx<GetAllEquipmentsResponseModel> getAllEquipmentsResponseModel = GetAllEquipmentsResponseModel().obs;
+  Rx<GetAllEquipmentsResponse> selectedEquipment = GetAllEquipmentsResponse().obs;
   // Workforce
-  Rx<String> selectedWorker = "".obs;
+  Rx<GetAllWorkforcesResponse> selectedWorkforces = GetAllWorkforcesResponse().obs;
+  Rx<GetAllWorkforcesResponseModel> getAllWorkforcesResponseModel = GetAllWorkforcesResponseModel().obs;
+
+
+  Rx<DateTime> date = DateTime.now().obs;
+
+  // Equipment
+
   RxList<Workforce> workforceList = <Workforce>[].obs;
   RxList<Equipment> equipmentList = <Equipment>[].obs;
   RxList<Task> taskList = <Task>[].obs;
-
-  RxString project = "".obs;
-
-  RxList<String> projects = <String>[
-    'Green Valley School 0',
-    'Green Valley School 1',
-    'Green Valley School 2'
-  ].obs;
 
   Rx<File> selectedImage = File("").obs;
 
@@ -99,7 +121,7 @@ class AddSiteDiaryController extends GetxController {
     );
     if (picked != null) {
       date.value = picked;
-      dateTimeController.value.text = DateFormat('MMMM dd, yyyy').format(date.value);
+      dateTimeController.value.text = picked.toString();
     }
   }
 
@@ -187,6 +209,205 @@ class AddSiteDiaryController extends GetxController {
     }
   }
 
+  Future<void> getMyProject() async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.myProject}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllProjectResponseModel.value = GetAllProjectResponseModel.fromJson(responseBody);
+      } else {
+        throw "Get profile is Failed!";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Get profile is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+  Future<void> getProjectDetailsController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.projectDetails}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getProjectDetailsResponseModel.value = GetProjectDetailsResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+  Future<void> getAllWorkforceController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.getProjectWorkforce}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllWorkforcesResponseModel.value = GetAllWorkforcesResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
+    }
+  }
+
+
+  Future<void> getAllEquipmentsController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.getProjectEquipments}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getAllEquipmentsResponseModel.value = GetAllEquipmentsResponseModel.fromJson(responseBody);
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+  Future<void> crateSiteDiaryController({
+    required Map<String,dynamic> payload,
+    required File image,
+  }) async {
+    try {
+
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+
+      // Create multipart request
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(Api.createSiteDiary),
+      );
+
+      request.headers.addAll(headers);
+
+
+      // Get file extension and MIME type
+
+      request.fields['payload'] = jsonEncode(payload);
+
+
+      String mimeType = CustomMimeType.getMimeType(image.path);
+      MediaType contentType = MediaType.parse(mimeType);
+
+      // Add file to request with proper MIME type
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image', // Field name expected by server
+          image.path,
+          filename: "${image.path.split("/").last}",
+          contentType: contentType,
+        ),
+      );
+
+
+      // Send request
+      var response = await request.send();
+
+      // Process response
+      String responseBody = await response.stream.bytesToString();
+      var responseData = jsonDecode(responseBody);
+
+      debugPrint('Upload Response: ${jsonEncode(responseData)}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Handle successful upload
+        String successMessage = responseData['message'];
+        kSnackBar(message: successMessage, bgColor: AppColors.green);
+        Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+      } else {
+        // Handle server error
+        String errorMessage = responseData['message'];
+        kSnackBar(message: errorMessage, bgColor: AppColors.red);
+      }
+    } catch (e) {
+      // Handle exceptions
+      debugPrint('Upload error: $e');
+      kSnackBar(message: "${e}", bgColor: AppColors.red);
+    } finally {
+      isSubmit(false);
+    }
+  }
+
 
 
 
@@ -194,9 +415,11 @@ class AddSiteDiaryController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    isLoading(true);
     _speech = stt.SpeechToText();
     Future.delayed(Duration(seconds: 1),() async {
       await fetchAddress();
+      await getMyProject();
     });
   }
 }

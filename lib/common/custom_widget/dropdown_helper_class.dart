@@ -88,9 +88,7 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
         items: items.map((T item) {
           return DropdownMenuItem<T>(
             value: item,
-            child: itemBuilder != null
-                ? itemBuilder!(item)
-                : TextHelperClass.headingText(
+            child: itemBuilder != null ? itemBuilder!(item) : TextHelperClass.headingText(
               context: context,
               text: itemToString != null ? itemToString!(item) : item.toString(),
               fontSize: 20.sp(context),

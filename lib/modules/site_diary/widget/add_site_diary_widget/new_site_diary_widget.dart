@@ -1,14 +1,13 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/create_project/model/get_all_project_response_model.dart';
-import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
+import 'package:construction_management_app/modules/site_diary/controller/new_site_diary_controller.dart';
 import 'package:flutter/material.dart';
 
-class AddSiteDiaryWidget {
+class NewSiteDiaryWidget {
 
 
   static Widget projectSelectionAndDescriptionBuilder({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -24,37 +23,37 @@ class AddSiteDiaryWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextHelperClass.headingText(
-            context: context,
-            text: "Project Select",
-            fontSize: 17,
-            textColor: AppColors.black65,
-            fontWeight: FontWeight.w700,
-          ),
-
-          SpaceHelperClass.v(8.h(context)),
-
-          CustomDropdownHelperClass<GetAllProject>(
-            value: controller.selectSingleProject.value.name == null ? null : controller.selectSingleProject.value,
-            items: controller.getAllProjectResponseModel.value.data!.data!.toList(),
-            onChanged: (value) async {
-              controller.selectSingleProject.value = value!;
-              controller.isLoading.value = true;
-              await controller.getProjectDetailsController(projectId: controller.selectSingleProject.value.sId);
-              await controller.getAllWorkforceController(projectId: controller.selectSingleProject.value.sId);
-              await controller.getAllEquipmentsController(projectId:  controller.selectSingleProject.value.sId);
-            },
-            itemBuilder: (value) {
-              return TextHelperClass.headingText(
-                context: context,
-                text: value.name,
-                fontSize: 20.sp(context),
-                textColor: AppColors.black,
-                fontWeight: FontWeight.w700,
-              );
-            },
-            hintText: "Select project",
-          ),
+          // TextHelperClass.headingText(
+          //   context: context,
+          //   text: "Project Select",
+          //   fontSize: 17,
+          //   textColor: AppColors.black65,
+          //   fontWeight: FontWeight.w700,
+          // ),
+          //
+          // SpaceHelperClass.v(8.h(context)),
+          //
+          // CustomDropdownHelperClass<GetAllProject>(
+          //   value: controller.selectSingleProject.value.name == null ? null : controller.selectSingleProject.value,
+          //   items: controller.getAllProjectResponseModel.value.data!.data!.toList(),
+          //   onChanged: (value) async {
+          //     controller.selectSingleProject.value = value!;
+          //     controller.isLoading.value = true;
+          //     await controller.getProjectDetailsController(projectId: controller.selectSingleProject.value.sId);
+          //     await controller.getAllWorkforceController(projectId: controller.selectSingleProject.value.sId);
+          //     await controller.getAllEquipmentsController(projectId:  controller.selectSingleProject.value.sId);
+          //   },
+          //   itemBuilder: (value) {
+          //     return TextHelperClass.headingText(
+          //       context: context,
+          //       text: value.name,
+          //       fontSize: 20.sp(context),
+          //       textColor: AppColors.black,
+          //       fontWeight: FontWeight.w700,
+          //     );
+          //   },
+          //   hintText: "Select project",
+          // ),
 
           SpaceHelperClass.v(16.h(context)),
 
@@ -284,26 +283,26 @@ class AddSiteDiaryWidget {
 
 
 
-class Task {
+class NewSiteDiaryTask {
   final String name;
-  final List<Workforce> workforce;
-  final List<Equipment> equipment;
+  final List<NewSiteDiaryWorkforce> workforce;
+  final List<NewSiteDiaryEquipment> equipment;
 
-  Task(this.name, this.workforce, this.equipment);
+  NewSiteDiaryTask(this.name, this.workforce, this.equipment);
 }
 
-class Workforce {
+class NewSiteDiaryWorkforce {
   final String typeId;
   final int quantity;
   final int duration;
 
-  Workforce(this.typeId, this.quantity, this.duration);
+  NewSiteDiaryWorkforce(this.typeId, this.quantity, this.duration);
 }
 
-class Equipment {
+class NewSiteDiaryEquipment {
   final String typeId;
   final int quantity;
   final int duration;
 
-  Equipment(this.typeId, this.quantity, this.duration);
+  NewSiteDiaryEquipment(this.typeId, this.quantity, this.duration);
 }

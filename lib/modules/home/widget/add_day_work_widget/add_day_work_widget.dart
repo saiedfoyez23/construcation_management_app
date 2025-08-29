@@ -1,14 +1,15 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/create_project/model/get_all_project_response_model.dart';
-import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
+import 'package:construction_management_app/modules/home/controller/add_day_work_controller.dart';
 import 'package:flutter/material.dart';
 
-class AddSiteDiaryWidget {
+import '../../../create_project/model/get_all_project_response_model.dart';
+
+class AddDayWorkWidget {
 
 
-  static Widget projectSelectionAndDescriptionBuilder({
+  static Widget projectSelectionAndDescriptionDayWorkBuilder({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required AddDayWorkController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -60,7 +61,7 @@ class AddSiteDiaryWidget {
 
           TextHelperClass.headingText(
             context: context,
-            text: "Site diary name",
+            text: "Day work name",
             fontSize: 17,
             textColor: AppColors.black65,
             fontWeight: FontWeight.w700,
@@ -279,31 +280,4 @@ class AddSiteDiaryWidget {
 
 
 
-
-}
-
-
-
-class Task {
-  final String name;
-  final List<Workforce> workforce;
-  final List<Equipment> equipment;
-
-  Task(this.name, this.workforce, this.equipment);
-}
-
-class Workforce {
-  final String typeId;
-  final int quantity;
-  final int duration;
-
-  Workforce(this.typeId, this.quantity, this.duration);
-}
-
-class Equipment {
-  final String typeId;
-  final int quantity;
-  final int duration;
-
-  Equipment(this.typeId, this.quantity, this.duration);
 }

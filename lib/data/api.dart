@@ -25,6 +25,10 @@ class Api {
   static const postFile = "$baseUrl/folders";
   static const getFolderDetails = "$baseUrl/folders";
 
+  ///subscription
+  static const getAllSubscription = "$baseUrl/subscription-plans";
+  static const createSubscription = "$baseUrl/subscriptions/create-subscription-checkout-session";
+
   /// workforce
   static const postWorkforce = "$baseUrl/workforces";
   static const getProjectWorkforce = "$baseUrl/workforces/all";
@@ -52,4 +56,11 @@ class Api {
   /// employees
   static const createEmployees = "$baseUrl/employees"; //done
   static const getAllCompanyEmployees = "$baseUrl/employees";
+
+
+  ///create site diary
+  static const createSiteDiary = "$baseUrl/site-diaries"; //done
+
+  ///create day works
+  static const createDayWorks = "$baseUrl/day-works"; //done
 }

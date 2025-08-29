@@ -1,13 +1,14 @@
 import 'package:construction_management_app/modules/home/controller/add_site_diary_controller.dart';
+import 'package:construction_management_app/modules/site_diary/controller/new_site_diary_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/common.dart';
 
-class ImageAndLocationWidget {
+class NewSiteDiaryImageAndLocationWidget {
 
-  Widget imageAndLocationBuilder({
+  Widget newSiteDiaryImageAndLocationBuilder({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -80,7 +81,7 @@ class ImageAndLocationWidget {
 // Helper Widget for Image Capture Button
   Widget _buildImageCaptureButton({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -127,7 +128,7 @@ class ImageAndLocationWidget {
 // Helper Widget for Selected Image Preview
   Widget _buildSelectedImagePreview({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return ImageHelperClass.customFileImageContainer(
       context: context,
@@ -142,7 +143,7 @@ class ImageAndLocationWidget {
 // Helper Widget for Location Section
   Widget _buildLocationSection({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -203,7 +204,7 @@ class ImageAndLocationWidget {
 // Helper Widget for Recapture Button
   Widget _buildRecaptureButton({
     required BuildContext context,
-    required AddSiteDiaryController controller,
+    required NewSiteDiaryController controller,
   }) {
     return CustomButtonHelper.customRoundedButton(
       context: context,

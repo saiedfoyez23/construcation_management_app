@@ -61,9 +61,25 @@ class FolderDetailsController extends GetxController {
   }
 
 
+  Future<void> cleanList() async {
+    getFileList.clear();
+    getFileSearchList.clear();
+  }
+
+
+  Future<void> refreshList() async {
+    getFileList.refresh();
+    getFileSearchList.refresh();
+  }
+
+
   Future<void> getFolderDetailsController({required String folderId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      await cleanList();
+      await refreshList();
+
 
       var headers = {
         'Content-Type': 'application/json',
