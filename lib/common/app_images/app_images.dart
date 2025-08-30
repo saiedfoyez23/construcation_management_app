@@ -87,6 +87,6 @@ class AppImages {
   static const String folderEditIcon = "asset/icons/folder_edit.png";
   static const String fileIcon = "asset/icons/file_icon.png";
   static const String logOutIcon = "asset/icons/log_out.png";
-  static const String editImageIcon = "asset/icons/edit-image.png";
+  static const String editImageIcon = "asset/icons/editSite.png";
   //////////////////////// icons /////////////////////////////
 }
