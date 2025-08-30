@@ -294,7 +294,7 @@ class FolderView extends StatelessWidget {
                       ),
                     ],
                   ),
-                ):
+                ) :
                 SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (context,int index) {

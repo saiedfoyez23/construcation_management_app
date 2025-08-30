@@ -1,18 +1,18 @@
 import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/modules/day_work/controller/day_work_controller.dart';
+import 'package:construction_management_app/modules/day_work/view/new_day_work_view.dart';
 import 'package:construction_management_app/modules/project_details/view/project_details_view.dart';
-import 'package:construction_management_app/modules/site_diary/controller/site_diary_controller.dart';
-import 'package:construction_management_app/modules/site_diary/view/new_site_diary_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SiteDiaryView extends StatelessWidget {
-  SiteDiaryView({super.key,required this.projectId});
+class DayWorkView extends StatelessWidget {
+  DayWorkView({super.key,required this.projectId});
 
   final String projectId;
 
   @override
   Widget build(BuildContext context) {
-    SiteDiaryController siteDiaryController = Get.put(SiteDiaryController(projectId: projectId));
+    DayWorkController dayWorkController = Get.put(DayWorkController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -21,7 +21,7 @@ class SiteDiaryView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: Obx(()=>siteDiaryController.isLoading.value == true  ?
+          child: Obx(()=>dayWorkController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -30,11 +30,10 @@ class SiteDiaryView extends StatelessWidget {
           ) :
           RefreshIndicator(
             onRefresh: () async {
-              Get.off(()=>SiteDiaryView(projectId: projectId),preventDuplicates: false);
+              Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
             },
             child: CustomScrollView(
               slivers: [
-
 
 
                 CustomAppBarHelper.normalAppBar(
@@ -42,7 +41,7 @@ class SiteDiaryView extends StatelessWidget {
                   onBackPressed: () {
                     Get.off(()=>ProjectDetailsView(projectId: projectId),preventDuplicates: false);
                   },
-                  title: "All Site Diary",
+                  title: "All Day Work",
                 ),
 
 
@@ -64,7 +63,7 @@ class SiteDiaryView extends StatelessWidget {
                             Expanded(
                               child: TextHelperClass.headingText(
                                 context: context,
-                                text: "All Site Diary",
+                                text: "All Day Work",
                                 fontSize: 22,
                                 textColor: AppColors.black255,
                                 fontWeight: FontWeight.w700,
@@ -75,15 +74,15 @@ class SiteDiaryView extends StatelessWidget {
 
                             CustomButtonHelper.textWithIconButton(
                               context: context,
-                              width: 165,
+                              width: 155,
                               height: 40,
                               minHeight: 40,
-                              minWidth: 165,
-                              textContainerWidth: 120.w(context),
+                              minWidth: 155,
+                              textContainerWidth: 110.w(context),
                               onPressed: () async {
-                                Get.off(()=>NewSiteDiaryView(projectId: projectId),preventDuplicates: false);
+                                Get.off(()=>NewDayWorkView(projectId: projectId),preventDuplicates: false);
                               },
-                              text: "Upload New Log",
+                              text: "Add Day Work",
                               icon: Icons.add,
                               iconSize: 19.r(context),
                               fontWeight: FontWeight.w600,
@@ -98,7 +97,7 @@ class SiteDiaryView extends StatelessWidget {
 
                         CustomTextFormFieldClass.build(
                           context: context,
-                          controller: siteDiaryController.searchController.value,
+                          controller: dayWorkController.searchController.value,
                           hintText: "Search site diary...",
                           textColor: Color.fromRGBO(173, 174, 188, 1),
                           borderColor: Color.fromRGBO(229, 231, 235, 1),
@@ -124,10 +123,10 @@ class SiteDiaryView extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           onChanged: (siteDiaryValue) async {
                             if(siteDiaryValue == "") {
-                              siteDiaryController.getAllSiteDiariesSearchResponseList.value = siteDiaryController.getAllSiteDiariesResponseList;
-                              siteDiaryController.getAllSiteDiariesSearchResponseList.refresh();
+                              dayWorkController.getAllDayWorkSearchResponseList.value = dayWorkController.getAllDayWorkResponseList;
+                              dayWorkController.getAllDayWorkSearchResponseList.refresh();
                             } else {
-                              siteDiaryController.getAllSiteDiariesSearchResponseList.value = siteDiaryController.getAllSiteDiariesSearchResponseList.where((value)=>value.name.toString().toLowerCase().contains(siteDiaryValue.toString().toLowerCase()) == true).toList();
+                              dayWorkController.getAllDayWorkSearchResponseList.value = dayWorkController.getAllDayWorkSearchResponseList.where((value)=>value.name.toString().toLowerCase().contains(siteDiaryValue.toString().toLowerCase()) == true).toList();
                             }
                           },
                         ),
@@ -141,7 +140,9 @@ class SiteDiaryView extends StatelessWidget {
                 ),
 
 
-                siteDiaryController.getAllSiteDiariesSearchResponseList.isEmpty == true ?
+
+
+                dayWorkController.getAllDayWorkSearchResponseList.isEmpty == true ?
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
@@ -152,7 +153,7 @@ class SiteDiaryView extends StatelessWidget {
 
                       TextHelperClass.headingText(
                         context: context,
-                        text: "No Site Diary Available",
+                        text: "No Day Work Available",
                         alignment: Alignment.center,
                         textAlign: TextAlign.center,
                         fontSize: 24,
@@ -199,7 +200,7 @@ class SiteDiaryView extends StatelessWidget {
                                       children: [
                                         TextHelperClass.headingText(
                                           context: context,
-                                          text: siteDiaryController.getAllSiteDiariesSearchResponseList[index].name,
+                                          text: dayWorkController.getAllDayWorkSearchResponseList[index].name,
                                           fontSize: 18,
                                           textColor: Color.fromRGBO(31, 41, 55, 1),
                                           fontWeight: FontWeight.w700,
@@ -207,7 +208,7 @@ class SiteDiaryView extends StatelessWidget {
                                         SpaceHelperClass.v(4.h(context)),
                                         TextHelperClass.headingText(
                                           context: context,
-                                          text: siteDiaryController.getAllSiteDiariesSearchResponseList[index].location,
+                                          text: dayWorkController.getAllDayWorkSearchResponseList[index].location,
                                           fontSize: 15,
                                           textColor: Color.fromRGBO(107, 114, 128, 1),
                                           fontWeight: FontWeight.w500,
@@ -231,7 +232,7 @@ class SiteDiaryView extends StatelessWidget {
                                               Expanded(
                                                 child: TextHelperClass.headingText(
                                                   context: context,
-                                                  text: siteDiaryController.getTimeDifference(siteDiaryController.getAllSiteDiariesSearchResponseList[index].createdAt),
+                                                  text: dayWorkController.getTimeDifference(dayWorkController.getAllDayWorkSearchResponseList[index].createdAt),
                                                   fontSize: 15,
                                                   textColor: Color.fromRGBO(75, 85, 99, 1),
                                                   fontWeight: FontWeight.w500,
@@ -290,7 +291,7 @@ class SiteDiaryView extends StatelessWidget {
                                                           textAlign: TextAlign.center,
                                                           alignment: Alignment.center,
                                                           context: context,
-                                                          text: "Delete Site Diary?",
+                                                          text: "Delete Day Work?",
                                                           fontSize: 18,
                                                           textColor: AppColors.black255,
                                                           fontWeight: FontWeight.w700,
@@ -316,7 +317,7 @@ class SiteDiaryView extends StatelessWidget {
                                                         Column(
                                                           children: [
 
-                                                            siteDiaryController.isDelete.value == true ?
+                                                            dayWorkController.isDelete.value == true ?
                                                             CustomLoaderButton().customLoaderButton(
                                                               backgroundColor: Colors.transparent,
                                                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -332,9 +333,9 @@ class SiteDiaryView extends StatelessWidget {
                                                               borderRadius: 8,
                                                               backgroundColor: Color.fromRGBO(220, 20, 60, 1),
                                                               onPressed: () async {
-                                                                siteDiaryController.isDelete.value = true;
-                                                                await siteDiaryController.deleteSiteDiaryController(
-                                                                  siteDiaryId: siteDiaryController.getAllSiteDiariesSearchResponseList[index].sId,
+                                                                dayWorkController.isDelete.value = true;
+                                                                await dayWorkController.deleteDayWorkController(
+                                                                  dayWorkId: dayWorkController.getAllDayWorkSearchResponseList[index].sId,
                                                                 );
                                                               },
                                                             ),
@@ -404,7 +405,7 @@ class SiteDiaryView extends StatelessWidget {
                                   Expanded(
                                     child: TextHelperClass.headingText(
                                       context: context,
-                                      text: "${ siteDiaryController.getAllSiteDiariesSearchResponseList[index].totalWorkforces} Workforce",
+                                      text: "${dayWorkController.getAllDayWorkSearchResponseList[index].totalWorkforces} Workforce",
                                       fontSize: 15,
                                       textColor: Color.fromRGBO(75, 85, 99, 1),
                                       fontWeight: FontWeight.w500,
@@ -434,7 +435,7 @@ class SiteDiaryView extends StatelessWidget {
                                   Expanded(
                                     child: TextHelperClass.headingText(
                                       context: context,
-                                      text: "${ siteDiaryController.getAllSiteDiariesSearchResponseList[index].totalEquipments} Equipments",
+                                      text: "${dayWorkController.getAllDayWorkSearchResponseList[index].totalEquipments} Equipments",
                                       fontSize: 15,
                                       textColor: Color.fromRGBO(75, 85, 99, 1),
                                       fontWeight: FontWeight.w500,
@@ -523,17 +524,14 @@ class SiteDiaryView extends StatelessWidget {
                         ),
                       );
                     },
-                    childCount: siteDiaryController.getAllSiteDiariesSearchResponseList.length
+                    childCount: dayWorkController.getAllDayWorkSearchResponseList.length
                 ),),
-
-
-
 
 
 
               ],
             ),
-          ),),
+          ),)
         ),
       ),
     );

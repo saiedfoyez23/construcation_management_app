@@ -59,8 +59,12 @@ class Api {
 
 
   ///create site diary
+  static const getAllSiteDiary = "$baseUrl/site-diaries/project";
   static const createSiteDiary = "$baseUrl/site-diaries"; //done
+  static const deleteSiteDiary = "$baseUrl/site-diaries"; //done
 
   ///create day works
   static const createDayWorks = "$baseUrl/day-works"; //done
+  static const deleteDayWorks = "$baseUrl/day-works"; //done
+  static const getAllDayWorks = "$baseUrl/day-works/project";
 }

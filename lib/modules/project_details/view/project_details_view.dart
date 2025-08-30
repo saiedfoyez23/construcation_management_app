@@ -1,5 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/calculator_tools/view/calculator_view.dart';
+import 'package:construction_management_app/modules/day_work/view/day_work_view.dart';
 import 'package:construction_management_app/modules/folder/view/folder_view.dart';
 import 'package:construction_management_app/modules/project_details/controller/project_view_controller.dart';
 import 'package:construction_management_app/modules/resources/view/resources_view.dart';
@@ -353,6 +354,9 @@ class ProjectDetailsView extends StatelessWidget {
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(4.r(context)),
                                       ),
+                                      side: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                       minimumSize: Size(107.w(context), 30.h(context)),
                                     ),
@@ -422,7 +426,7 @@ class ProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.addDayworks,
                             text: "Dayworks",
                             onTap: () {
-                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                              Get.off(()=>DayWorkView(projectId: projectId), preventDuplicates: false);
                             },
                           ),
 
