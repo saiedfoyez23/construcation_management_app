@@ -47,10 +47,120 @@ class SiteDiaryDetailsView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
                   child: Column(
                     children: [
+
+                      SpaceHelperClass.v(16.h(context)),
+
+                      Row(
+                        children: [
+
+                          Expanded(
+                            child: Column(
+                              children: [
+
+
+                                TextHelperClass.headingText(
+                                  context: context,
+                                  text: "${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.project?.name} - ${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.name}",
+                                  fontSize: 20,
+                                  textColor: AppColors.black38,
+                                  fontWeight: FontWeight.w700,
+                                ),
+
+                                SpaceHelperClass.v(6.h(context)),
+
+                                // Project Address with Location Icon
+                                Row(
+                                  children: [
+                                    ImageHelperClass.customImageContainer(
+                                      context: context,
+                                      height: 18.h(context),
+                                      width: 18.w(context),
+                                      imagePath: AppImages.location,
+                                      imageFit: BoxFit.contain,
+                                      fit: BoxFit.cover,
+                                    ),
+
+                                    SpaceHelperClass.h(4.w(context)),
+
+                                    Expanded(
+                                      child: TextHelperClass.headingText(
+                                        context: context,
+                                        text: "${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.location}",
+                                        fontSize: 16,
+                                        textColor: AppColors.gray107,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+
+
+                              ],
+                            ),
+                          ),
+
+                          SpaceHelperClass.h(12.w(context)),
+
+
+                          ImageHelperClass.customImageButtonContainer(
+                            onPressed: () async {},
+                            context: context,
+                            height: 30.h(context),
+                            width: 30.w(context),
+                            imagePath: AppImages.editBlueIconSite,
+                            fit: BoxFit.cover,
+                            imageFit: BoxFit.contain,
+                          ),
+                        ],
+                      ),
+
+
+                      SpaceHelperClass.v(16.h(context)),
+
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "Description",
+                        fontSize: 18,
+                        textColor: Color.fromRGBO(0, 0, 0, 1),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      SpaceHelperClass.v(8.h(context)),
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.description}",
+                        fontSize: 15,
+                        textColor: Color.fromRGBO(75, 85, 99, 1),
+                        fontWeight: FontWeight.w500,
+                      ),
+
+
+                      SpaceHelperClass.v(16.h(context)),
+
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "Weather Condition",
+                        fontSize: 18,
+                        textColor: Color.fromRGBO(0, 0, 0, 1),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      SpaceHelperClass.v(8.h(context)),
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.weatherCondition}",
+                        fontSize: 15,
+                        textColor: Color.fromRGBO(75, 85, 99, 1),
+                        fontWeight: FontWeight.w500,
+                      ),
+
                   
                   
                   
-                      SpaceHelperClass.v(13.h(context)),
+                      SpaceHelperClass.v(16.h(context)),
                   
                       ...getSiteDiaryDetailsController.taskList.map((item) {
                         return SiteDiaryDetailsTaskDetailsWidget().siteDiaryDetailsTaskDetailsBuilder(
@@ -60,8 +170,41 @@ class SiteDiaryDetailsView extends StatelessWidget {
                         );
                       }),
 
+                      SpaceHelperClass.v(16.h(context)),
 
-                      SpaceHelperClass.v(12.h(context)),
+
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "Attachments",
+                        fontSize: 18,
+                        textColor: Color.fromRGBO(0, 0, 0, 1),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      SpaceHelperClass.v(8.h(context)),
+
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "Task-related photos",
+                        fontSize: 15,
+                        textColor: Color.fromRGBO(75, 85, 99, 1),
+                        fontWeight: FontWeight.w500,
+                      ),
+
+                      SpaceHelperClass.v(13.h(context)),
+
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5.r(context)),
+                        child: Image.network(
+                          "${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.image}",
+                          width: 375.w(context),
+                          height: 192.h(context),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+
+
+                      SpaceHelperClass.v(16.h(context)),
 
                       getSiteDiaryDetailsController.isPdf.value == true  ?
                       CustomLoaderButton().customLoaderButton(
@@ -74,7 +217,7 @@ class SiteDiaryDetailsView extends StatelessWidget {
                         height: 50.h(context),
                         child: OutlinedButton(
                           onPressed: () async {
-                            await getSiteDiaryDetailsController.getPdfController(siteDiaryId: siteDiaryId);
+                            await getSiteDiaryDetailsController.getPdfExcelController(siteDiaryId: siteDiaryId, isExcel: false, context: context);
                           },
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
@@ -120,6 +263,67 @@ class SiteDiaryDetailsView extends StatelessWidget {
                         ),
                       ),
 
+                      SpaceHelperClass.v(12.h(context)),
+
+                      getSiteDiaryDetailsController.isExcelOpen.value == true  ?
+                      CustomLoaderButton().customLoaderButton(
+                        backgroundColor: Colors.transparent,
+                        loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                        height: 50,
+                        context: context,
+                      ) :
+                      SizedBox(
+                        height: 50.h(context),
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            await getSiteDiaryDetailsController.getPdfExcelController(siteDiaryId: siteDiaryId, isExcel: true, context: context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.hpm(context),
+                              vertical: 6.vpm(context),
+                            ),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r(context)),
+                            ),
+                            side: BorderSide(
+                                color: Color.fromRGBO(33, 178, 122, 1),
+                                width: 1
+                            ),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            minimumSize: Size(375.w(context), 50.h(context)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+
+                              ImageHelperClass.customImageContainer(
+                                context: context,
+                                height: 20.h(context),
+                                width: 20.w(context),
+                                imagePath: AppImages.excell,
+                                imageFit: BoxFit.contain,
+                                fit: BoxFit.cover,
+                              ),
+
+                              SpaceHelperClass.h(4.w(context)),
+
+                              TextHelperClass.headingTextWithoutWidth(
+                                context: context,
+                                text: "Export as Excel",
+                                fontSize: 16,
+                                textColor: Color.fromRGBO(33, 178, 122, 1),
+                                fontWeight: FontWeight.w500,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+
+
+                      SpaceHelperClass.v(15.h(context)),
 
 
                   

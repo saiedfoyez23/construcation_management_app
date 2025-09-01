@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
@@ -12,7 +14,7 @@ import 'package:construction_management_app/modules/site_diary/model/get_single_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
 
 import '../../../common/common.dart';
 import '../../../data/api.dart';
@@ -21,6 +23,7 @@ import '../../../data/base_client.dart';
 class GetSiteDiaryDetailsController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPdf = false.obs;
+  RxBool isExcelOpen = false.obs;
   RxList<SiteDiaryDetailsWorkforce> workforce = <SiteDiaryDetailsWorkforce>[].obs;
   RxList<SiteDiaryDetailsEquipment> equipment = <SiteDiaryDetailsEquipment>[].obs;
   RxList<SiteDiaryDetailsTask> taskList = <SiteDiaryDetailsTask>[].obs;
@@ -85,35 +88,68 @@ class GetSiteDiaryDetailsController extends GetxController {
 
 
 
-  Future<void> getPdfController({required String siteDiaryId}) async {
+  Future<void> getPdfExcelController({required String siteDiaryId,required bool isExcel,required BuildContext context}) async {
     try {
-      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+      if(isExcel == true) {
+        isExcelOpen.value = true;
 
 
-      var headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
-      };
+        loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
-      dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: "${Api.detailsSiteDiary}/${siteDiaryId}",
-          headers: headers,
-        ),
-      );
 
-      if (responseBody != null) {
-        print("hello ${jsonEncode(responseBody)}");
-        await generateAndSavePdf(responseBody);
+        var headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+        };
+
+        dynamic responseBody = await BaseClient.handleResponse(
+          await BaseClient.getRequest(
+            api: "${Api.detailsSiteDiary}/${siteDiaryId}",
+            headers: headers,
+          ),
+        );
+
+        if (responseBody != null) {
+          print("hello ${jsonEncode(responseBody)}");
+          await generateAndSaveExcel(context: context, responseJson: responseBody);
+        } else {
+          throw "Data retrieve is Failed";
+        }
+
       } else {
-        throw "Data retrieve is Failed";
+
+        isPdf.value = true;
+
+
+        loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+
+        var headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+        };
+
+        dynamic responseBody = await BaseClient.handleResponse(
+          await BaseClient.getRequest(
+            api: "${Api.detailsSiteDiary}/${siteDiaryId}",
+            headers: headers,
+          ),
+        );
+
+        if (responseBody != null) {
+          print("hello ${jsonEncode(responseBody)}");
+          await generateAndSavePdf(responseBody);
+        } else {
+          throw "Data retrieve is Failed";
+        }
       }
     } catch (e) {
       debugPrint("Catch Error.........$e");
       kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
     } finally {
-      isPdf(false);
+      isExcel == true ? isExcelOpen(false) : isPdf(false);
     }
   }
 
@@ -185,53 +221,81 @@ class GetSiteDiaryDetailsController extends GetxController {
 
     final data = responseJson['data'];
 
+    Uint8List? imageBytes;
+    try {
+      final response = await http.get(Uri.parse(data['image']));
+      if (response.statusCode == 200) {
+        imageBytes = response.bodyBytes;
+      }
+    } catch (e) {
+      print("Image load failed: $e");
+    }
+
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(20),
         build: (pw.Context context) {
-          return pw.Padding(
-            padding: const pw.EdgeInsets.all(16),
-            child: pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text("Site Diary Report",
-                    textAlign: pw.TextAlign.center,
-                    style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(height: 16),
-
-                pw.Text("Project Name: ${data['project']['name']}"),
-                pw.Text("Diary Name: ${data['name']}"),
-                pw.Text("Description: ${data['description']}"),
-                pw.Text("Location: ${data['location']}"),
-                pw.Text("Date: ${data['date']}"),
-                pw.Text("Weather: ${data['weather_condition']}"),
-                pw.Text("Duration: ${data['duration']}"),
-                pw.Text("Comment: ${data['comment']}"),
-                pw.SizedBox(height: 16),
-
-                pw.Text("Workforces:", style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-                ...List.generate(
-                  (data['tasks'][0]['workforces'] as List).length,
-                      (i) {
-                    var wf = data['tasks'][0]['workforces'][i];
-                    return pw.Text(
-                        "- ${wf['workforce']['name']} | Qty: ${wf['quantity']} | Duration: ${wf['duration']}");
-                  },
-                ),
-                pw.SizedBox(height: 12),
-
-                pw.Text("Equipments:", style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-                ...List.generate(
-                  (data['tasks'][0]['equipments'] as List).length,
-                      (i) {
-                    var eq = data['tasks'][0]['equipments'][i];
-                    return pw.Text(
-                        "- ${eq['equipment']['name']} | Qty: ${eq['quantity']} | Duration: ${eq['duration']}");
-                  },
-                ),
-              ],
+          return [
+            pw.Container(
+              width: PdfPageFormat.a4.availableWidth * 0.6,
+              child: pw.Text(
+                "Site Diary Report",
+                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+              ),
             ),
-          );
+            pw.SizedBox(height: 16),
+
+            buildField("Project Name", data['project']['name'] ?? ""),
+            buildField("Diary Name", data['name'] ?? ""),
+            buildField("Description", data['description'] ?? ""),
+            buildField("Location", data['location'] ?? ""),
+            buildField("Date", data['date'] ?? ""),
+            buildField("Weather", data['weather_condition'] ?? ""),
+            buildField("Delay", data['duration'] ?? ""),
+            buildField("Comment", data['comment'] ?? ""),
+
+
+            pw.SizedBox(height: 15),
+
+            // 🖼️ Insert Image
+            if (imageBytes != null) ...[
+              pw.Text("Attached Image:",
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 10),
+              pw.Image(pw.MemoryImage(imageBytes), height: 200),
+              pw.SizedBox(height: 20),
+            ],
+
+            pw.Divider(),
+
+            pw.Text("Workforces:",
+                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+            ...List.generate(
+              (data['tasks'][0]['workforces'] as List).length,
+                  (i) {
+                var wf = data['tasks'][0]['workforces'][i];
+                return pw.Text(
+                  "- ${wf['workforce']['name']} | Qty: ${wf['quantity']} | Duration: ${wf['duration']}",
+                  style: pw.TextStyle(fontSize: 12),
+                );
+              },
+            ),
+
+            pw.SizedBox(height: 16),
+            pw.Text("Equipments:",
+                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+            ...List.generate(
+              (data['tasks'][0]['equipments'] as List).length,
+                  (i) {
+                var eq = data['tasks'][0]['equipments'][i];
+                return pw.Text(
+                  "- ${eq['equipment']['name']} | Qty: ${eq['quantity']} | Duration: ${eq['duration']}",
+                  style: pw.TextStyle(fontSize: 12),
+                );
+              },
+            ),
+          ];
         },
       ),
     );
@@ -248,6 +312,127 @@ class GetSiteDiaryDetailsController extends GetxController {
       print('File opened successfully');
     }
 
+  }
+
+  pw.Widget buildField(String title, String value) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          title,
+          style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold),
+        ),
+        pw.SizedBox(height: 4),
+        pw.Text(
+          value,
+          style: pw.TextStyle(fontSize: 12),
+        ),
+        pw.SizedBox(height: 12),
+      ],
+    );
+  }
+
+  /// Generate Excel File
+  Future<void> generateAndSaveExcel({required BuildContext context,required Map<String, dynamic> responseJson}) async {
+    final data = responseJson["data"];
+
+    // Create a new Excel workbook
+    final xlsio.Workbook workbook = xlsio.Workbook();
+    final xlsio.Worksheet sheet = workbook.worksheets[0];
+
+    // Title
+    sheet.getRangeByName('A1').setText('Site Diary Report');
+    sheet.getRangeByName('A1').cellStyle.bold = true;
+
+    // Basic Info
+    sheet.getRangeByName('A2').setText('Project Name');
+    sheet.getRangeByName('B2').setText(data['project']['name']);
+
+    sheet.getRangeByName('A3').setText('Diary Name');
+    sheet.getRangeByName('B3').setText(data['name']);
+
+    sheet.getRangeByName('A4').setText('Added By');
+    sheet.getRangeByName('B4').setText("${data['added_by']['user']['name']} (${data['added_by']['user_type']})");
+
+    sheet.getRangeByName('A5').setText('Date');
+    sheet.getRangeByName('B5').setText(data['date']);
+
+    sheet.getRangeByName('A6').setText('Weather');
+    sheet.getRangeByName('B6').setText(data['weather_condition']);
+
+    sheet.getRangeByName('A7').setText('Delay');
+    sheet.getRangeByName('B7').setText(data['duration']);
+
+    sheet.getRangeByName('A8').setText('Location');
+    sheet.getRangeByName('B8').setText(data['location']);
+
+    sheet.getRangeByName('A9').setText('Description');
+    sheet.getRangeByName('B9').setText(data['description']);
+
+    // Tasks
+    int row = 11;
+    sheet.getRangeByName('A$row').setText('Tasks');
+    sheet.getRangeByName('A$row').cellStyle.bold = true;
+    row++;
+
+    for (var task in data['tasks']) {
+      sheet.getRangeByIndex(row, 1).setText("Task: ${task['name']}");
+      row++;
+
+      sheet.getRangeByIndex(row, 1).setText("Workforces");
+      row++;
+      for (var wf in task['workforces']) {
+        sheet.getRangeByIndex(row, 1).setText(wf['workforce']['name']);
+        sheet.getRangeByIndex(row, 2).setNumber(wf['quantity'].toDouble());
+        sheet.getRangeByIndex(row, 3).setText(wf['duration']);
+        row++;
+      }
+
+      sheet.getRangeByIndex(row, 1).setText("Equipments");
+      row++;
+      for (var eq in task['equipments']) {
+        sheet.getRangeByIndex(row, 1).setText(eq['equipment']['name']);
+        sheet.getRangeByIndex(row, 2).setNumber(eq['quantity'].toDouble());
+        sheet.getRangeByIndex(row, 3).setText(eq['duration']);
+        row++;
+      }
+
+      row++;
+    }
+
+    // Comment
+    sheet.getRangeByIndex(row, 1).setText("Comment");
+    sheet.getRangeByIndex(row, 2).setText(data['comment']);
+    row += 2;
+
+    // 🖼️ Insert Image from URL
+    try {
+      final response = await http.get(Uri.parse(data['image']));
+      if (response.statusCode == 200) {
+        final Uint8List imageBytes = response.bodyBytes;
+        final String base64Image = base64Encode(imageBytes);
+        final xlsio.Picture picture = sheet.pictures.addBase64(row, 1, base64Image);
+        picture.height = 200; // resize image
+        picture.width = 300;
+      }
+    } catch (e) {
+      print("Image insert failed: $e");
+    }
+
+    // Save Excel
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
+
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File("${dir.path}/site_diary_with_image.xlsx");
+    await file.writeAsBytes(bytes, flush: true);
+
+    final result = await OpenFile.open(file.path);
+    if (result.type != ResultType.done) {
+      print('Failed to open file: ${result.message}');
+    } else {
+      print('File opened successfully');
+    }
   }
 
 
