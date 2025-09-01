@@ -3,8 +3,6 @@ import 'package:construction_management_app/modules/project_details/view/project
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../site_diary/view/project_detalis_site.dart';
-
 class HomeWidgets {
 
   static Widget profileCard({

@@ -1,6 +1,7 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/project_details/view/project_details_view.dart';
 import 'package:construction_management_app/modules/site_diary/controller/site_diary_controller.dart';
+import 'package:construction_management_app/modules/site_diary/view/edit_site_diary_view.dart';
 import 'package:construction_management_app/modules/site_diary/view/new_site_diary_view.dart';
 import 'package:construction_management_app/modules/site_diary/view/site_diary_details_view.dart';
 import 'package:flutter/material.dart';
@@ -405,7 +406,7 @@ class SiteDiaryView extends StatelessWidget {
                                   Expanded(
                                     child: TextHelperClass.headingText(
                                       context: context,
-                                      text: "${ siteDiaryController.getAllSiteDiariesSearchResponseList[index].totalWorkforces} Workforce",
+                                      text: "${siteDiaryController.getAllSiteDiariesSearchResponseList[index].totalWorkforces} Workforce",
                                       fontSize: 15,
                                       textColor: Color.fromRGBO(75, 85, 99, 1),
                                       fontWeight: FontWeight.w500,
@@ -471,7 +472,7 @@ class SiteDiaryView extends StatelessWidget {
                                     height: 50.h(context),
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        //_handleAddTask(controller: controller);
+                                        Get.off(()=>EditSiteDiaryView(siteDiaryId: siteDiaryController.getAllSiteDiariesSearchResponseList[index].sId, projectId: projectId),preventDuplicates: false);
                                       },
                                       style: OutlinedButton.styleFrom(
                                         padding: EdgeInsets.symmetric(

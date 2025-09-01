@@ -7,7 +7,6 @@ import 'package:construction_management_app/modules/check_list/view/widget/check
 import 'package:construction_management_app/modules/check_list/view/widget/check_list_timeline_card.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/checklist_inspection_card.dart';
 import 'package:construction_management_app/modules/check_list/view/widget/project_detalis_checklist.dart';
-import 'package:construction_management_app/modules/day_work/view/project_detalis_day_work.dart';
 import 'package:construction_management_app/modules/message/view/group_message.dart';
 import 'package:construction_management_app/modules/tomorrow_task/view/project_detalis_planning.dart';
 import 'package:flutter/material.dart';
@@ -212,17 +211,17 @@ class _ProjectDetalisChecklistState extends State<ProjectDetalisChecklist> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProjectDetalisDayWorkScreen());
-                        },
-                        child: ProjectDetalisChecklistCard(
-                          image: AppImages.clock,
-                          name: "Dayworks",
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(() => ProjectDetalisDayWorkScreen());
+                    //     },
+                    //     child: ProjectDetalisChecklistCard(
+                    //       image: AppImages.clock,
+                    //       name: "Dayworks",
+                    //     ),
+                    //   ),
+                    // ),
                     Expanded(
                       child: GestureDetector(
                         onTap: () {

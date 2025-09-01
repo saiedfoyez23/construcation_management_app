@@ -1,38 +1,42 @@
 import 'dart:convert';
-
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/day_work/controller/new_day_work_controller.dart';
-import 'package:construction_management_app/modules/day_work/view/day_work_view.dart';
-import 'package:construction_management_app/modules/day_work/widget/add_day_work_widget/image_and_location_day_work_widget.dart';
-import 'package:construction_management_app/modules/day_work/widget/add_day_work_widget/new_add_day_work_widget.dart';
-import 'package:construction_management_app/modules/day_work/widget/add_day_work_widget/new_day_work_add_task_section_widget.dart';
-import 'package:construction_management_app/modules/day_work/widget/add_day_work_widget/new_day_work_material_used_widget.dart';
-import 'package:construction_management_app/modules/day_work/widget/add_day_work_widget/new_day_work_task_details_widget.dart';
+import 'package:construction_management_app/modules/site_diary/controller/site_diary_edit_controller.dart';
+import 'package:construction_management_app/modules/site_diary/view/site_diary_details_view.dart';
+import 'package:construction_management_app/modules/site_diary/view/site_diary_view.dart';
+import 'package:construction_management_app/modules/site_diary/widget/add_site_diary_widget/new_site_diary_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/edit_site_diary_widget/edit_site_diary_add_task_section_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/edit_site_diary_widget/edit_site_diary_delay_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/edit_site_diary_widget/edit_site_diary_image_and_location_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/edit_site_diary_widget/edit_site_diary_task_details_widget.dart';
+import 'package:construction_management_app/modules/site_diary/widget/edit_site_diary_widget/edit_site_diary_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NewDayWorkView extends StatelessWidget {
-  NewDayWorkView({super.key,required this.projectId});
+class EditSiteDiaryView extends StatelessWidget {
+  EditSiteDiaryView({super.key,required this.siteDiaryId,required this.projectId});
 
+  final String siteDiaryId;
   final String projectId;
+
   @override
   Widget build(BuildContext context) {
-    NewDayWorkController newDayWorkController = Get.put(NewDayWorkController(projectId: projectId));
+    SiteDiaryEditController siteDiaryEditController = Get.put(SiteDiaryEditController(projectId: projectId, siteDiaryId: siteDiaryId));
     return Scaffold(
-      body: SafeArea(
-        child: Obx(()=>Container(
+      body:  SafeArea(
+        child: Container(
           height: 812.h(context),
           width: 375.w(context),
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: newDayWorkController.isLoading.value == true  ?
+          child: Obx(()=> siteDiaryEditController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
             height: 812,
             context: context,
-          ) :CustomScrollView(
+          ) :
+          CustomScrollView(
             slivers: [
 
 
@@ -40,9 +44,9 @@ class NewDayWorkView extends StatelessWidget {
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 onBackPressed: () {
-                  Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+                  Get.off(()=>SiteDiaryDetailsView(projectId: projectId,siteDiaryId: siteDiaryId,),preventDuplicates: false);
                 },
-                title: "New Day Work",
+                title: "Edit Site Diary",
               ),
 
 
@@ -50,43 +54,43 @@ class NewDayWorkView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
                       SpaceHelperClass.v(24.h(context)),
 
-
-                      NewAddDayWorkWidget.newDayWorkProjectSelectionAndDescriptionBuilder(
-                        context: context,
-                        controller: newDayWorkController,
-                      ),
-
-                      SpaceHelperClass.v(24.h(context)),
-
-                      NewDayWorkAddTaskSectionWidget().newDayWorkAddTaskSectionBuilder(context: context, controller: newDayWorkController,),
-
-                      SpaceHelperClass.v(24.h(context)),
-
-                      ...newDayWorkController.taskList.map((item) {
-                        return NewDayWorkTaskDetailsWidget().newDayWorkTaskDetailsBuilder(
-                          context: context,
-                          controller: newDayWorkController,
-                          item: item,
-                        );
-                      }),
-
-
-                      NewDayWorkMaterialUsedWidget().newDayWorkMaterialsUsedSection(
-                        context: context,
-                        controller: newDayWorkController,
-                      ),
-
+                      EditSiteDiaryWidget.projectSelectionAndDescriptionBuilder(context: context, controller: siteDiaryEditController),
 
 
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      NewDayWorkImageAndLocationWidget().newDayWorkImageAndLocationBuilder(context: context, controller: newDayWorkController),
+
+
+                      EditSiteDiaryAddTaskSectionWidget().editSiteDiaryAddTaskSectionBuilder(context: context,controller: siteDiaryEditController),
+
+                      SpaceHelperClass.v(24.h(context)),
+
+                      ...[
+                        for (int i = 0; i < siteDiaryEditController.taskList.length; i++)
+                          EditSiteDiaryTaskDetailsWidget().editSiteDiaryTaskDetailsBuilder(
+                            context: context,
+                            controller: siteDiaryEditController,
+                            item: siteDiaryEditController.taskList[i],
+                            index: i,
+                            siteDiaryId: siteDiaryId
+                          ),
+                      ],
+
+
+                      SpaceHelperClass.v(24.h(context)),
+
+
+                      EditSiteDiaryCommandWidget().editSiteDiaryCommendWidget(context: context, controller: siteDiaryEditController),
+
+                      SpaceHelperClass.v(24.h(context)),
+
+
+                      EditSiteDiaryImageAndLocationWidget().editSiteDiaryImageAndLocationBuilder(context: context, controller: siteDiaryEditController),
 
                       SpaceHelperClass.v(35.h(context)),
 
@@ -95,7 +99,7 @@ class NewDayWorkView extends StatelessWidget {
 
 
                           Expanded(
-                            child: newDayWorkController.isSubmit.value == true ?
+                            child: siteDiaryEditController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -111,25 +115,22 @@ class NewDayWorkView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(newDayWorkController.getProjectDetailsResponseModel.value.data == null) {
-                                  kSnackBar(message: "Please select a project", bgColor: AppColors.red);
-                                } else if(newDayWorkController.nameController.value.text == ""){
+                                if(siteDiaryEditController.nameController.value.text == ""){
                                   kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
-                                } else if(newDayWorkController.descriptionController.value.text == "") {
+                                } else if(siteDiaryEditController.descriptionController.value.text == "") {
                                   kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
-                                } else if(newDayWorkController.dateTimeController.value.text == "") {
+                                } else if(siteDiaryEditController.dateTimeController.value.text == "") {
                                   kSnackBar(message: "Please select a date", bgColor: AppColors.red);
-                                } else if(newDayWorkController.weatherConditionController.value.text == "") {
+                                } else if(siteDiaryEditController.weatherConditionController.value.text == "") {
                                   kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
-                                } else if(newDayWorkController.locationController.value.text == "") {
+                                } else if(siteDiaryEditController.locationController.value.text == "") {
                                   kSnackBar(message: "Please enter location", bgColor: AppColors.red);
-                                } else if(newDayWorkController.taskList.isEmpty == true) {
+                                } else if(siteDiaryEditController.taskList.isEmpty == true) {
                                   kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
-                                } else if(newDayWorkController.selectedImage.value.path == "") {
-                                  kSnackBar(message: "Please select a image", bgColor: AppColors.red);
                                 } else {
-                                  newDayWorkController.isSubmit.value = true;
-                                  List<Map<String, dynamic>> tasksToJson(List<DayWorkTask> tasks) {
+                                  siteDiaryEditController.isSubmit.value = true;
+
+                                  List<Map<String, dynamic>> tasksToJson(List<EditSiteDiaryTask> tasks) {
                                     return tasks.map((task) {
                                       return {
                                         "name": task.name,
@@ -152,28 +153,28 @@ class NewDayWorkView extends StatelessWidget {
                                   }
 
                                   Map<String,dynamic> payload = {
-                                    "name": newDayWorkController.nameController.value.text,
-                                    "project": newDayWorkController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                                    "description": newDayWorkController.descriptionController.value.text,
-                                    "date": newDayWorkController.dateTimeController.value.text,
-                                    "weather_condition": newDayWorkController.weatherConditionController.value.text,
-                                    "duration": "8 hours",
-                                    "tasks": tasksToJson(newDayWorkController.taskList),
-                                    "location":  newDayWorkController.locationController.value.text,
-                                    "materials":  newDayWorkController.metrialUsedController.value.text,
+                                    "name": siteDiaryEditController.nameController.value.text,
+                                    "project": siteDiaryEditController.getProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "description": siteDiaryEditController.descriptionController.value.text,
+                                    "date": siteDiaryEditController.dateTimeController.value.text,
+                                    "weather_condition": siteDiaryEditController.weatherConditionController.value.text,
+                                    "comment": siteDiaryEditController.commendController.value.text,
+                                    "location": siteDiaryEditController.locationController.value.text,
                                   };
                                   print(jsonEncode(payload));
                                   //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
-                                  await newDayWorkController.createDayWorksController(
+                                  await siteDiaryEditController.updateSiteDiaryController(
                                     payload: payload,
-                                    image: newDayWorkController.selectedImage.value,
+                                    image: siteDiaryEditController.selectedImage.value,
                                     projectId: projectId,
+                                    siteDiaryId: siteDiaryId,
                                   );
                                 }
 
                               },
                             ),
                           ),
+
 
                           SpaceHelperClass.h(12.w(context)),
 
@@ -189,7 +190,7 @@ class NewDayWorkView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+                                Get.off(()=>SiteDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
                               },
                             ),
                           ),
@@ -203,17 +204,19 @@ class NewDayWorkView extends StatelessWidget {
                       SpaceHelperClass.v(35.h(context)),
 
 
-
                     ],
                   ),
                 ),
-              )
+              ),
+
+
+
 
 
 
             ],
-          ),
-        )),
+          )),
+        ),
       ),
     );
   }

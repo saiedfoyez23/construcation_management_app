@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:construction_management_app/modules/day_work/model/get_single_day_work_details_response_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
@@ -20,37 +21,36 @@ import '../../../common/common.dart';
 import '../../../data/api.dart';
 import '../../../data/base_client.dart';
 
-class GetSiteDiaryDetailsController extends GetxController {
+class GetDayWorkDetailsController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPdf = false.obs;
   RxBool isExcelOpen = false.obs;
-  RxList<SiteDiaryDetailsWorkforce> workforce = <SiteDiaryDetailsWorkforce>[].obs;
-  RxList<SiteDiaryDetailsEquipment> equipment = <SiteDiaryDetailsEquipment>[].obs;
-  RxList<SiteDiaryDetailsTask> taskList = <SiteDiaryDetailsTask>[].obs;
+  RxList<DayWorkWorkforce> workforce = <DayWorkWorkforce>[].obs;
+  RxList<DayWorkEquipment> equipment = <DayWorkEquipment>[].obs;
+  RxList<DayWorkDetailsTask> taskList = <DayWorkDetailsTask>[].obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
-  Rx<GetSingleSiteDiaryDetailsResponseModel> getSingleSiteDiaryDetailsResponseModel = GetSingleSiteDiaryDetailsResponseModel().obs;
+  Rx<GetSingleDayWorkDetailsResponseModel> getSingleDayWorkDetailsResponseModel = GetSingleDayWorkDetailsResponseModel().obs;
   Rx<GetAllEquipmentsResponseModel> getAllEquipmentsResponseModel = GetAllEquipmentsResponseModel().obs;
   Rx<GetAllWorkforcesResponseModel> getAllWorkforcesResponseModel = GetAllWorkforcesResponseModel().obs;
-  String siteDiaryId;
+  String dayWorkId;
   String projectId;
-  GetSiteDiaryDetailsController({required this.siteDiaryId,required this.projectId});
+  GetDayWorkDetailsController({required this.dayWorkId,required this.projectId});
 
 
   @override
   void onInit() {
     // TODO: implement onInit
-    super.onInit()
-    ;
+    super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
       await getAllEquipmentsController(projectId: projectId);
       await getAllWorkforceController(projectId: projectId);
-      await getSiteDiaryDetailsController(siteDiaryId: siteDiaryId);
+      await getDayWorkDetailsController(dayWorkId: dayWorkId);
     });
   }
 
 
-  Future<void> getSiteDiaryDetailsController({required String siteDiaryId}) async {
+  Future<void> getDayWorkDetailsController({required String dayWorkId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -63,16 +63,15 @@ class GetSiteDiaryDetailsController extends GetxController {
 
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.getRequest(
-          api: "${Api.detailsSiteDiary}/${siteDiaryId}",
+          api: "${Api.detailsDayWork}/${dayWorkId}",
           headers: headers,
         ),
       );
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getSingleSiteDiaryDetailsResponseModel.value = GetSingleSiteDiaryDetailsResponseModel.fromJson(responseBody);
-        final siteDiaryData = getSingleSiteDiaryDetailsResponseModel.value.data;
-        taskList.value = siteDiaryData?.toTaskList() ?? [];
+        getSingleDayWorkDetailsResponseModel.value = GetSingleDayWorkDetailsResponseModel.fromJson(responseBody);
+        taskList.value = getSingleDayWorkDetailsResponseModel.value.toTaskList();
       } else {
         throw "Data retrieve is Failed";
       }
@@ -85,7 +84,7 @@ class GetSiteDiaryDetailsController extends GetxController {
   }
 
 
-  Future<void> getPdfExcelController({required String siteDiaryId,required bool isExcel,required BuildContext context}) async {
+  Future<void> getPdfExcelController({required String dayWorkId,required bool isExcel,required BuildContext context}) async {
     try {
       if(isExcel == true) {
         isExcelOpen.value = true;
@@ -102,7 +101,7 @@ class GetSiteDiaryDetailsController extends GetxController {
 
         dynamic responseBody = await BaseClient.handleResponse(
           await BaseClient.getRequest(
-            api: "${Api.detailsSiteDiary}/${siteDiaryId}",
+            api: "${Api.detailsDayWork}/${dayWorkId}",
             headers: headers,
           ),
         );
@@ -130,7 +129,7 @@ class GetSiteDiaryDetailsController extends GetxController {
 
         dynamic responseBody = await BaseClient.handleResponse(
           await BaseClient.getRequest(
-            api: "${Api.detailsSiteDiary}/${siteDiaryId}",
+            api: "${Api.detailsDayWork}/${dayWorkId}",
             headers: headers,
           ),
         );
@@ -251,6 +250,7 @@ class GetSiteDiaryDetailsController extends GetxController {
             buildField("Weather", data['weather_condition'] ?? ""),
             buildField("Delay", data['duration'] ?? ""),
             buildField("Comment", data['comment'] ?? ""),
+            buildField("Materials Used", data['materials'] ?? ""),
 
 
             pw.SizedBox(height: 15),
@@ -297,7 +297,7 @@ class GetSiteDiaryDetailsController extends GetxController {
 
     // Save to local storage
     final dir = await getApplicationDocumentsDirectory();
-    final file = File("${dir.path}/site_diary_report.pdf");
+    final file = File("${dir.path}/day_work_report.pdf");
     await file.writeAsBytes(await pdf.save());
 
     final result = await OpenFile.open(file.path);
@@ -364,8 +364,13 @@ class GetSiteDiaryDetailsController extends GetxController {
     sheet.getRangeByName('A9').setText('Description');
     sheet.getRangeByName('B9').setText(data['description']);
 
+
+    sheet.getRangeByName('A10').setText('Materials Used');
+    sheet.getRangeByName('B10').setText(data['materials']);
+
+
     // Tasks
-    int row = 11;
+    int row = 12;
     sheet.getRangeByName('A$row').setText('Tasks');
     sheet.getRangeByName('A$row').cellStyle.bold = true;
     row++;
@@ -419,7 +424,7 @@ class GetSiteDiaryDetailsController extends GetxController {
     workbook.dispose();
 
     final dir = await getApplicationDocumentsDirectory();
-    final file = File("${dir.path}/site_diary_with_image.xlsx");
+    final file = File("${dir.path}/day_work_with_image.xlsx");
     await file.writeAsBytes(bytes, flush: true);
 
     final result = await OpenFile.open(file.path);
@@ -435,40 +440,41 @@ class GetSiteDiaryDetailsController extends GetxController {
 
 
 
-class SiteDiaryDetailsTask {
+class DayWorkDetailsTask {
   final String name;
-  final List<SiteDiaryDetailsWorkforce> workforce;
-  final List<SiteDiaryDetailsEquipment> equipment;
+  final List<DayWorkWorkforce> workforce;
+  final List<DayWorkEquipment> equipment;
 
-  SiteDiaryDetailsTask(this.name, this.workforce, this.equipment);
+  DayWorkDetailsTask(this.name, this.workforce, this.equipment);
 
 }
 
-class SiteDiaryDetailsWorkforce {
+class DayWorkWorkforce {
   final String typeId;
   final int quantity;
   final int duration;
 
-  SiteDiaryDetailsWorkforce(this.typeId, this.quantity, this.duration);
+  DayWorkWorkforce(this.typeId, this.quantity, this.duration);
 
 }
 
-class SiteDiaryDetailsEquipment {
+class DayWorkEquipment {
   final String typeId;
   final int quantity;
   final int duration;
 
-  SiteDiaryDetailsEquipment(this.typeId, this.quantity, this.duration);
+  DayWorkEquipment(this.typeId, this.quantity, this.duration);
 }
 
 
-extension SiteDiaryMapper on GetSingleSiteDiaryDetailsResponse {
-  List<SiteDiaryDetailsTask> toTaskList() {
-    if (tasks == null) return [];
+extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
+  List<DayWorkDetailsTask> toTaskList() {
+    if (data?.tasks == null) return [];
 
-    return tasks!.map((task) {
+    return data!.tasks!.map((task) {
+      // Map Workforces
       final workforceList = task.workforces?.map((wf) {
-        return SiteDiaryDetailsWorkforce(
+        return DayWorkWorkforce(
           wf.workforce?.sId ?? "",
           (wf.quantity is int)
               ? wf.quantity
@@ -477,8 +483,9 @@ extension SiteDiaryMapper on GetSingleSiteDiaryDetailsResponse {
         );
       }).toList() ?? [];
 
+      // Map Equipments
       final equipmentList = task.equipments?.map((eq) {
-        return SiteDiaryDetailsEquipment(
+        return DayWorkEquipment(
           eq.equipment?.sId ?? "",
           (eq.quantity is int)
               ? eq.quantity
@@ -487,7 +494,8 @@ extension SiteDiaryMapper on GetSingleSiteDiaryDetailsResponse {
         );
       }).toList() ?? [];
 
-      return SiteDiaryDetailsTask(
+      // Return Task
+      return DayWorkDetailsTask(
         task.name ?? "",
         workforceList,
         equipmentList,
@@ -496,10 +504,12 @@ extension SiteDiaryMapper on GetSingleSiteDiaryDetailsResponse {
   }
 }
 
+/// Helper function to convert "25 hours" → 25
 int _parseDurationToInt(dynamic duration) {
   if (duration == null) return 0;
   if (duration is int) return duration;
-  final str = duration.toString();
+
+  final str = duration.toString().trim();
   final number = int.tryParse(str.split(" ").first);
   return number ?? 0;
 }

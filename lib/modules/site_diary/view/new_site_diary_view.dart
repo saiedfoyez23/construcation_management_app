@@ -147,7 +147,7 @@ class NewSiteDiaryView extends StatelessWidget {
                                     "description": newSiteDiaryController.descriptionController.value.text,
                                     "date": newSiteDiaryController.dateTimeController.value.text,
                                     "weather_condition": newSiteDiaryController.weatherConditionController.value.text,
-                                    "duration": "0 hours",
+                                    "duration": "",
                                     "tasks": tasksToJson(newSiteDiaryController.taskList),
                                     "location": newSiteDiaryController.locationController.value.text,
                                   };

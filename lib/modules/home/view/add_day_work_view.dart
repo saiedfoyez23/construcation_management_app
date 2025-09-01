@@ -158,7 +158,7 @@ class AddDayWorkView extends StatelessWidget {
                                     "description": addDayWorkController.descriptionController.value.text,
                                     "date": addDayWorkController.dateTimeController.value.text,
                                     "weather_condition": addDayWorkController.weatherConditionController.value.text,
-                                    "duration": "0 hours",
+                                    "duration": "",
                                     "tasks": tasksToJson(addDayWorkController.taskList),
                                     "location": addDayWorkController.locationController.value.text,
                                     "materials": addDayWorkController.metrialUsedController.value.text,

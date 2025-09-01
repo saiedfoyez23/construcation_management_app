@@ -4,7 +4,6 @@ import 'package:construction_management_app/modules/day_work/view/day_work_view.
 import 'package:construction_management_app/modules/folder/view/folder_view.dart';
 import 'package:construction_management_app/modules/project_details/controller/project_view_controller.dart';
 import 'package:construction_management_app/modules/resources/view/resources_view.dart';
-import 'package:construction_management_app/modules/site_diary/view/all_site_diary_screen.dart';
 import 'package:construction_management_app/modules/site_diary/view/site_diary_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,3 +1,8 @@
+import 'package:construction_management_app/modules/site_diary/model/get_single_site_diary_details_response_model.dart';
+import 'package:construction_management_app/modules/site_diary/view/site_diary_details_view.dart';
+import 'package:construction_management_app/modules/site_diary/widget/edit_site_diary_widget/edit_site_diary_widget.dart';
+import 'package:get/get.dart';
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
@@ -21,17 +26,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../../common/common.dart';
 
-class NewSiteDiaryController extends GetxController {
+class SiteDiaryEditController extends GetxController {
 
   late stt.SpeechToText _speech;
   RxBool isListening = false.obs;
   RxBool isSubmit = false.obs;
   Rx<TextEditingController> nameController = TextEditingController().obs;
   Rx<TextEditingController> weatherConditionController = TextEditingController().obs;
+  Rx<TextEditingController> commendController = TextEditingController().obs;
+  Rx<TextEditingController> delayController = TextEditingController().obs;
   Rx<TextEditingController> dateTimeController = TextEditingController().obs;
   Rx<TextEditingController> descriptionController = TextEditingController().obs;
   Rx<TextEditingController> audioController = TextEditingController().obs;
   Rx<TextEditingController> taskNameController = TextEditingController().obs;
+  Rx<GetSingleSiteDiaryDetailsResponseModel> getSingleSiteDiaryDetailsResponseModel = GetSingleSiteDiaryDetailsResponseModel().obs;
   Rx<TextEditingController> locationController = TextEditingController().obs;
   Rx<TextEditingController> workforceQuantityController = TextEditingController().obs;
   Rx<TextEditingController> workForceDurationController = TextEditingController().obs;
@@ -57,9 +65,9 @@ class NewSiteDiaryController extends GetxController {
 
   // Equipment
 
-  RxList<NewSiteDiaryWorkforce> workforceList = <NewSiteDiaryWorkforce>[].obs;
-  RxList<NewSiteDiaryEquipment> equipmentList = <NewSiteDiaryEquipment>[].obs;
-  RxList<NewSiteDiaryTask> taskList = <NewSiteDiaryTask>[].obs;
+  RxList<EditSiteDiaryWorkforce> workforceList = <EditSiteDiaryWorkforce>[].obs;
+  RxList<EditSiteDiaryEquipment> equipmentList = <EditSiteDiaryEquipment>[].obs;
+  RxList<EditSiteDiaryTask> taskList = <EditSiteDiaryTask>[].obs;
 
   Rx<File> selectedImage = File("").obs;
 
@@ -153,57 +161,118 @@ class NewSiteDiaryController extends GetxController {
     );
   }
 
-  Future<Position> getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      kSnackBar(message: 'Location services are disabled.', bgColor: AppColors.red);
-    }
-
-    // Check permission
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        kSnackBar(message: 'Location permissions are denied.', bgColor: AppColors.red);
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      kSnackBar(message: 'Location permissions are permanently denied, we cannot request.', bgColor: AppColors.red);
-    }
-
-    // Get current position
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  }
-
-
-  Future<String> getAddressFromLatLng(Position position) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-
-    if (placemarks.isNotEmpty) {
-      Placemark place = placemarks.first;
-      return "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
-    } else {
-      kSnackBar(message: "No address available", bgColor: AppColors.red);
-      return "No address available";
-    }
-  }
-
-
-  Future<void> fetchAddress() async {
+  Future<void> getSiteDiaryDetailsController({required String siteDiaryId}) async {
     try {
-      Position position = await getCurrentLocation();
-      locationController.value.text = await getAddressFromLatLng(position);
-      print("📍 Address: ${locationController.value.text}");
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.detailsSiteDiary}/${siteDiaryId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getSingleSiteDiaryDetailsResponseModel.value = GetSingleSiteDiaryDetailsResponseModel.fromJson(responseBody);
+        final siteDiaryData = getSingleSiteDiaryDetailsResponseModel.value.data;
+        taskList.value = siteDiaryData?.toTaskList() ?? [];
+        nameController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.name ?? "";
+        descriptionController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.description ?? "";
+        commendController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.comment ?? "";
+        delayController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.duration ?? "";
+        dateTimeController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.date ?? "";
+        locationController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.location ?? "";
+        weatherConditionController.value.text = getSingleSiteDiaryDetailsResponseModel.value.data?.weatherCondition ?? "";
+      } else {
+        throw "Data retrieve is Failed";
+      }
     } catch (e) {
-      kSnackBar(message: "Error: $e", bgColor: AppColors.red);
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
+    }
+  }
+
+  Future<void> removeTasksSiteDiaryController({required String siteDiaryId,required int index}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.patchRequest(
+          api: "${Api.removeTaskSiteDiary}/${siteDiaryId}",
+          headers: headers,
+          body: jsonEncode({
+            "task_index": index,
+          })
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
+    }
+  }
+
+
+  Future<void> addTasksSiteDiaryController({required String siteDiaryId,required Map<String,dynamic> data}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.postRequest(
+          api: "${Api.addTaskSiteDiary}/${siteDiaryId}",
+          headers: headers,
+          body: jsonEncode(data),
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      //isLoading(false);
     }
   }
 
@@ -304,9 +373,10 @@ class NewSiteDiaryController extends GetxController {
   }
 
 
-  Future<void> crateSiteDiaryController({
+  Future<void> updateSiteDiaryController({
     required Map<String,dynamic> payload,
-    required File image,
+    File? image,
+    required String siteDiaryId,
     required String projectId,
   }) async {
     try {
@@ -322,8 +392,8 @@ class NewSiteDiaryController extends GetxController {
 
       // Create multipart request
       var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(Api.createSiteDiary),
+        'PUT',
+        Uri.parse("${Api.updateSiteDiary}/${siteDiaryId}"),
       );
 
       request.headers.addAll(headers);
@@ -333,19 +403,21 @@ class NewSiteDiaryController extends GetxController {
 
       request.fields['payload'] = jsonEncode(payload);
 
+      if(image?.path != "") {
+        String mimeType = CustomMimeType.getMimeType(image!.path);
+        MediaType contentType = MediaType.parse(mimeType);
 
-      String mimeType = CustomMimeType.getMimeType(image.path);
-      MediaType contentType = MediaType.parse(mimeType);
+        // Add file to request with proper MIME type
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image', // Field name expected by server
+            image.path,
+            filename: "${image.path.split("/").last}",
+            contentType: contentType,
+          ),
+        );
+      }
 
-      // Add file to request with proper MIME type
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image', // Field name expected by server
-          image.path,
-          filename: "${image.path.split("/").last}",
-          contentType: contentType,
-        ),
-      );
 
 
       // Send request
@@ -361,7 +433,7 @@ class NewSiteDiaryController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>SiteDiaryView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>SiteDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -378,7 +450,8 @@ class NewSiteDiaryController extends GetxController {
 
 
   String projectId;
-  NewSiteDiaryController({required this.projectId});
+  String siteDiaryId;
+  SiteDiaryEditController({required this.projectId,required this.siteDiaryId});
 
   @override
   void onInit() {
@@ -387,11 +460,54 @@ class NewSiteDiaryController extends GetxController {
     isLoading(true);
     _speech = stt.SpeechToText();
     Future.delayed(Duration(seconds: 1),() async {
-      await fetchAddress();
+      await getSiteDiaryDetailsController(siteDiaryId: siteDiaryId);
       await getProjectDetailsController(projectId: projectId);
       await getAllWorkforceController(projectId: projectId);
       await getAllEquipmentsController(projectId: projectId);
     });
   }
 
+}
+
+
+extension SiteDiaryMapper on GetSingleSiteDiaryDetailsResponse {
+  List<EditSiteDiaryTask> toTaskList() {
+    if (tasks == null) return [];
+
+    return tasks!.map((task) {
+      final workforceList = task.workforces?.map((wf) {
+        return EditSiteDiaryWorkforce(
+          wf.workforce?.sId ?? "",
+          (wf.quantity is int)
+              ? wf.quantity
+              : int.tryParse(wf.quantity.toString()) ?? 0,
+          _parseDurationToInt(wf.duration),
+        );
+      }).toList() ?? [];
+
+      final equipmentList = task.equipments?.map((eq) {
+        return EditSiteDiaryEquipment(
+          eq.equipment?.sId ?? "",
+          (eq.quantity is int)
+              ? eq.quantity
+              : int.tryParse(eq.quantity.toString()) ?? 0,
+          _parseDurationToInt(eq.duration),
+        );
+      }).toList() ?? [];
+
+      return EditSiteDiaryTask(
+        task.name ?? "",
+        workforceList,
+        equipmentList,
+      );
+    }).toList();
+  }
+}
+
+int _parseDurationToInt(dynamic duration) {
+  if (duration == null) return 0;
+  if (duration is int) return duration;
+  final str = duration.toString();
+  final number = int.tryParse(str.split(" ").first);
+  return number ?? 0;
 }

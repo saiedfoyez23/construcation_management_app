@@ -1,5 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/site_diary/controller/get_site_diary_details_controller.dart';
+import 'package:construction_management_app/modules/site_diary/view/edit_site_diary_view.dart';
 import 'package:construction_management_app/modules/site_diary/view/site_diary_view.dart';
 import 'package:construction_management_app/modules/site_diary/widget/site_diary_details_widget/site_diary_details_task_details_widget.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,9 @@ class SiteDiaryDetailsView extends StatelessWidget {
 
 
                           ImageHelperClass.customImageButtonContainer(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              Get.off(()=>EditSiteDiaryView(siteDiaryId: siteDiaryId, projectId: projectId),preventDuplicates: false);
+                            },
                             context: context,
                             height: 30.h(context),
                             width: 30.w(context),
@@ -200,6 +203,66 @@ class SiteDiaryDetailsView extends StatelessWidget {
                           width: 375.w(context),
                           height: 192.h(context),
                           fit: BoxFit.contain,
+                        ),
+                      ),
+
+                      SpaceHelperClass.v(16.h(context)),
+
+
+                      getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.duration == "" ?
+                      SizedBox.shrink() :
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(235, 242, 255, 1),
+                          borderRadius: BorderRadius.circular(12.r(context)),
+                        ),
+                        child: Column(
+                          children: [
+
+                            Row(
+                              children: [
+                                ImageHelperClass.customImageContainer(
+                                  context: context,
+                                  height: 20.h(context),
+                                  width: 20.w(context),
+                                  imagePath: AppImages.delay,
+                                  imageFit: BoxFit.contain,
+                                  fit: BoxFit.cover,
+                                ),
+
+
+                                SpaceHelperClass.h(12.w(context)),
+
+
+                                Expanded(
+                                  child: TextHelperClass.headingText(
+                                    context: context,
+                                    text: "Delay",
+                                    fontSize: 18,
+                                    textColor: Color.fromRGBO(31, 41, 55, 1), // White text
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
+                            SpaceHelperClass.v(16.h(context)),
+
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "${getSiteDiaryDetailsController.getSingleSiteDiaryDetailsResponseModel.value.data?.duration}",
+                              fontSize: 15,
+                              textColor: Color.fromRGBO(75, 85, 99, 1), // White text
+                              fontWeight: FontWeight.w500,
+                            ),
+
+
+
+
+                          ],
                         ),
                       ),
 

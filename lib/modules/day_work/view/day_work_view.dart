@@ -1,5 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/day_work/controller/day_work_controller.dart';
+import 'package:construction_management_app/modules/day_work/view/day_work_details_view.dart';
 import 'package:construction_management_app/modules/day_work/view/new_day_work_view.dart';
 import 'package:construction_management_app/modules/project_details/view/project_details_view.dart';
 import 'package:flutter/material.dart';
@@ -460,7 +461,7 @@ class DayWorkView extends StatelessWidget {
                                     fontSize: 18,
                                     text: 'View Details →',
                                     onPressed: () {
-
+                                      Get.off(()=>DayWorkDetailsView(dayWorkId: dayWorkController.getAllDayWorkSearchResponseList[index].sId, projectId: projectId));
                                     },
                                   ),
 
