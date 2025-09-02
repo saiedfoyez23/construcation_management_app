@@ -265,17 +265,12 @@ class CustomButtonHelper {
     double iconSize = 16,
     double fontSize = 16,
     FontWeight fontWeight = FontWeight.w600,
-    double width = 375,
-    double textContainerWidth = 375,
     double height = 50,
-    double minWidth = 265,
-    double minHeight = 28,
-    double horizontalPadding = 8,
+    double horizontalPadding = 10,
     double verticalPadding = 6,
     double borderRadius = 4,
   }) {
     return SizedBox(
-      width: width.w(context),
       height: height.h(context),
       child: ElevatedButton(
         onPressed: onPressed,
@@ -289,15 +284,13 @@ class CustomButtonHelper {
             borderRadius: BorderRadius.circular(borderRadius.r(context)),
           ),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          minimumSize: Size(minWidth.w(context), minHeight.h(context)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: iconColor, size: iconSize.r(context)),
-            SpaceHelperClass.h(8.w(context)),
-            TextHelperClass.headingText(
-              width: textContainerWidth.w(context),
+            SpaceHelperClass.h(4.w(context)),
+            TextHelperClass.headingTextWithoutWidth(
               context: context,
               text: text,
               fontSize: fontSize.sp(context),

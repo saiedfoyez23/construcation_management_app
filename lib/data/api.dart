@@ -73,4 +73,7 @@ class Api {
   static const deleteDayWorks = "$baseUrl/day-works"; //done
   static const getAllDayWorks = "$baseUrl/day-works/project";
   static const detailsDayWork = "$baseUrl/day-works"; //done
+  static const updateDayWork = "$baseUrl/day-works"; //done
+  static const removeTaskDayWork = "$baseUrl/day-works/remove-task"; // done
+  static const addTaskDayWork = "$baseUrl/day-works/add-task"; // done
 }

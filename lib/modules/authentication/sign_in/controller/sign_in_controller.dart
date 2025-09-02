@@ -5,7 +5,8 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/dashboard/view/dashboard_view.dart';
+import 'package:construction_management_app/modules/company_user/dashboard/view/dashboard_view.dart';
+import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
@@ -81,7 +82,7 @@ class SignInController extends GetxController {
       if(decodedToken['role'] == "company_admin") {
         Get.off(()=>DashboardView(index: 0,),);
       } else {
-        print("No Redirection");
+        Get.off(()=>EmployeeDashboardView(index: 0),preventDuplicates: false);
       }
     } else {
       print("empty jwt");

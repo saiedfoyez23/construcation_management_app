@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/company_user/dashboard/view/dashboard_view.dart';
+import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
 import 'package:construction_management_app/modules/splash/view/welcome_screen_view.dart';
 import 'package:get/get.dart';
-
 import '../../../common/app_constant/app_constant.dart';
 import '../../../common/local_store/local_store.dart';
-import '../../dashboard/view/dashboard_view.dart';
 
 class SplashScreenController extends GetxController {
 
@@ -29,9 +29,9 @@ class SplashScreenController extends GetxController {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
       Map<String, dynamic> decodedToken = parseJwt(loginResponseModel.value.data!.accessToken!);
       if(decodedToken['role'] == "company_admin") {
-        Get.off(()=>DashboardView(index: 0,),);
+        Get.off(()=>DashboardView(index: 0,),preventDuplicates: false);
       } else {
-        print("No Redirection");
+        Get.off(()=>EmployeeDashboardView(index: 0),preventDuplicates: false);
       }
     } else {
       Get.off(()=>WelcomeScreenView(),preventDuplicates: false);

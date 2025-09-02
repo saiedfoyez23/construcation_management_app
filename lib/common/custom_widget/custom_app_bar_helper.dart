@@ -1,9 +1,8 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/message/view/send_message.dart';
-import 'package:construction_management_app/modules/notification/view/notification_screen.dart';
+import 'package:construction_management_app/modules/company_user/message/view/send_message.dart';
+import 'package:construction_management_app/modules/company_user/notification/view/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 class CustomAppBarHelper {

@@ -1,8 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:construction_management_app/common/app_color/app_color.dart';
+import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
+import 'package:construction_management_app/common/local_store/local_store.dart';
+import 'package:construction_management_app/modules/authentication/sign_in/view/sign_in_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import "package:http/http.dart" as http;
 
@@ -83,6 +87,11 @@ class BaseClient {
           bgColor: AppColors.red,
         );
         print(response.body);
+        if(json.decode(response.body)['message'].toString() == "jwt expired") {
+          LocalStorage.removeData(key: AppConstant.token);
+          LocalStorage.removeData(key: AppConstant.getProfileResponse);
+          Get.offAll(()=>SignInView());
+        }
         /* try {
             var response = await http.post(
               Uri.parse(ApiConstant.refreshToken),
