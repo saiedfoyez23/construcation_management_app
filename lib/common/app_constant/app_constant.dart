@@ -2,6 +2,7 @@ class AppConstant {
   static const token = 'token';
   static const projectId = 'project';
   static const getProfileResponse = "getProfileResponse";
+  static const getEmployeeProfileResponse = "getEmployeeProfileResponse";
   // static const company = 'company';
   // static const userId = 'userId';
 

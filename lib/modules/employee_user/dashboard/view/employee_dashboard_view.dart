@@ -1,5 +1,9 @@
 import 'package:construction_management_app/common/app_images/app_images.dart';
+import 'package:construction_management_app/modules/employee_user/create_project/view/employee_all_job_view.dart';
 import 'package:construction_management_app/modules/employee_user/dashboard/controller/employee_dashboard_controller.dart';
+import 'package:construction_management_app/modules/employee_user/home/view/employee_home_view.dart';
+import 'package:construction_management_app/modules/employee_user/message/view/group_message.dart';
+import 'package:construction_management_app/modules/employee_user/profile/view/employee_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,11 +12,10 @@ class EmployeeDashboardView extends StatelessWidget {
   EmployeeDashboardView({super.key,required this.index});
   final int index;
   final List<Widget> _screens = [
-    //HomeView(),
-    //AllJobView(),
-    //EmployeeListView(),
-    //GroupMessage(),
-    //ProfileView()
+    EmployeeHomeView(),
+    EmployeeAllJobView(),
+    EmployeeGroupMessage(),
+    EmployeeProfileView()
   ];
 
   @override

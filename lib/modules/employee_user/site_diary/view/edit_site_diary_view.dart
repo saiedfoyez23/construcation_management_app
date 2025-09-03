@@ -1,0 +1,209 @@
+class EditSiteDiaryView extends StatelessWidget {
+  EditSiteDiaryView({super.key,required this.siteDiaryId,required this.projectId});
+
+  final String siteDiaryId;
+  final String projectId;
+
+  @override
+  Widget build(BuildContext context) {
+    SiteDiaryEditController siteDiaryEditController = Get.put(SiteDiaryEditController(projectId: projectId, siteDiaryId: siteDiaryId));
+    return Scaffold(
+      body:  SafeArea(
+        child: Container(
+          height: 812.h(context),
+          width: 375.w(context),
+          decoration: BoxDecoration(
+            color: AppColors.scaffoldBackGroundColor,
+          ),
+          child: Obx(()=> siteDiaryEditController.isLoading.value == true  ?
+          CustomLoaderButton().customLoaderButton(
+            backgroundColor: Colors.transparent,
+            loaderColor: Color.fromRGBO(38, 50, 56, 1),
+            height: 812,
+            context: context,
+          ) :
+          CustomScrollView(
+            slivers: [
+
+
+
+              CustomAppBarHelper.normalAppBar(
+                context: context,
+                onBackPressed: () {
+                  Get.off(()=>SiteDiaryDetailsView(projectId: projectId,siteDiaryId: siteDiaryId,),preventDuplicates: false);
+                },
+                title: "Edit Site Diary",
+              ),
+
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
+                  child: Column(
+                    children: [
+
+                      SpaceHelperClass.v(24.h(context)),
+
+                      EditSiteDiaryWidget.projectSelectionAndDescriptionBuilder(context: context, controller: siteDiaryEditController),
+
+
+                      SpaceHelperClass.v(24.h(context)),
+
+
+
+
+                      EditSiteDiaryAddTaskSectionWidget().editSiteDiaryAddTaskSectionBuilder(context: context,controller: siteDiaryEditController),
+
+                      SpaceHelperClass.v(24.h(context)),
+
+                      ...[
+                        for (int i = 0; i < siteDiaryEditController.taskList.length; i++)
+                          EditSiteDiaryTaskDetailsWidget().editSiteDiaryTaskDetailsBuilder(
+                            context: context,
+                            controller: siteDiaryEditController,
+                            item: siteDiaryEditController.taskList[i],
+                            index: i,
+                            siteDiaryId: siteDiaryId
+                          ),
+                      ],
+
+
+                      SpaceHelperClass.v(24.h(context)),
+
+
+                      EditSiteDiaryCommandWidget().editSiteDiaryCommendWidget(context: context, controller: siteDiaryEditController),
+
+                      SpaceHelperClass.v(24.h(context)),
+
+
+                      EditSiteDiaryImageAndLocationWidget().editSiteDiaryImageAndLocationBuilder(context: context, controller: siteDiaryEditController),
+
+                      SpaceHelperClass.v(35.h(context)),
+
+                      Row(
+                        children: [
+
+
+                          Expanded(
+                            child: siteDiaryEditController.isSubmit.value == true ?
+                            CustomLoaderButton().customLoaderButton(
+                              backgroundColor: Colors.transparent,
+                              loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                              height: 50,
+                              context: context,
+                            ) :
+                            CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Save Log",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(255, 255, 255, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                              onPressed: () async {
+                                if(siteDiaryEditController.nameController.value.text == ""){
+                                  kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
+                                } else if(siteDiaryEditController.descriptionController.value.text == "") {
+                                  kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
+                                } else if(siteDiaryEditController.dateTimeController.value.text == "") {
+                                  kSnackBar(message: "Please select a date", bgColor: AppColors.red);
+                                } else if(siteDiaryEditController.weatherConditionController.value.text == "") {
+                                  kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
+                                } else if(siteDiaryEditController.locationController.value.text == "") {
+                                  kSnackBar(message: "Please enter location", bgColor: AppColors.red);
+                                } else if(siteDiaryEditController.taskList.isEmpty == true) {
+                                  kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
+                                } else {
+                                  siteDiaryEditController.isSubmit.value = true;
+
+                                  List<Map<String, dynamic>> tasksToJson(List<EditSiteDiaryTask> tasks) {
+                                    return tasks.map((task) {
+                                      return {
+                                        "name": task.name,
+                                        "workforces": task.workforce.map((wf) {
+                                          return {
+                                            "workforce": wf.typeId,
+                                            "quantity": wf.quantity,
+                                            "duration": "${wf.duration} hours",
+                                          };
+                                        }).toList(),
+                                        "equipments": task.equipment.map((eq) {
+                                          return {
+                                            "equipment": eq.typeId,
+                                            "quantity": eq.quantity,
+                                            "duration": "${eq.duration} hours",
+                                          };
+                                        }).toList(),
+                                      };
+                                    }).toList();
+                                  }
+
+                                  Map<String,dynamic> payload = {
+                                    "name": siteDiaryEditController.nameController.value.text,
+                                    "project": siteDiaryEditController.getProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "description": siteDiaryEditController.descriptionController.value.text,
+                                    "date": siteDiaryEditController.dateTimeController.value.text,
+                                    "weather_condition": siteDiaryEditController.weatherConditionController.value.text,
+                                    "comment": siteDiaryEditController.commendController.value.text,
+                                    "location": siteDiaryEditController.locationController.value.text,
+                                  };
+                                  print(jsonEncode(payload));
+                                  //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
+                                  await siteDiaryEditController.updateSiteDiaryController(
+                                    payload: payload,
+                                    image: siteDiaryEditController.selectedImage.value,
+                                    projectId: projectId,
+                                    siteDiaryId: siteDiaryId,
+                                  );
+                                }
+
+                              },
+                            ),
+                          ),
+
+
+                          SpaceHelperClass.h(12.w(context)),
+
+                          Expanded(
+                            child: CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Cancel",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(75, 85, 99, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                              borderWidth: 1,
+                              borderColor: Color.fromRGBO(229, 231, 235, 1),
+                              onPressed: () {
+                                Get.off(()=>SiteDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
+                              },
+                            ),
+                          ),
+
+
+
+                        ],
+                      ),
+
+
+                      SpaceHelperClass.v(35.h(context)),
+
+
+                    ],
+                  ),
+                ),
+              ),
+
+
+
+
+
+
+            ],
+          )),
+        ),
+      ),
+    );
+  }
+}

@@ -90,6 +90,7 @@ class BaseClient {
         if(json.decode(response.body)['message'].toString() == "jwt expired") {
           LocalStorage.removeData(key: AppConstant.token);
           LocalStorage.removeData(key: AppConstant.getProfileResponse);
+          LocalStorage.removeData(key: AppConstant.getEmployeeProfileResponse);
           Get.offAll(()=>SignInView());
         }
         /* try {

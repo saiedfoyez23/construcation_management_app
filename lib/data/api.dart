@@ -54,8 +54,10 @@ class Api {
   static const setting = "$baseUrl/settings"; //done
 
   /// employees
+  static const employeeProfile = "$baseUrl/employees/profile";
   static const createEmployees = "$baseUrl/employees"; //done
   static const getAllCompanyEmployees = "$baseUrl/employees";
+  static const getEmployeeProfileUpdate = "$baseUrl/employees";
 
 
   ///create site diary

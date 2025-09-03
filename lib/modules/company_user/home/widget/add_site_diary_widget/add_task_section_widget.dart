@@ -203,6 +203,27 @@ class AddTaskSectionWidget {
 
           Row(
             children: [
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextHelperClass.headingText(
+                      context: context,
+                      text: 'Quantity',
+                      fontSize: 15,
+                      textColor: Color.fromRGBO(75, 85, 99, 1),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    SpaceHelperClass.v(8.h(context)),
+                    _buildQuantityField(
+                      context: context,
+                      controller: controller.workforceQuantityController.value,
+                    ),
+                  ],
+                ),
+              ),
+              SpaceHelperClass.h(8.w(context)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,26 +242,6 @@ class AddTaskSectionWidget {
                       controller: controller.workForceDurationController.value,
                     ),
 
-                  ],
-                ),
-              ),
-              SpaceHelperClass.h(8.w(context)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextHelperClass.headingText(
-                      context: context,
-                      text: 'Quantity',
-                      fontSize: 15,
-                      textColor: Color.fromRGBO(75, 85, 99, 1),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SpaceHelperClass.v(8.h(context)),
-                    _buildQuantityField(
-                      context: context,
-                      controller: controller.workforceQuantityController.value,
-                    ),
                   ],
                 ),
               ),
@@ -341,6 +342,27 @@ class AddTaskSectionWidget {
           Row(
             children: [
               Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextHelperClass.headingText(
+                      context: context,
+                      text: 'Quantity',
+                      fontSize: 15,
+                      textColor: Color.fromRGBO(75, 85, 99, 1),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    SpaceHelperClass.v(8.h(context)),
+                    _buildQuantityField(
+                      context: context,
+                      controller: controller.equipmentQuantityController.value,
+                    ),
+                  ],
+                ),
+              ),
+              SpaceHelperClass.h(8.w(context)),
+
+              Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -362,26 +384,6 @@ class AddTaskSectionWidget {
 
                     ],
                   )
-              ),
-              SpaceHelperClass.h(8.w(context)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextHelperClass.headingText(
-                      context: context,
-                      text: 'Quantity',
-                      fontSize: 15,
-                      textColor: Color.fromRGBO(75, 85, 99, 1),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SpaceHelperClass.v(8.h(context)),
-                    _buildQuantityField(
-                      context: context,
-                      controller: controller.equipmentQuantityController.value,
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

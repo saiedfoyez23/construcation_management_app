@@ -207,6 +207,26 @@ class AddTaskSectionWidgetDayWork {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    TextHelperClass.headingText(
+                      context: context,
+                      text: 'Quantity',
+                      fontSize: 15,
+                      textColor: Color.fromRGBO(75, 85, 99, 1),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    SpaceHelperClass.v(8.h(context)),
+                    _buildQuantityField(
+                      context: context,
+                      controller: controller.workforceQuantityController.value,
+                    ),
+                  ],
+                ),
+              ),
+              SpaceHelperClass.h(8.w(context)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     // Duration Field
                     TextHelperClass.headingText(
                       context: context,
@@ -221,26 +241,6 @@ class AddTaskSectionWidgetDayWork {
                       controller: controller.workForceDurationController.value,
                     ),
 
-                  ],
-                ),
-              ),
-              SpaceHelperClass.h(8.w(context)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextHelperClass.headingText(
-                      context: context,
-                      text: 'Quantity',
-                      fontSize: 15,
-                      textColor: Color.fromRGBO(75, 85, 99, 1),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SpaceHelperClass.v(8.h(context)),
-                    _buildQuantityField(
-                      context: context,
-                      controller: controller.workforceQuantityController.value,
-                    ),
                   ],
                 ),
               ),
@@ -344,6 +344,26 @@ class AddTaskSectionWidgetDayWork {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    TextHelperClass.headingText(
+                      context: context,
+                      text: 'Quantity',
+                      fontSize: 15,
+                      textColor: Color.fromRGBO(75, 85, 99, 1),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    SpaceHelperClass.v(8.h(context)),
+                    _buildQuantityField(
+                      context: context,
+                      controller: controller.equipmentQuantityController.value,
+                    ),
+                  ],
+                ),
+              ),
+              SpaceHelperClass.h(8.w(context)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
 
                     // Duration Field
                     TextHelperClass.headingText(
@@ -362,26 +382,6 @@ class AddTaskSectionWidgetDayWork {
 
                   ],
                 )
-              ),
-              SpaceHelperClass.h(8.w(context)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextHelperClass.headingText(
-                      context: context,
-                      text: 'Quantity',
-                      fontSize: 15,
-                      textColor: Color.fromRGBO(75, 85, 99, 1),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SpaceHelperClass.v(8.h(context)),
-                    _buildQuantityField(
-                      context: context,
-                      controller: controller.equipmentQuantityController.value,
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
