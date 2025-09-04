@@ -4,6 +4,7 @@ import 'package:construction_management_app/modules/employee_user/dashboard/view
 import 'package:construction_management_app/modules/employee_user/folder/view/employee_folder_view.dart';
 import 'package:construction_management_app/modules/employee_user/project_details/controller/employee_project_view_controller.dart';
 import 'package:construction_management_app/modules/employee_user/resources/view/employee_resources_view.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/view/site_employee_diary_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -409,7 +410,7 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.addSiteDiary,
                             text: "Site Diary",
                             onTap: () {
-                              //Get.off(()=>SiteDiaryView(projectId: projectId), preventDuplicates: false);
+                              Get.off(()=>SiteEmployeeDiaryView(projectId: projectId), preventDuplicates: false);
                             },
                           ),
 

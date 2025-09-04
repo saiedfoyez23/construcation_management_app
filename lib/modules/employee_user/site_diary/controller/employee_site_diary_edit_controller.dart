@@ -1,5 +1,4 @@
 import 'package:construction_management_app/modules/company_user/site_diary/view/site_diary_details_view.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/widget/edit_site_diary_widget/edit_site_diary_widget.dart';
 import 'package:construction_management_app/modules/employee_user/create_project/model/get_all_project_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/project_details/model/get_employee_project_details_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
@@ -18,7 +17,6 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-
 import '../../../../common/common.dart';
 
 class EmployeeSiteDiaryEditController extends GetxController {
@@ -60,9 +58,9 @@ class EmployeeSiteDiaryEditController extends GetxController {
 
   // Equipment
 
-  RxList<EditSiteDiaryWorkforce> workforceList = <EditSiteDiaryWorkforce>[].obs;
-  RxList<EditSiteDiaryEquipment> equipmentList = <EditSiteDiaryEquipment>[].obs;
-  RxList<EditSiteDiaryTask> taskList = <EditSiteDiaryTask>[].obs;
+  RxList<EmployeeEditSiteDiaryWorkforce> workforceList = <EmployeeEditSiteDiaryWorkforce>[].obs;
+  RxList<EmployeeEditSiteDiaryEquipment> equipmentList = <EmployeeEditSiteDiaryEquipment>[].obs;
+  RxList<EmployeeEditSiteDiaryTask> taskList = <EmployeeEditSiteDiaryTask>[].obs;
 
   Rx<File> selectedImage = File("").obs;
 
@@ -465,13 +463,39 @@ class EmployeeSiteDiaryEditController extends GetxController {
 }
 
 
+class EmployeeEditSiteDiaryTask {
+  final String name;
+  final List<EmployeeEditSiteDiaryWorkforce> workforce;
+  final List<EmployeeEditSiteDiaryEquipment> equipment;
+
+  EmployeeEditSiteDiaryTask(this.name, this.workforce, this.equipment);
+
+}
+
+class EmployeeEditSiteDiaryWorkforce {
+  final String typeId;
+  final int quantity;
+  final int duration;
+
+  EmployeeEditSiteDiaryWorkforce(this.typeId, this.quantity, this.duration);
+}
+
+class EmployeeEditSiteDiaryEquipment {
+  final String typeId;
+  final int quantity;
+  final int duration;
+
+  EmployeeEditSiteDiaryEquipment(this.typeId, this.quantity, this.duration);
+}
+
+
 extension SiteDiaryMapper on GetEmployeeSingleSiteDiaryDetailsResponse {
-  List<EditSiteDiaryTask> toTaskList() {
+  List<EmployeeEditSiteDiaryTask> toTaskList() {
     if (tasks == null) return [];
 
     return tasks!.map((task) {
       final workforceList = task.workforces?.map((wf) {
-        return EditSiteDiaryWorkforce(
+        return EmployeeEditSiteDiaryWorkforce(
           wf.workforce?.sId ?? "",
           (wf.quantity is int)
               ? wf.quantity
@@ -481,7 +505,7 @@ extension SiteDiaryMapper on GetEmployeeSingleSiteDiaryDetailsResponse {
       }).toList() ?? [];
 
       final equipmentList = task.equipments?.map((eq) {
-        return EditSiteDiaryEquipment(
+        return EmployeeEditSiteDiaryEquipment(
           eq.equipment?.sId ?? "",
           (eq.quantity is int)
               ? eq.quantity
@@ -490,7 +514,7 @@ extension SiteDiaryMapper on GetEmployeeSingleSiteDiaryDetailsResponse {
         );
       }).toList() ?? [];
 
-      return EditSiteDiaryTask(
+      return EmployeeEditSiteDiaryTask(
         task.name ?? "",
         workforceList,
         equipmentList,

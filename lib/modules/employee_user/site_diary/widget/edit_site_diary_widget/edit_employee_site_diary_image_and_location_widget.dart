@@ -1,14 +1,12 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/controller/site_diary_edit_controller.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/controller/employee_site_diary_edit_controller.dart';
 import 'package:flutter/material.dart';
 
+class EditEmployeeSiteDiaryImageAndLocationWidget {
 
-
-class EditSiteDiaryImageAndLocationWidget {
-
-  Widget editSiteDiaryImageAndLocationBuilder({
+  Widget editEmployeeSiteDiaryImageAndLocationBuilder({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -80,7 +78,7 @@ class EditSiteDiaryImageAndLocationWidget {
 // Helper Widget for Image Capture Button
   Widget _buildImageCaptureButton({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -127,14 +125,14 @@ class EditSiteDiaryImageAndLocationWidget {
 // Helper Widget for Selected Image Preview
   Widget _buildSelectedImagePreview({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     if(controller.selectedImage.value.path == "") {
       return ImageHelperClass.customNetworkImageContainer(
         context: context,
         height: 192.h(context),
         width: 374.w(context),
-        imagePath: controller.getSingleSiteDiaryDetailsResponseModel.value.data?.image,
+        imagePath: controller.getEmployeeSingleSiteDiaryDetailsResponseModel.value.data?.image,
         imageFit: BoxFit.contain,
         fit: BoxFit.cover,
       );
@@ -153,7 +151,7 @@ class EditSiteDiaryImageAndLocationWidget {
 // Helper Widget for Location Section
   Widget _buildLocationSection({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -214,7 +212,7 @@ class EditSiteDiaryImageAndLocationWidget {
 // Helper Widget for Recapture Button
   Widget _buildRecaptureButton({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return CustomButtonHelper.customRoundedButton(
       context: context,

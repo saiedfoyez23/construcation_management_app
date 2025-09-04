@@ -1,14 +1,14 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/controller/site_diary_edit_controller.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/controller/employee_site_diary_edit_controller.dart';
 import 'package:flutter/material.dart';
 
-class EditSiteDiaryCommandWidget {
+class EditEmployeeSiteDiaryCommandWidget {
 
 
-  Widget editSiteDiaryCommendWidget({
+  Widget editEmployeeSiteDiaryCommendWidget({
     required BuildContext context,
-    required SiteDiaryEditController controller,
-    String hintText = "Write Comment",
+    required EmployeeSiteDiaryEditController controller,
+    String hintText = "Write Reason For Delay",
     int maxLines = 3,
   }) {
     return Container(
@@ -34,7 +34,7 @@ class EditSiteDiaryCommandWidget {
           // Section Title
           TextHelperClass.headingText(
             context: context,
-            text: "Write Comment",
+            text: "Write Delay",
             fontSize: 20,
             textColor: AppColors.black65,
             fontWeight: FontWeight.w700,
@@ -45,7 +45,7 @@ class EditSiteDiaryCommandWidget {
           // Materials Input Field
           CustomTextFormFieldClass.textFiledWithMaxLineBuild(
             context: context,
-            controller: controller.commendController.value,
+            controller: controller.delayController.value,
             hintText: hintText,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 9.hpm(context),

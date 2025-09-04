@@ -1,6 +1,8 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/employee_user/project_details/view/employee_project_details_view.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/view/edit_employee_site_diary_view.dart';
 import 'package:construction_management_app/modules/employee_user/site_diary/view/new_employee_site_diary_view.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/view/site_employee_diary_details_view.dart';
 import 'package:get/get.dart';
 import 'package:construction_management_app/modules/employee_user/site_diary/controller/site_employee_diary_controller.dart';
 import 'package:flutter/material.dart';
@@ -455,7 +457,7 @@ class SiteEmployeeDiaryView extends StatelessWidget {
                                     fontSize: 18,
                                     text: 'View Details →',
                                     onPressed: () {
-                                      Get.off(()=>SiteDiaryDetailsView(siteDiaryId: siteDiaryController.getAllSiteDiariesSearchResponseList[index].sId,projectId: projectId,),preventDuplicates: false);
+                                      Get.off(()=>SiteEmployeeDiaryDetailsView(siteDiaryId: siteEmployeeDiaryController.getEmployeeAllSiteDiariesSearchResponseList[index].sId,projectId: projectId,),preventDuplicates: false);
                                     },
                                   ),
 
@@ -465,7 +467,7 @@ class SiteEmployeeDiaryView extends StatelessWidget {
                                     height: 50.h(context),
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        Get.off(()=>EditSiteDiaryView(siteDiaryId: siteDiaryController.getAllSiteDiariesSearchResponseList[index].sId, projectId: projectId),preventDuplicates: false);
+                                        Get.off(()=>EditEmployeeSiteDiaryView(siteDiaryId: siteEmployeeDiaryController.getEmployeeAllSiteDiariesSearchResponseList[index].sId, projectId: projectId),preventDuplicates: false);
                                       },
                                       style: OutlinedButton.styleFrom(
                                         padding: EdgeInsets.symmetric(

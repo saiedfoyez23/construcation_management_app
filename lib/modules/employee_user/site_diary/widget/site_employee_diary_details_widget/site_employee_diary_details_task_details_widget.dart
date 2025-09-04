@@ -1,15 +1,13 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/controller/get_site_diary_details_controller.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/controller/new_site_diary_controller.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/controller/get_employee_site_diary_details_controller.dart';
 import 'package:flutter/material.dart';
 
+class SiteEmployeeDiaryDetailsTaskDetailsWidget {
 
-class SiteDiaryDetailsTaskDetailsWidget {
-
-  Widget siteDiaryDetailsTaskDetailsBuilder({
+  Widget siteEmployeeDiaryDetailsTaskDetailsBuilder({
     required BuildContext context,
-    required GetSiteDiaryDetailsController controller,
-    required SiteDiaryDetailsTask item,
+    required GetEmployeeSiteDiaryDetailsController controller,
+    required EmployeeSiteDiaryDetailsTask item,
   }) {
     return Container(
       width: 375.w(context),
@@ -81,8 +79,8 @@ class SiteDiaryDetailsTaskDetailsWidget {
 // Helper Widget for Remove Task Button
   Widget _buildRemoveTaskButton({
     required BuildContext context,
-    required NewSiteDiaryController controller,
-    required SiteDiaryDetailsTask item,
+    required GetEmployeeSiteDiaryDetailsController controller,
+    required EmployeeSiteDiaryDetailsTask item,
   }) {
     return SizedBox(
       width: 74.w(context),
@@ -133,8 +131,8 @@ class SiteDiaryDetailsTaskDetailsWidget {
 // Helper Widget for Workforce Details Section
   Widget _buildWorkforceDetailsSection({
     required BuildContext context,
-    required SiteDiaryDetailsTask item,
-    required GetSiteDiaryDetailsController controller,
+    required GetEmployeeSiteDiaryDetailsController controller,
+    required EmployeeSiteDiaryDetailsTask item,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +148,7 @@ class SiteDiaryDetailsTaskDetailsWidget {
         SpaceHelperClass.v(10.h(context)),
 
         ...item.workforce.map((workforceItem) => _buildAddedItem(
-          title: '${workforceItem.quantity} ${controller.getAllWorkforcesResponseModel.value.data?.where((value)=> value.sId == workforceItem.typeId).first.name}',
+          title: '${workforceItem.quantity} ${controller.getEmployeeAllWorkforcesResponseModel.value.data?.where((value)=> value.sId == workforceItem.typeId).first.name}',
           subtitle: '${workforceItem.duration} hour',
           icon: AppImages.workforceIcon,
           onDelete: () {}, // No onDelete callback since it's false in original
@@ -164,8 +162,8 @@ class SiteDiaryDetailsTaskDetailsWidget {
 // Helper Widget for Equipment Details Section
   Widget _buildEquipmentDetailsSection({
     required BuildContext context,
-    required SiteDiaryDetailsTask item,
-    required GetSiteDiaryDetailsController controller,
+    required GetEmployeeSiteDiaryDetailsController controller,
+    required EmployeeSiteDiaryDetailsTask item,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +179,7 @@ class SiteDiaryDetailsTaskDetailsWidget {
         SpaceHelperClass.v(10.h(context)),
 
         ...item.equipment.map((equipmentItem) => _buildAddedItem(
-          title: '${equipmentItem.quantity} ${controller.getAllEquipmentsResponseModel.value.data?.where((value)=> value.sId == equipmentItem.typeId).first.name}',
+          title: '${equipmentItem.quantity} ${controller.getEmployeeAllEquipmentsResponseModel.value.data?.where((value)=> value.sId == equipmentItem.typeId).first.name}',
           subtitle: '${equipmentItem.duration} hour',
           icon: AppImages.equipmentIcon,
           onDelete: () {}, // No onDelete callback since it's false in original

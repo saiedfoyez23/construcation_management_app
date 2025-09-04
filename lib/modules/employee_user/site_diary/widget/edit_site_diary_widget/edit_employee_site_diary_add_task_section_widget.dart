@@ -1,16 +1,16 @@
 import 'dart:convert';
+
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_equipments_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_workforces_response_model.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/controller/site_diary_edit_controller.dart';
-import 'package:construction_management_app/modules/company_user/site_diary/widget/edit_site_diary_widget/edit_site_diary_widget.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/controller/employee_site_diary_edit_controller.dart';
 import 'package:flutter/material.dart';
 
-class EditSiteDiaryAddTaskSectionWidget {
+class EditEmployeeSiteDiaryAddTaskSectionWidget {
 
-  Widget editSiteDiaryAddTaskSectionBuilder({
+  Widget editEmployeeSiteDiaryAddTaskSectionBuilder({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -143,7 +143,7 @@ class EditSiteDiaryAddTaskSectionWidget {
   // Helper function for Workforce section
   Widget _buildWorkforceSection({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Padding(
       padding: EdgeInsets.only(
@@ -177,13 +177,13 @@ class EditSiteDiaryAddTaskSectionWidget {
               ),
               SpaceHelperClass.v(8.h(context)),
 
-              CustomDropdownHelperClass<GetAllWorkforcesResponse>(
+              CustomDropdownHelperClass<GetEmployeeAllWorkforcesResponse>(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 16.hpm(context),
                   vertical: 8.vpm(context),
                 ),
                 value: controller.selectedWorkforces.value.name == null ? null : controller.selectedWorkforces.value,
-                items: controller.getAllWorkforcesResponseModel.value.data?.where((value)=>value.isDeleted == false).toList() ?? [],
+                items: controller.getEmployeeAllWorkforcesResponseModel.value.data?.where((value)=>value.isDeleted == false).toList() ?? [],
                 onChanged: (value) async {
                   controller.selectedWorkforces.value = value!;
                 },
@@ -264,7 +264,7 @@ class EditSiteDiaryAddTaskSectionWidget {
 
           // Workforce List
           ...controller.workforceList.map((item) => _buildAddedItem(
-            title: '${item.quantity} ${controller.getAllWorkforcesResponseModel.value.data?.where((value)=> value.sId == item.typeId).first.name}',
+            title: '${item.quantity} ${controller.getEmployeeAllWorkforcesResponseModel.value.data?.where((value)=> value.sId == item.typeId).first.name}',
             subtitle: '${item.duration} hour',
             icon: AppImages.workforceIcon,
             onDelete: () {
@@ -281,7 +281,7 @@ class EditSiteDiaryAddTaskSectionWidget {
 // Helper function for Equipment section
   Widget _buildEquipmentSection({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Padding(
       padding: EdgeInsets.only(
@@ -316,13 +316,13 @@ class EditSiteDiaryAddTaskSectionWidget {
                 fontWeight: FontWeight.w500,
               ),
               SpaceHelperClass.v(8.h(context)),
-              CustomDropdownHelperClass<GetAllEquipmentsResponse>(
+              CustomDropdownHelperClass<GetEmployeeAllEquipmentsResponse>(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 16.hpm(context),
                   vertical: 8.vpm(context),
                 ),
                 value: controller.selectedEquipment.value.name == null ? null : controller.selectedEquipment.value,
-                items: controller.getAllEquipmentsResponseModel.value.data?.where((value)=>value.isDeleted == false).toList() ?? [],
+                items: controller.getEmployeeAllEquipmentsResponseModel.value.data?.where((value)=>value.isDeleted == false).toList() ?? [],
                 onChanged: (value) async {
                   controller.selectedEquipment.value = value!;
                 },
@@ -407,7 +407,7 @@ class EditSiteDiaryAddTaskSectionWidget {
 
           // Equipment List
           ...controller.equipmentList.map((item) => _buildAddedItem(
-            title: '${item.quantity} ${controller.getAllEquipmentsResponseModel.value.data?.where((value)=> value.sId == item.typeId).first.name}',
+            title: '${item.quantity} ${controller.getEmployeeAllEquipmentsResponseModel.value.data?.where((value)=> value.sId == item.typeId).first.name}',
             subtitle: '${item.duration} hour',
             icon: AppImages.equipmentIcon,
             onDelete: () {
@@ -617,7 +617,7 @@ class EditSiteDiaryAddTaskSectionWidget {
 
 // Handler functions
   Future<void> _handleAddTask({
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) async {
     if (controller.taskNameController.value.text.isEmpty) {
       kSnackBar(message: "Enter task name", bgColor: AppColors.red);
@@ -627,7 +627,7 @@ class EditSiteDiaryAddTaskSectionWidget {
       kSnackBar(message: "Add equipment", bgColor: AppColors.red);
     } else {
       controller.taskList.add(
-        EditSiteDiaryTask(
+        EmployeeEditSiteDiaryTask(
           controller.taskNameController.value.text,
           List.from(controller.workforceList),
           List.from(controller.equipmentList),
@@ -651,7 +651,7 @@ class EditSiteDiaryAddTaskSectionWidget {
         }).toList(),
       };
       jsonEncode(data);
-      await controller.addTasksSiteDiaryController(siteDiaryId: controller.getSingleSiteDiaryDetailsResponseModel.value.data?.sId, data: data);
+      await controller.addTasksSiteDiaryController(siteDiaryId: controller.getEmployeeSingleSiteDiaryDetailsResponseModel.value.data?.sId, data: data);
       controller.taskNameController.value.clear();
       controller.workforceList.clear();
       controller.equipmentList.clear();
@@ -659,7 +659,7 @@ class EditSiteDiaryAddTaskSectionWidget {
   }
 
   void _handleAddWorkforce({
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     if (controller.selectedWorkforces.value.name == null ||
         controller.workforceQuantityController.value.text.isEmpty ||
@@ -669,21 +669,21 @@ class EditSiteDiaryAddTaskSectionWidget {
       kSnackBar(message: "${controller.selectedWorkforces.value.quantity} ${controller.selectedWorkforces.value.name} is available", bgColor: AppColors.red);
     } else {
       controller.workforceList.add(
-        EditSiteDiaryWorkforce(
+        EmployeeEditSiteDiaryWorkforce(
           controller.selectedWorkforces.value.sId,
           int.parse(controller.workforceQuantityController.value.text),
           int.parse(controller.workForceDurationController.value.text),
         ),
       );
       controller.workforceList.refresh();
-      controller.selectedWorkforces.value = GetAllWorkforcesResponse();
+      controller.selectedWorkforces.value = GetEmployeeAllWorkforcesResponse();
       controller.workforceQuantityController.value.clear();
       controller.workForceDurationController.value.clear();
     }
   }
 
   void _handleAddEquipment({
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     if (controller.selectedEquipment.value.name == null ||
         controller.equipmentQuantityController.value.text.isEmpty ||
@@ -693,14 +693,14 @@ class EditSiteDiaryAddTaskSectionWidget {
       kSnackBar(message: "${controller.selectedEquipment.value.quantity} ${controller.selectedEquipment.value.name} is available", bgColor: AppColors.red);
     } else {
       controller.equipmentList.add(
-        EditSiteDiaryEquipment(
+        EmployeeEditSiteDiaryEquipment(
           controller.selectedEquipment.value.sId,
           int.parse(controller.equipmentQuantityController.value.text),
           int.parse(controller.equipmentDurationController.value.text),
         ),
       );
       controller.equipmentList.refresh();
-      controller.selectedEquipment.value = GetAllEquipmentsResponse();
+      controller.selectedEquipment.value = GetEmployeeAllEquipmentsResponse();
       controller.equipmentQuantityController.value.clear();
       controller.equipmentDurationController.value.clear();
     }

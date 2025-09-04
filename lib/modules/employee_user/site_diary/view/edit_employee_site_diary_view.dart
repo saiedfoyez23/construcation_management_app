@@ -1,12 +1,25 @@
-class EditSiteDiaryView extends StatelessWidget {
-  EditSiteDiaryView({super.key,required this.siteDiaryId,required this.projectId});
+import 'dart:convert';
+
+import 'package:construction_management_app/common/common.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/controller/employee_site_diary_edit_controller.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/view/site_employee_diary_details_view.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/widget/edit_site_diary_widget/edit_employee_site_diary_add_task_section_widget.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/widget/edit_site_diary_widget/edit_employee_site_diary_delay_widget.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/widget/edit_site_diary_widget/edit_employee_site_diary_image_and_location_widget.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/widget/edit_site_diary_widget/edit_employee_site_diary_task_details_widget.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/widget/edit_site_diary_widget/edit_employee_site_diary_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class EditEmployeeSiteDiaryView extends StatelessWidget {
+  EditEmployeeSiteDiaryView({super.key,required this.siteDiaryId,required this.projectId});
 
   final String siteDiaryId;
   final String projectId;
 
   @override
   Widget build(BuildContext context) {
-    SiteDiaryEditController siteDiaryEditController = Get.put(SiteDiaryEditController(projectId: projectId, siteDiaryId: siteDiaryId));
+    EmployeeSiteDiaryEditController employeeSiteDiaryEditController = Get.put(EmployeeSiteDiaryEditController(projectId: projectId, siteDiaryId: siteDiaryId));
     return Scaffold(
       body:  SafeArea(
         child: Container(
@@ -15,7 +28,7 @@ class EditSiteDiaryView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: Obx(()=> siteDiaryEditController.isLoading.value == true  ?
+          child: Obx(()=> employeeSiteDiaryEditController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -30,7 +43,7 @@ class EditSiteDiaryView extends StatelessWidget {
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 onBackPressed: () {
-                  Get.off(()=>SiteDiaryDetailsView(projectId: projectId,siteDiaryId: siteDiaryId,),preventDuplicates: false);
+                  Get.off(()=>SiteEmployeeDiaryDetailsView(projectId: projectId,siteDiaryId: siteDiaryId,),preventDuplicates: false);
                 },
                 title: "Edit Site Diary",
               ),
@@ -44,7 +57,7 @@ class EditSiteDiaryView extends StatelessWidget {
 
                       SpaceHelperClass.v(24.h(context)),
 
-                      EditSiteDiaryWidget.projectSelectionAndDescriptionBuilder(context: context, controller: siteDiaryEditController),
+                      EditEmployeeSiteDiaryWidget.employeeProjectSelectionAndDescriptionBuilder(context: context, controller: employeeSiteDiaryEditController),
 
 
                       SpaceHelperClass.v(24.h(context)),
@@ -52,16 +65,16 @@ class EditSiteDiaryView extends StatelessWidget {
 
 
 
-                      EditSiteDiaryAddTaskSectionWidget().editSiteDiaryAddTaskSectionBuilder(context: context,controller: siteDiaryEditController),
+                      EditEmployeeSiteDiaryAddTaskSectionWidget().editEmployeeSiteDiaryAddTaskSectionBuilder(context: context,controller: employeeSiteDiaryEditController),
 
                       SpaceHelperClass.v(24.h(context)),
 
                       ...[
-                        for (int i = 0; i < siteDiaryEditController.taskList.length; i++)
-                          EditSiteDiaryTaskDetailsWidget().editSiteDiaryTaskDetailsBuilder(
+                        for (int i = 0; i < employeeSiteDiaryEditController.taskList.length; i++)
+                          EditEmployeeSiteDiaryTaskDetailsWidget().editEmployeeSiteDiaryTaskDetailsBuilder(
                             context: context,
-                            controller: siteDiaryEditController,
-                            item: siteDiaryEditController.taskList[i],
+                            controller: employeeSiteDiaryEditController,
+                            item: employeeSiteDiaryEditController.taskList[i],
                             index: i,
                             siteDiaryId: siteDiaryId
                           ),
@@ -71,12 +84,12 @@ class EditSiteDiaryView extends StatelessWidget {
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      EditSiteDiaryCommandWidget().editSiteDiaryCommendWidget(context: context, controller: siteDiaryEditController),
+                      EditEmployeeSiteDiaryCommandWidget().editEmployeeSiteDiaryCommendWidget(context: context, controller: employeeSiteDiaryEditController),
 
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      EditSiteDiaryImageAndLocationWidget().editSiteDiaryImageAndLocationBuilder(context: context, controller: siteDiaryEditController),
+                      EditEmployeeSiteDiaryImageAndLocationWidget().editEmployeeSiteDiaryImageAndLocationBuilder(context: context, controller: employeeSiteDiaryEditController),
 
                       SpaceHelperClass.v(35.h(context)),
 
@@ -85,7 +98,7 @@ class EditSiteDiaryView extends StatelessWidget {
 
 
                           Expanded(
-                            child: siteDiaryEditController.isSubmit.value == true ?
+                            child: employeeSiteDiaryEditController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -101,22 +114,22 @@ class EditSiteDiaryView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(siteDiaryEditController.nameController.value.text == ""){
+                                if(employeeSiteDiaryEditController.nameController.value.text == ""){
                                   kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
-                                } else if(siteDiaryEditController.descriptionController.value.text == "") {
+                                } else if(employeeSiteDiaryEditController.descriptionController.value.text == "") {
                                   kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
-                                } else if(siteDiaryEditController.dateTimeController.value.text == "") {
+                                } else if(employeeSiteDiaryEditController.dateTimeController.value.text == "") {
                                   kSnackBar(message: "Please select a date", bgColor: AppColors.red);
-                                } else if(siteDiaryEditController.weatherConditionController.value.text == "") {
+                                } else if(employeeSiteDiaryEditController.weatherConditionController.value.text == "") {
                                   kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
-                                } else if(siteDiaryEditController.locationController.value.text == "") {
+                                } else if(employeeSiteDiaryEditController.locationController.value.text == "") {
                                   kSnackBar(message: "Please enter location", bgColor: AppColors.red);
-                                } else if(siteDiaryEditController.taskList.isEmpty == true) {
+                                } else if(employeeSiteDiaryEditController.taskList.isEmpty == true) {
                                   kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
                                 } else {
-                                  siteDiaryEditController.isSubmit.value = true;
+                                  employeeSiteDiaryEditController.isSubmit.value = true;
 
-                                  List<Map<String, dynamic>> tasksToJson(List<EditSiteDiaryTask> tasks) {
+                                  List<Map<String, dynamic>> tasksToJson(List<EmployeeEditSiteDiaryTask> tasks) {
                                     return tasks.map((task) {
                                       return {
                                         "name": task.name,
@@ -139,19 +152,19 @@ class EditSiteDiaryView extends StatelessWidget {
                                   }
 
                                   Map<String,dynamic> payload = {
-                                    "name": siteDiaryEditController.nameController.value.text,
-                                    "project": siteDiaryEditController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                                    "description": siteDiaryEditController.descriptionController.value.text,
-                                    "date": siteDiaryEditController.dateTimeController.value.text,
-                                    "weather_condition": siteDiaryEditController.weatherConditionController.value.text,
-                                    "comment": siteDiaryEditController.commendController.value.text,
-                                    "location": siteDiaryEditController.locationController.value.text,
+                                    "name": employeeSiteDiaryEditController.nameController.value.text,
+                                    "project": employeeSiteDiaryEditController.getEmployeeProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "description": employeeSiteDiaryEditController.descriptionController.value.text,
+                                    "date": employeeSiteDiaryEditController..dateTimeController.value.text,
+                                    "weather_condition": employeeSiteDiaryEditController..weatherConditionController.value.text,
+                                    "duration": employeeSiteDiaryEditController.delayController.value.text,
+                                    "location": employeeSiteDiaryEditController..locationController.value.text,
                                   };
                                   print(jsonEncode(payload));
                                   //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
-                                  await siteDiaryEditController.updateSiteDiaryController(
+                                  await employeeSiteDiaryEditController.updateSiteDiaryController(
                                     payload: payload,
-                                    image: siteDiaryEditController.selectedImage.value,
+                                    image: employeeSiteDiaryEditController.selectedImage.value,
                                     projectId: projectId,
                                     siteDiaryId: siteDiaryId,
                                   );
@@ -176,7 +189,7 @@ class EditSiteDiaryView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.off(()=>SiteDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
+                                Get.off(()=>SiteEmployeeDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
                               },
                             ),
                           ),

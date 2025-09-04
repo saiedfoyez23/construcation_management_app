@@ -1,13 +1,14 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/site_diary/controller/site_diary_edit_controller.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/controller/employee_site_diary_edit_controller.dart';
 import 'package:flutter/material.dart';
 
-class EditSiteDiaryWidget {
+class EditEmployeeSiteDiaryWidget {
 
 
-  static Widget projectSelectionAndDescriptionBuilder({
+  static Widget employeeProjectSelectionAndDescriptionBuilder({
     required BuildContext context,
-    required SiteDiaryEditController controller,
+    required EmployeeSiteDiaryEditController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -94,8 +95,8 @@ class EditSiteDiaryWidget {
 
           TextHelperClass.headingText(
             context: context,
-            text: controller.getProjectDetailsResponseModel.value.data == null ? "" :
-            controller.getProjectDetailsResponseModel.value.data?.participants?.first.participants?.where((element)=> element.user?.type == "supervisor").first.user?.name,
+            text: controller.getEmployeeProjectDetailsResponseModel.value.data == null ? "" :
+            controller.getEmployeeProjectDetailsResponseModel.value.data?.participants?.first.participants?.where((element)=> element.user?.type == "supervisor").first.user?.name,
             fontSize: 15,
             textColor: AppColors.black38,
             fontWeight: FontWeight.w500,
@@ -277,33 +278,4 @@ class EditSiteDiaryWidget {
   }
 
 
-
-
-}
-
-
-
-class EditSiteDiaryTask {
-  final String name;
-  final List<EditSiteDiaryWorkforce> workforce;
-  final List<EditSiteDiaryEquipment> equipment;
-
-  EditSiteDiaryTask(this.name, this.workforce, this.equipment);
-
-}
-
-class EditSiteDiaryWorkforce {
-  final String typeId;
-  final int quantity;
-  final int duration;
-
-  EditSiteDiaryWorkforce(this.typeId, this.quantity, this.duration);
-}
-
-class EditSiteDiaryEquipment {
-  final String typeId;
-  final int quantity;
-  final int duration;
-
-  EditSiteDiaryEquipment(this.typeId, this.quantity, this.duration);
 }
