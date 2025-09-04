@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
-import 'package:construction_management_app/common/custom_widget/custom_snackbar.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/create_project/model/get_all_project_response_model.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_view.dart';
-import 'package:construction_management_app/modules/company_user/project_details/model/get_project_details_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_equipments_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_workforces_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/create_project/model/get_all_project_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_view.dart';
+import 'package:construction_management_app/modules/employee_user/project_details/model/get_employee_project_details_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,10 +18,9 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-
 import '../../../../common/common.dart';
 
-class NewDayWorkController extends GetxController {
+class NewEmployeeDayWorkController extends GetxController {
 
   late stt.SpeechToText _speech;
   RxBool isListening = false.obs;
@@ -42,32 +40,32 @@ class NewDayWorkController extends GetxController {
   Rx<TextEditingController> equipmentQuantityController = TextEditingController().obs;
   Rx<TextEditingController> equipmentDurationController = TextEditingController().obs;
   Rx<DateTime> date = DateTime.now().obs;
-  RxString supervisor = 'Jane Cooper'.obs;
+
+
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
-  Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
-  Rx<GetAllProject> selectSingleProject = GetAllProject().obs;
+  Rx<EmployeeGetAllProjectResponseModel> employeeGetAllProjectResponseModel = EmployeeGetAllProjectResponseModel().obs;
+  Rx<EmployeeGetAllProject> selectSingleProject = EmployeeGetAllProject().obs;
   RxBool isLoading = false.obs;
 
-  Rx<GetProjectDetailsResponseModel> getProjectDetailsResponseModel = GetProjectDetailsResponseModel().obs;
+  Rx<GetEmployeeProjectDetailsResponseModel> getEmployeeProjectDetailsResponseModel = GetEmployeeProjectDetailsResponseModel().obs;
 
 
-  Rx<GetAllEquipmentsResponseModel> getAllEquipmentsResponseModel = GetAllEquipmentsResponseModel().obs;
-  Rx<GetAllEquipmentsResponse> selectedEquipment = GetAllEquipmentsResponse().obs;
+  Rx<GetEmployeeAllEquipmentsResponseModel> getEmployeeAllEquipmentsResponseModel = GetEmployeeAllEquipmentsResponseModel().obs;
+  Rx<GetEmployeeAllEquipmentsResponse> selectedEquipment = GetEmployeeAllEquipmentsResponse().obs;
   // Workforce
-  Rx<GetAllWorkforcesResponse> selectedWorkforces = GetAllWorkforcesResponse().obs;
-  Rx<GetAllWorkforcesResponseModel> getAllWorkforcesResponseModel = GetAllWorkforcesResponseModel().obs;
+  Rx<GetEmployeeAllWorkforcesResponse> selectedWorkforces = GetEmployeeAllWorkforcesResponse().obs;
+  Rx<GetEmployeeAllWorkforcesResponseModel> getEmployeeAllWorkforcesResponseModel = GetEmployeeAllWorkforcesResponseModel().obs;
 
 
   // Equipment
 
-  RxList<DayWorkWorkforce> workforceList = <DayWorkWorkforce>[].obs;
-  RxList<DayWorkEquipment> equipmentList = <DayWorkEquipment>[].obs;
-  RxList<DayWorkTask> taskList = <DayWorkTask>[].obs;
+  RxList<EmployeeDayWorkWorkforce> workforceList = <EmployeeDayWorkWorkforce>[].obs;
+  RxList<EmployeeDayWorkEquipment> equipmentList = <EmployeeDayWorkEquipment>[].obs;
+  RxList<EmployeeDayWorkTask> taskList = <EmployeeDayWorkTask>[].obs;
 
   Rx<File> selectedImage = File("").obs;
 
-
-  Future<void> getProjectDetailsController({required String projectId}) async {
+  Future<void> getEmployeeProjectDetailsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -86,7 +84,7 @@ class NewDayWorkController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getProjectDetailsResponseModel.value = GetProjectDetailsResponseModel.fromJson(responseBody);
+        getEmployeeProjectDetailsResponseModel.value = GetEmployeeProjectDetailsResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -94,12 +92,12 @@ class NewDayWorkController extends GetxController {
       debugPrint("Catch Error.........$e");
       kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
     } finally {
-      //isLoading(false);
+      isLoading(false);
     }
   }
 
 
-  Future<void> getAllWorkforceController({required String projectId}) async {
+  Future<void> getEmployeeAllWorkforceController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -118,7 +116,7 @@ class NewDayWorkController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllWorkforcesResponseModel.value = GetAllWorkforcesResponseModel.fromJson(responseBody);
+        getEmployeeAllWorkforcesResponseModel.value = GetEmployeeAllWorkforcesResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -131,7 +129,7 @@ class NewDayWorkController extends GetxController {
   }
 
 
-  Future<void> getAllEquipmentsController({required String projectId}) async {
+  Future<void> getEmployeeAllEquipmentsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -150,7 +148,7 @@ class NewDayWorkController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllEquipmentsResponseModel.value = GetAllEquipmentsResponseModel.fromJson(responseBody);
+        getEmployeeAllEquipmentsResponseModel.value = GetEmployeeAllEquipmentsResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -364,7 +362,7 @@ class NewDayWorkController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>DayEmployeeWorkView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -381,7 +379,7 @@ class NewDayWorkController extends GetxController {
 
   String projectId;
 
-  NewDayWorkController({required this.projectId});
+  NewEmployeeDayWorkController({required this.projectId});
 
 
   @override
@@ -392,9 +390,9 @@ class NewDayWorkController extends GetxController {
     _speech = stt.SpeechToText();
     Future.delayed(Duration(seconds: 1),() async {
       await fetchAddress();
-      await getProjectDetailsController(projectId: projectId);
-      await getAllWorkforceController(projectId: projectId);
-      await getAllEquipmentsController(projectId: projectId);
+      await getEmployeeProjectDetailsController(projectId: projectId);
+      await getEmployeeAllWorkforceController(projectId: projectId);
+      await getEmployeeAllEquipmentsController(projectId: projectId);
     });
   }
 
@@ -407,26 +405,26 @@ class NewDayWorkController extends GetxController {
 }
 
 
-class DayWorkTask {
+class EmployeeDayWorkTask {
   final String name;
-  final List<DayWorkWorkforce> workforce;
-  final List<DayWorkEquipment> equipment;
+  final List<EmployeeDayWorkWorkforce> workforce;
+  final List<EmployeeDayWorkEquipment> equipment;
 
-  DayWorkTask(this.name, this.workforce, this.equipment);
+  EmployeeDayWorkTask(this.name, this.workforce, this.equipment);
 }
 
-class DayWorkWorkforce {
+class EmployeeDayWorkWorkforce {
   final String typeId;
   final int quantity;
   final int duration;
 
-  DayWorkWorkforce(this.typeId, this.quantity, this.duration);
+  EmployeeDayWorkWorkforce(this.typeId, this.quantity, this.duration);
 }
 
-class DayWorkEquipment {
+class EmployeeDayWorkEquipment {
   final String typeId;
   final int quantity;
   final int duration;
 
-  DayWorkEquipment(this.typeId, this.quantity, this.duration);
+  EmployeeDayWorkEquipment(this.typeId, this.quantity, this.duration);
 }

@@ -1,20 +1,21 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/get_day_work_details_controller.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_edit_view.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_view.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_details_widget/day_work_details_task_details_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/get_employee_day_work_details_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_edit_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/day_employee_work_details_widget/day_employee_work_details_task_details_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DayWorkDetailsView extends StatelessWidget {
-  DayWorkDetailsView({super.key,required this.dayWorkId,required this.projectId});
+
+class DayEmployeeWorkDetailsView extends StatelessWidget {
+  DayEmployeeWorkDetailsView({super.key,required this.dayWorkId,required this.projectId});
 
   final String dayWorkId;
   final String projectId;
 
   @override
   Widget build(BuildContext context) {
-    GetDayWorkDetailsController getDayWorkDetailsController = Get.put(GetDayWorkDetailsController(dayWorkId: dayWorkId, projectId: projectId));
+    GetEmployeeDayWorkDetailsController getEmployeeDayWorkDetailsController = Get.put(GetEmployeeDayWorkDetailsController(dayWorkId: dayWorkId, projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -23,7 +24,7 @@ class DayWorkDetailsView extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.scaffoldBackGroundColor,
             ),
-            child: Obx(()=> getDayWorkDetailsController.isLoading.value == true  ?
+            child: Obx(()=> getEmployeeDayWorkDetailsController.isLoading.value == true  ?
             CustomLoaderButton().customLoaderButton(
               backgroundColor: Colors.transparent,
               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -36,7 +37,7 @@ class DayWorkDetailsView extends StatelessWidget {
                 CustomAppBarHelper.normalAppBar(
                   context: context,
                   onBackPressed: () {
-                    Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+                    Get.off(()=>DayEmployeeWorkView(projectId: projectId),preventDuplicates: false);
                   },
                   title: "Day Work Details",
                 ),
@@ -60,7 +61,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                                   TextHelperClass.headingText(
                                     context: context,
-                                    text: "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.project?.name} - ${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.name}",
+                                    text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.project?.name} - ${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.name}",
                                     fontSize: 20,
                                     textColor: AppColors.black38,
                                     fontWeight: FontWeight.w700,
@@ -84,7 +85,7 @@ class DayWorkDetailsView extends StatelessWidget {
                                       Expanded(
                                         child: TextHelperClass.headingText(
                                           context: context,
-                                          text: "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.location}",
+                                          text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.location}",
                                           fontSize: 16,
                                           textColor: AppColors.gray107,
                                           fontWeight: FontWeight.w400,
@@ -104,7 +105,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                             ImageHelperClass.customImageButtonContainer(
                               onPressed: () async {
-                                Get.off(()=>DayWorkEditView(dayWorkId: getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.sId, projectId: projectId),preventDuplicates: false);
+                                Get.off(()=>DayEmployeeWorkEditView(dayWorkId: getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.sId, projectId: projectId),preventDuplicates: false);
                               },
                               context: context,
                               height: 30.h(context),
@@ -131,7 +132,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                         TextHelperClass.headingText(
                           context: context,
-                          text: "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.description}",
+                          text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.description}",
                           fontSize: 15,
                           textColor: Color.fromRGBO(75, 85, 99, 1),
                           fontWeight: FontWeight.w500,
@@ -152,7 +153,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                         TextHelperClass.headingText(
                           context: context,
-                          text: "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.weatherCondition}",
+                          text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.weatherCondition}",
                           fontSize: 15,
                           textColor: Color.fromRGBO(75, 85, 99, 1),
                           fontWeight: FontWeight.w500,
@@ -174,7 +175,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                         TextHelperClass.headingText(
                           context: context,
-                          text: "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.materials}",
+                          text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.materials}",
                           fontSize: 15,
                           textColor: Color.fromRGBO(75, 85, 99, 1),
                           fontWeight: FontWeight.w500,
@@ -185,10 +186,10 @@ class DayWorkDetailsView extends StatelessWidget {
 
                         SpaceHelperClass.v(16.h(context)),
 
-                        ...getDayWorkDetailsController.taskList.map((item) {
-                          return DayWorkDetailsTaskDetailsWidget().dayWorkDetailsTaskDetailsBuilder(
+                        ...getEmployeeDayWorkDetailsController.taskList.map((item) {
+                          return DayEmployeeWorkDetailsTaskDetailsWidget().dayEmployeeWorkDetailsTaskDetailsBuilder(
                             context: context,
-                            controller: getDayWorkDetailsController,
+                            controller: getEmployeeDayWorkDetailsController,
                             item: item,
                           );
                         }),
@@ -219,7 +220,7 @@ class DayWorkDetailsView extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(5.r(context)),
                           child: Image.network(
-                            "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.image}",
+                            "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.image}",
                             width: 375.w(context),
                             height: 192.h(context),
                             fit: BoxFit.contain,
@@ -229,7 +230,7 @@ class DayWorkDetailsView extends StatelessWidget {
                         SpaceHelperClass.v(16.h(context)),
 
 
-                        getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.duration == "" ?
+                        getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.duration == "" ?
                         SizedBox.shrink() :
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
@@ -273,7 +274,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                               TextHelperClass.headingText(
                                 context: context,
-                                text: "${getDayWorkDetailsController.getSingleDayWorkDetailsResponseModel.value.data?.duration}",
+                                text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.duration}",
                                 fontSize: 15,
                                 textColor: Color.fromRGBO(75, 85, 99, 1), // White text
                                 fontWeight: FontWeight.w500,
@@ -289,7 +290,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                         SpaceHelperClass.v(16.h(context)),
 
-                        getDayWorkDetailsController.isPdf.value == true  ?
+                        getEmployeeDayWorkDetailsController.isPdf.value == true  ?
                         CustomLoaderButton().customLoaderButton(
                           backgroundColor: Colors.transparent,
                           loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -300,7 +301,7 @@ class DayWorkDetailsView extends StatelessWidget {
                           height: 50.h(context),
                           child: OutlinedButton(
                             onPressed: () async {
-                              await getDayWorkDetailsController.getPdfExcelController(dayWorkId: dayWorkId, isExcel: false, context: context);
+                              await getEmployeeDayWorkDetailsController.getPdfExcelController(dayWorkId: dayWorkId, isExcel: false, context: context);
                             },
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
@@ -348,7 +349,7 @@ class DayWorkDetailsView extends StatelessWidget {
 
                         SpaceHelperClass.v(12.h(context)),
 
-                        getDayWorkDetailsController.isExcelOpen.value == true  ?
+                        getEmployeeDayWorkDetailsController.isExcelOpen.value == true  ?
                         CustomLoaderButton().customLoaderButton(
                           backgroundColor: Colors.transparent,
                           loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -359,7 +360,7 @@ class DayWorkDetailsView extends StatelessWidget {
                           height: 50.h(context),
                           child: OutlinedButton(
                             onPressed: () async {
-                              await getDayWorkDetailsController.getPdfExcelController(dayWorkId: dayWorkId, isExcel: true, context: context);
+                              await getEmployeeDayWorkDetailsController.getPdfExcelController(dayWorkId: dayWorkId, isExcel: true, context: context);
                             },
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric(

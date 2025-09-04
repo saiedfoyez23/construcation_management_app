@@ -1,12 +1,13 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/day_work_edit_controller.dart';
+import 'package:construction_management_app/modules/company_user/day_work/controller/new_day_work_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/new_employee_day_work_controller.dart';
 import 'package:flutter/material.dart';
 
-class EditDayWorkImageAndLocationWidget {
+class EmployeeNewDayWorkImageAndLocationWidget {
 
-  Widget editDayWorkImageAndLocationBuilder({
+  Widget employeeNewDayWorkImageAndLocationBuilder({
     required BuildContext context,
-    required DayWorkEditController controller,
+    required NewEmployeeDayWorkController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -45,7 +46,8 @@ class EditDayWorkImageAndLocationWidget {
           SpaceHelperClass.v(12.h(context)),
 
           // Selected Image Preview
-          _buildSelectedImagePreview(context: context, controller: controller),
+          if (controller.selectedImage.value.path.isNotEmpty)
+            _buildSelectedImagePreview(context: context, controller: controller),
 
           SpaceHelperClass.v(12.h(context)),
 
@@ -78,7 +80,7 @@ class EditDayWorkImageAndLocationWidget {
 // Helper Widget for Image Capture Button
   Widget _buildImageCaptureButton({
     required BuildContext context,
-    required DayWorkEditController controller,
+    required NewEmployeeDayWorkController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -125,33 +127,22 @@ class EditDayWorkImageAndLocationWidget {
 // Helper Widget for Selected Image Preview
   Widget _buildSelectedImagePreview({
     required BuildContext context,
-    required DayWorkEditController controller,
+    required NewEmployeeDayWorkController controller,
   }) {
-    if(controller.selectedImage.value.path == "") {
-      return ImageHelperClass.customNetworkImageContainer(
-        context: context,
-        height: 192.h(context),
-        width: 374.w(context),
-        imagePath: controller.getSingleDayWorkDetailsResponseModel.value.data?.image,
-        imageFit: BoxFit.contain,
-        fit: BoxFit.cover,
-      );
-    } else {
-      return ImageHelperClass.customFileImageContainer(
-        context: context,
-        height: 192.h(context),
-        width: 374.w(context),
-        imagePath: controller.selectedImage.value,
-        imageFit: BoxFit.contain,
-        fit: BoxFit.cover,
-      );
-    }
+    return ImageHelperClass.customFileImageContainer(
+      context: context,
+      height: 192.h(context),
+      width: 374.w(context),
+      imagePath: controller.selectedImage.value,
+      imageFit: BoxFit.contain,
+      fit: BoxFit.cover,
+    );
   }
 
 // Helper Widget for Location Section
   Widget _buildLocationSection({
     required BuildContext context,
-    required DayWorkEditController controller,
+    required NewEmployeeDayWorkController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -212,7 +203,7 @@ class EditDayWorkImageAndLocationWidget {
 // Helper Widget for Recapture Button
   Widget _buildRecaptureButton({
     required BuildContext context,
-    required DayWorkEditController controller,
+    required NewEmployeeDayWorkController controller,
   }) {
     return CustomButtonHelper.customRoundedButton(
       context: context,

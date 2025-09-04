@@ -1,10 +1,3 @@
-import 'package:construction_management_app/modules/company_user/create_project/model/get_all_project_response_model.dart';
-import 'package:construction_management_app/modules/company_user/day_work/model/get_single_day_work_details_response_model.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_details_view.dart';
-import 'package:construction_management_app/modules/company_user/project_details/model/get_project_details_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_equipments_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_workforces_response_model.dart';
-import 'package:get/get.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
@@ -12,18 +5,21 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/create_project/model/get_all_project_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/model/get_single_day_work_details_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_details_view.dart';
+import 'package:construction_management_app/modules/employee_user/project_details/model/get_employee_project_details_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-
 import '../../../../common/common.dart';
 
-class DayWorkEditController extends GetxController {
+class DayEmployeeWorkEditController extends GetxController {
 
   late stt.SpeechToText _speech;
   RxBool isListening = false.obs;
@@ -37,7 +33,7 @@ class DayWorkEditController extends GetxController {
   Rx<TextEditingController> audioController = TextEditingController().obs;
   Rx<TextEditingController> taskNameController = TextEditingController().obs;
   Rx<TextEditingController> materialUsedController = TextEditingController().obs;
-  Rx<GetSingleDayWorkDetailsResponseModel> getSingleDayWorkDetailsResponseModel = GetSingleDayWorkDetailsResponseModel().obs;
+  Rx<GetEmployeeSingleDayWorkDetailsResponseModel> getEmployeeSingleDayWorkDetailsResponseModel = GetEmployeeSingleDayWorkDetailsResponseModel().obs;
   Rx<TextEditingController> locationController = TextEditingController().obs;
   Rx<TextEditingController> workforceQuantityController = TextEditingController().obs;
   Rx<TextEditingController> workForceDurationController = TextEditingController().obs;
@@ -45,27 +41,27 @@ class DayWorkEditController extends GetxController {
   Rx<TextEditingController> equipmentDurationController = TextEditingController().obs;
 
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
-  Rx<GetAllProjectResponseModel> getAllProjectResponseModel = GetAllProjectResponseModel().obs;
-  Rx<GetAllProject> selectSingleProject = GetAllProject().obs;
+  Rx<EmployeeGetAllProjectResponseModel> employeeGetAllProjectResponseModel = EmployeeGetAllProjectResponseModel().obs;
+  Rx<EmployeeGetAllProject> selectSingleProject = EmployeeGetAllProject().obs;
   RxBool isLoading = false.obs;
 
-  Rx<GetProjectDetailsResponseModel> getProjectDetailsResponseModel = GetProjectDetailsResponseModel().obs;
+  Rx<GetEmployeeProjectDetailsResponseModel> getEmployeeProjectDetailsResponseModel = GetEmployeeProjectDetailsResponseModel().obs;
 
 
-  Rx<GetAllEquipmentsResponseModel> getAllEquipmentsResponseModel = GetAllEquipmentsResponseModel().obs;
-  Rx<GetAllEquipmentsResponse> selectedEquipment = GetAllEquipmentsResponse().obs;
+  Rx<GetEmployeeAllEquipmentsResponseModel> getEmployeeAllEquipmentsResponseModel = GetEmployeeAllEquipmentsResponseModel().obs;
+  Rx<GetEmployeeAllEquipmentsResponse> selectedEquipment = GetEmployeeAllEquipmentsResponse().obs;
   // Workforce
-  Rx<GetAllWorkforcesResponse> selectedWorkforces = GetAllWorkforcesResponse().obs;
-  Rx<GetAllWorkforcesResponseModel> getAllWorkforcesResponseModel = GetAllWorkforcesResponseModel().obs;
+  Rx<GetEmployeeAllWorkforcesResponse> selectedWorkforces = GetEmployeeAllWorkforcesResponse().obs;
+  Rx<GetEmployeeAllWorkforcesResponseModel> getEmployeeAllWorkforcesResponseModel = GetEmployeeAllWorkforcesResponseModel().obs;
 
 
   Rx<DateTime> date = DateTime.now().obs;
 
   // Equipment
 
-  RxList<DayWorkEditWorkforce> workforceList = <DayWorkEditWorkforce>[].obs;
-  RxList<DayWorkEditEquipment> equipmentList = <DayWorkEditEquipment>[].obs;
-  RxList<DayWorkEditTask> taskList = <DayWorkEditTask>[].obs;
+  RxList<EmployeeDayWorkEditWorkforce> workforceList = <EmployeeDayWorkEditWorkforce>[].obs;
+  RxList<EmployeeDayWorkEditEquipment> equipmentList = <EmployeeDayWorkEditEquipment>[].obs;
+  RxList<EmployeeDayWorkEditTask> taskList = <EmployeeDayWorkEditTask>[].obs;
 
   Rx<File> selectedImage = File("").obs;
 
@@ -160,7 +156,7 @@ class DayWorkEditController extends GetxController {
   }
 
 
-  Future<void> getDayWorkDetailsController({required String dayWorkId}) async {
+  Future<void> getEmployeeDayWorkDetailsController({required String dayWorkId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -180,16 +176,16 @@ class DayWorkEditController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getSingleDayWorkDetailsResponseModel.value = GetSingleDayWorkDetailsResponseModel.fromJson(responseBody);
-        taskList.value = getSingleDayWorkDetailsResponseModel.value.toTaskList();
-        nameController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.name ?? "";
-        descriptionController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.description ?? "";
-        commendController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.comment ?? "";
-        delayController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.duration ?? "";
-        dateTimeController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.date ?? "";
-        locationController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.location ?? "";
-        weatherConditionController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.weatherCondition ?? "";
-        materialUsedController.value.text = getSingleDayWorkDetailsResponseModel.value.data?.materials ?? "";
+        getEmployeeSingleDayWorkDetailsResponseModel.value = GetEmployeeSingleDayWorkDetailsResponseModel.fromJson(responseBody);
+        taskList.value =  getEmployeeSingleDayWorkDetailsResponseModel.value.toTaskList();
+        nameController.value.text = getEmployeeSingleDayWorkDetailsResponseModel.value.data?.name ?? "";
+        descriptionController.value.text = getEmployeeSingleDayWorkDetailsResponseModel.value.data?.description ?? "";
+        commendController.value.text = getEmployeeSingleDayWorkDetailsResponseModel.value.data?.comment ?? "";
+        delayController.value.text = getEmployeeSingleDayWorkDetailsResponseModel.value.data?.duration ?? "";
+        dateTimeController.value.text = getEmployeeSingleDayWorkDetailsResponseModel.value.data?.date ?? "";
+        locationController.value.text =getEmployeeSingleDayWorkDetailsResponseModel.value.data?.location ?? "";
+        weatherConditionController.value.text = getEmployeeSingleDayWorkDetailsResponseModel.value.data?.weatherCondition ?? "";
+        materialUsedController.value.text =  getEmployeeSingleDayWorkDetailsResponseModel.value.data?.materials ?? "";
       } else {
         throw "Data retrieve is Failed";
       }
@@ -275,7 +271,7 @@ class DayWorkEditController extends GetxController {
   }
 
 
-  Future<void> getProjectDetailsController({required String projectId}) async {
+  Future<void> getEmployeeProjectDetailsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -294,7 +290,7 @@ class DayWorkEditController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getProjectDetailsResponseModel.value = GetProjectDetailsResponseModel.fromJson(responseBody);
+        getEmployeeProjectDetailsResponseModel.value = GetEmployeeProjectDetailsResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -302,12 +298,12 @@ class DayWorkEditController extends GetxController {
       debugPrint("Catch Error.........$e");
       kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
     } finally {
-      //isLoading(false);
+      isLoading(false);
     }
   }
 
 
-  Future<void> getAllWorkforceController({required String projectId}) async {
+  Future<void> getEmployeeAllWorkforceController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -326,7 +322,7 @@ class DayWorkEditController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllWorkforcesResponseModel.value = GetAllWorkforcesResponseModel.fromJson(responseBody);
+        getEmployeeAllWorkforcesResponseModel.value = GetEmployeeAllWorkforcesResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -339,7 +335,7 @@ class DayWorkEditController extends GetxController {
   }
 
 
-  Future<void> getAllEquipmentsController({required String projectId}) async {
+  Future<void> getEmployeeAllEquipmentsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -358,7 +354,7 @@ class DayWorkEditController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllEquipmentsResponseModel.value = GetAllEquipmentsResponseModel.fromJson(responseBody);
+        getEmployeeAllEquipmentsResponseModel.value = GetEmployeeAllEquipmentsResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -431,7 +427,7 @@ class DayWorkEditController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>DayWorkDetailsView(projectId: projectId, dayWorkId: dayWorkId,),preventDuplicates: false);
+        Get.off(()=>DayEmployeeWorkDetailsView(projectId: projectId, dayWorkId: dayWorkId,),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -449,7 +445,7 @@ class DayWorkEditController extends GetxController {
 
   String projectId;
   String dayWorkId;
-  DayWorkEditController({required this.projectId,required this.dayWorkId});
+  DayEmployeeWorkEditController({required this.projectId,required this.dayWorkId});
 
   @override
   void onInit() {
@@ -458,51 +454,51 @@ class DayWorkEditController extends GetxController {
     isLoading(true);
     _speech = stt.SpeechToText();
     Future.delayed(Duration(seconds: 1),() async {
-      await getDayWorkDetailsController(dayWorkId: dayWorkId);
-      await getProjectDetailsController(projectId: projectId);
-      await getAllWorkforceController(projectId: projectId);
-      await getAllEquipmentsController(projectId: projectId);
+      await getEmployeeDayWorkDetailsController(dayWorkId: dayWorkId);
+      await getEmployeeProjectDetailsController(projectId: projectId);
+      await getEmployeeAllWorkforceController(projectId: projectId);
+      await getEmployeeAllEquipmentsController(projectId: projectId);
     });
   }
 
 }
 
 
-class DayWorkEditTask {
+class EmployeeDayWorkEditTask {
   final String name;
-  final List<DayWorkEditWorkforce> workforce;
-  final List<DayWorkEditEquipment> equipment;
+  final List<EmployeeDayWorkEditWorkforce> workforce;
+  final List<EmployeeDayWorkEditEquipment> equipment;
 
-  DayWorkEditTask(this.name, this.workforce, this.equipment);
+  EmployeeDayWorkEditTask(this.name, this.workforce, this.equipment);
 
 }
 
-class DayWorkEditWorkforce {
+class EmployeeDayWorkEditWorkforce {
   final String typeId;
   final int quantity;
   final int duration;
 
-  DayWorkEditWorkforce(this.typeId, this.quantity, this.duration);
+  EmployeeDayWorkEditWorkforce(this.typeId, this.quantity, this.duration);
 
 }
 
-class DayWorkEditEquipment {
+class EmployeeDayWorkEditEquipment {
   final String typeId;
   final int quantity;
   final int duration;
 
-  DayWorkEditEquipment(this.typeId, this.quantity, this.duration);
+  EmployeeDayWorkEditEquipment(this.typeId, this.quantity, this.duration);
 }
 
 
-extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
-  List<DayWorkEditTask> toTaskList() {
+extension DayWorkMapper on GetEmployeeSingleDayWorkDetailsResponseModel {
+  List<EmployeeDayWorkEditTask> toTaskList() {
     if (data?.tasks == null) return [];
 
     return data!.tasks!.map((task) {
       // Map Workforces
       final workforceList = task.workforces?.map((wf) {
-        return DayWorkEditWorkforce(
+        return EmployeeDayWorkEditWorkforce(
           wf.workforce?.sId ?? "",
           (wf.quantity is int)
               ? wf.quantity
@@ -513,7 +509,7 @@ extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
 
       // Map Equipments
       final equipmentList = task.equipments?.map((eq) {
-        return DayWorkEditEquipment(
+        return EmployeeDayWorkEditEquipment(
           eq.equipment?.sId ?? "",
           (eq.quantity is int)
               ? eq.quantity
@@ -523,7 +519,7 @@ extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
       }).toList() ?? [];
 
       // Return Task
-      return DayWorkEditTask(
+      return EmployeeDayWorkEditTask(
         task.name ?? "",
         workforceList,
         equipmentList,

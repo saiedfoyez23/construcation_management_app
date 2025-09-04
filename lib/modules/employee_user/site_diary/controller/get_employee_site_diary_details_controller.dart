@@ -209,7 +209,7 @@ class GetEmployeeSiteDiaryDetailsController extends GetxController {
       debugPrint("Catch Error.........$e");
       kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
     } finally {
-      isLoading(false);
+      //isLoading(false);
     }
   }
 

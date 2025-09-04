@@ -1,14 +1,14 @@
-class GetAllDayWorkResponseModel {
+class GetEmployeeAllDayWorkResponseModel {
   var success;
   var message;
-  GetAllDayWorkResponse? data;
+  GetEmployeeAllDayWorkResponse? data;
 
-  GetAllDayWorkResponseModel({this.success, this.message, this.data});
+  GetEmployeeAllDayWorkResponseModel({this.success, this.message, this.data});
 
-  GetAllDayWorkResponseModel.fromJson(Map<String, dynamic> json) {
+  GetEmployeeAllDayWorkResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? new GetAllDayWorkResponse.fromJson(json['data']) : null;
+    data = json['data'] != null ? new GetEmployeeAllDayWorkResponse.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,17 +22,17 @@ class GetAllDayWorkResponseModel {
   }
 }
 
-class GetAllDayWorkResponse {
-  List<GetAllDayWork>? data;
+class GetEmployeeAllDayWorkResponse {
+  List<GetEmployeeAllDayWork>? data;
   Meta? meta;
 
-  GetAllDayWorkResponse({this.data, this.meta});
+  GetEmployeeAllDayWorkResponse({this.data, this.meta});
 
-  GetAllDayWorkResponse.fromJson(Map<String, dynamic> json) {
+  GetEmployeeAllDayWorkResponse.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <GetAllDayWork>[];
+      data = <GetEmployeeAllDayWork>[];
       json['data'].forEach((v) {
-        data!.add(new GetAllDayWork.fromJson(v));
+        data!.add(new GetEmployeeAllDayWork.fromJson(v));
       });
     }
     meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
@@ -50,7 +50,7 @@ class GetAllDayWorkResponse {
   }
 }
 
-class GetAllDayWork {
+class GetEmployeeAllDayWork {
   var sId;
   var name;
   var duration;
@@ -59,7 +59,7 @@ class GetAllDayWork {
   var totalWorkforces;
   var totalEquipments;
 
-  GetAllDayWork({
+  GetEmployeeAllDayWork({
     this.sId,
     this.name,
     this.duration,
@@ -69,7 +69,7 @@ class GetAllDayWork {
     this.totalEquipments,
   });
 
-  GetAllDayWork.fromJson(Map<String, dynamic> json) {
+  GetEmployeeAllDayWork.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
     duration = json['duration'];

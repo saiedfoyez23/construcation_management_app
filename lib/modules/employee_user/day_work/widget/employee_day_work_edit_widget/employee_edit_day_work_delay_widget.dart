@@ -1,14 +1,14 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/day_work_edit_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/day_employee_work_edit_controller.dart';
 import 'package:flutter/material.dart';
 
-class EditDayWorkMaterialUsedWidget {
+class EmployeeEditDayWorkCommandWidget {
 
 
-  Widget editDayWorkMaterialsUsedSection({
+  Widget employeeEditDayWorkCommendWidget({
     required BuildContext context,
-    required DayWorkEditController controller,
-    String hintText = "10 cubic meters of concrete",
+    required DayEmployeeWorkEditController controller,
+    String hintText = "Write Reason For Delay",
     int maxLines = 3,
   }) {
     return Container(
@@ -34,7 +34,7 @@ class EditDayWorkMaterialUsedWidget {
           // Section Title
           TextHelperClass.headingText(
             context: context,
-            text: "Materials Used",
+            text: "Write Delay",
             fontSize: 20,
             textColor: AppColors.black65,
             fontWeight: FontWeight.w700,
@@ -45,7 +45,7 @@ class EditDayWorkMaterialUsedWidget {
           // Materials Input Field
           CustomTextFormFieldClass.textFiledWithMaxLineBuild(
             context: context,
-            controller: controller.materialUsedController.value,
+            controller: controller.delayController.value,
             hintText: hintText,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 9.hpm(context),

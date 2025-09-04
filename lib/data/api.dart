@@ -1,9 +1,8 @@
 class Api {
   /// base url
 
-  //static const baseUrl = "http://172.252.13.83:5011/api/v1";
-  static const baseUrl = "http://10.10.10.17:5003/api/v1";
-  //static const imageUrl = "http://192.168.10.152:5005/";
+  static const baseUrl = "http://206.162.244.133:5000/api/v1";
+  //static const baseUrl = "http://10.10.10.17:5003/api/v1";
 
   ///auth
   static const login = "$baseUrl/auth/login"; // done

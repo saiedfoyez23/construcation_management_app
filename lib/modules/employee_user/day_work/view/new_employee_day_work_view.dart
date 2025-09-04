@@ -1,22 +1,23 @@
 import 'dart:convert';
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/new_day_work_controller.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_view.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/add_day_work_widget/image_and_location_day_work_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/add_day_work_widget/new_add_day_work_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/add_day_work_widget/new_day_work_add_task_section_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/add_day_work_widget/new_day_work_material_used_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/add_day_work_widget/new_day_work_task_details_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/new_employee_day_work_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_add_day_work_widget/employee_image_and_location_day_work_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_add_day_work_widget/employee_new_add_day_work_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_add_day_work_widget/employee_new_day_work_add_task_section_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_add_day_work_widget/employee_new_day_work_material_used_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_add_day_work_widget/employee_new_day_work_task_details_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NewDayWorkView extends StatelessWidget {
-  NewDayWorkView({super.key,required this.projectId});
+
+class NewEmployeeDayWorkView extends StatelessWidget {
+  NewEmployeeDayWorkView({super.key,required this.projectId});
 
   final String projectId;
   @override
   Widget build(BuildContext context) {
-    NewDayWorkController newDayWorkController = Get.put(NewDayWorkController(projectId: projectId));
+    NewEmployeeDayWorkController newEmployeeDayWorkController = Get.put(NewEmployeeDayWorkController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Obx(()=>Container(
@@ -25,7 +26,7 @@ class NewDayWorkView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: newDayWorkController.isLoading.value == true  ?
+          child: newEmployeeDayWorkController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -39,7 +40,7 @@ class NewDayWorkView extends StatelessWidget {
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 onBackPressed: () {
-                  Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+                  Get.off(()=>DayEmployeeWorkView(projectId: projectId),preventDuplicates: false);
                 },
                 title: "New Day Work",
               ),
@@ -55,29 +56,29 @@ class NewDayWorkView extends StatelessWidget {
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      NewAddDayWorkWidget.newDayWorkProjectSelectionAndDescriptionBuilder(
+                      EmployeeNewAddDayWorkWidget.employeeNewDayWorkProjectSelectionAndDescriptionBuilder(
                         context: context,
-                        controller: newDayWorkController,
+                        controller: newEmployeeDayWorkController,
                       ),
 
                       SpaceHelperClass.v(24.h(context)),
 
-                      NewDayWorkAddTaskSectionWidget().newDayWorkAddTaskSectionBuilder(context: context, controller: newDayWorkController,),
+                      EmployeeNewDayWorkAddTaskSectionWidget().employeeNewDayWorkAddTaskSectionBuilder(context: context, controller: newEmployeeDayWorkController,),
 
                       SpaceHelperClass.v(24.h(context)),
 
-                      ...newDayWorkController.taskList.map((item) {
-                        return NewDayWorkTaskDetailsWidget().newDayWorkTaskDetailsBuilder(
+                      ...newEmployeeDayWorkController.taskList.map((item) {
+                        return EmployeeNewDayWorkTaskDetailsWidget().employeeNewDayWorkTaskDetailsBuilder(
                           context: context,
-                          controller: newDayWorkController,
+                          controller: newEmployeeDayWorkController,
                           item: item,
                         );
                       }),
 
 
-                      NewDayWorkMaterialUsedWidget().newDayWorkMaterialsUsedSection(
+                      EmployeeNewDayWorkMaterialUsedWidget().employeeNewDayWorkMaterialsUsedSection(
                         context: context,
-                        controller: newDayWorkController,
+                        controller: newEmployeeDayWorkController,
                       ),
 
 
@@ -85,7 +86,7 @@ class NewDayWorkView extends StatelessWidget {
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      NewDayWorkImageAndLocationWidget().newDayWorkImageAndLocationBuilder(context: context, controller: newDayWorkController),
+                      EmployeeNewDayWorkImageAndLocationWidget().employeeNewDayWorkImageAndLocationBuilder(context: context, controller: newEmployeeDayWorkController),
 
                       SpaceHelperClass.v(35.h(context)),
 
@@ -94,7 +95,7 @@ class NewDayWorkView extends StatelessWidget {
 
 
                           Expanded(
-                            child: newDayWorkController.isSubmit.value == true ?
+                            child: newEmployeeDayWorkController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -110,25 +111,25 @@ class NewDayWorkView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(newDayWorkController.getProjectDetailsResponseModel.value.data == null) {
+                                if(newEmployeeDayWorkController.getEmployeeProjectDetailsResponseModel.value.data == null) {
                                   kSnackBar(message: "Please select a project", bgColor: AppColors.red);
-                                } else if(newDayWorkController.nameController.value.text == ""){
+                                } else if(newEmployeeDayWorkController.nameController.value.text == ""){
                                   kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
-                                } else if(newDayWorkController.descriptionController.value.text == "") {
+                                } else if(newEmployeeDayWorkController.descriptionController.value.text == "") {
                                   kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
-                                } else if(newDayWorkController.dateTimeController.value.text == "") {
+                                } else if(newEmployeeDayWorkController.dateTimeController.value.text == "") {
                                   kSnackBar(message: "Please select a date", bgColor: AppColors.red);
-                                } else if(newDayWorkController.weatherConditionController.value.text == "") {
+                                } else if(newEmployeeDayWorkController.weatherConditionController.value.text == "") {
                                   kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
-                                } else if(newDayWorkController.locationController.value.text == "") {
+                                } else if(newEmployeeDayWorkController.locationController.value.text == "") {
                                   kSnackBar(message: "Please enter location", bgColor: AppColors.red);
-                                } else if(newDayWorkController.taskList.isEmpty == true) {
+                                } else if(newEmployeeDayWorkController.taskList.isEmpty == true) {
                                   kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
-                                } else if(newDayWorkController.selectedImage.value.path == "") {
+                                } else if(newEmployeeDayWorkController.selectedImage.value.path == "") {
                                   kSnackBar(message: "Please select a image", bgColor: AppColors.red);
                                 } else {
-                                  newDayWorkController.isSubmit.value = true;
-                                  List<Map<String, dynamic>> tasksToJson(List<DayWorkTask> tasks) {
+                                  newEmployeeDayWorkController.isSubmit.value = true;
+                                  List<Map<String, dynamic>> tasksToJson(List<EmployeeDayWorkTask> tasks) {
                                     return tasks.map((task) {
                                       return {
                                         "name": task.name,
@@ -151,21 +152,21 @@ class NewDayWorkView extends StatelessWidget {
                                   }
 
                                   Map<String,dynamic> payload = {
-                                    "name": newDayWorkController.nameController.value.text,
-                                    "project": newDayWorkController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                                    "description": newDayWorkController.descriptionController.value.text,
-                                    "date": newDayWorkController.dateTimeController.value.text,
-                                    "weather_condition": newDayWorkController.weatherConditionController.value.text,
+                                    "name": newEmployeeDayWorkController.nameController.value.text,
+                                    "project": newEmployeeDayWorkController.getEmployeeProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "description": newEmployeeDayWorkController.descriptionController.value.text,
+                                    "date": newEmployeeDayWorkController.dateTimeController.value.text,
+                                    "weather_condition": newEmployeeDayWorkController.weatherConditionController.value.text,
                                     "duration": "8 hours",
-                                    "tasks": tasksToJson(newDayWorkController.taskList),
-                                    "location":  newDayWorkController.locationController.value.text,
-                                    "materials":  newDayWorkController.metrialUsedController.value.text,
+                                    "tasks": tasksToJson(newEmployeeDayWorkController.taskList),
+                                    "location": newEmployeeDayWorkController.locationController.value.text,
+                                    "materials": newEmployeeDayWorkController.metrialUsedController.value.text,
                                   };
                                   print(jsonEncode(payload));
                                   //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
-                                  await newDayWorkController.createDayWorksController(
+                                  await newEmployeeDayWorkController.createDayWorksController(
                                     payload: payload,
-                                    image: newDayWorkController.selectedImage.value,
+                                    image: newEmployeeDayWorkController.selectedImage.value,
                                     projectId: projectId,
                                   );
                                 }
@@ -188,7 +189,7 @@ class NewDayWorkView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+                                Get.off(()=>DayEmployeeWorkView(projectId: projectId),preventDuplicates: false);
                               },
                             ),
                           ),

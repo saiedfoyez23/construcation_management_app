@@ -155,10 +155,10 @@ class EditEmployeeSiteDiaryView extends StatelessWidget {
                                     "name": employeeSiteDiaryEditController.nameController.value.text,
                                     "project": employeeSiteDiaryEditController.getEmployeeProjectDetailsResponseModel.value.data?.sId ?? "",
                                     "description": employeeSiteDiaryEditController.descriptionController.value.text,
-                                    "date": employeeSiteDiaryEditController..dateTimeController.value.text,
-                                    "weather_condition": employeeSiteDiaryEditController..weatherConditionController.value.text,
+                                    "date": employeeSiteDiaryEditController.dateTimeController.value.text,
+                                    "weather_condition": employeeSiteDiaryEditController.weatherConditionController.value.text,
                                     "duration": employeeSiteDiaryEditController.delayController.value.text,
-                                    "location": employeeSiteDiaryEditController..locationController.value.text,
+                                    "location": employeeSiteDiaryEditController.locationController.value.text,
                                   };
                                   print(jsonEncode(payload));
                                   //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);

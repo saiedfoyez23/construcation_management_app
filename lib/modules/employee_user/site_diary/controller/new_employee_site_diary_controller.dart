@@ -11,6 +11,7 @@ import 'package:construction_management_app/modules/employee_user/create_project
 import 'package:construction_management_app/modules/employee_user/project_details/model/get_employee_project_details_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/view/site_employee_diary_view.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -362,7 +363,7 @@ class NewEmployeeSiteDiaryController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>SiteDiaryView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>SiteEmployeeDiaryView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -400,8 +401,8 @@ class NewEmployeeSiteDiaryController extends GetxController {
 
 class EmployeeNewSiteDiaryTask {
   final String name;
-  final List<NewSiteDiaryWorkforce> workforce;
-  final List<NewSiteDiaryEquipment> equipment;
+  final List<EmployeeNewSiteDiaryWorkforce> workforce;
+  final List<EmployeeNewSiteDiaryEquipment> equipment;
 
   EmployeeNewSiteDiaryTask(this.name, this.workforce, this.equipment);
 }

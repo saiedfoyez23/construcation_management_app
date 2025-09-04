@@ -1,13 +1,13 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/new_day_work_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/new_employee_day_work_controller.dart';
 import 'package:flutter/material.dart';
 
-class NewDayWorkMaterialUsedWidget {
+class EmployeeNewDayWorkMaterialUsedWidget {
 
 
-  Widget newDayWorkMaterialsUsedSection({
+  Widget employeeNewDayWorkMaterialsUsedSection({
     required BuildContext context,
-    required NewDayWorkController controller,
+    required NewEmployeeDayWorkController controller,
     String hintText = "10 cubic meters of concrete",
     int maxLines = 3,
   }) {

@@ -1,20 +1,21 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/day_work_controller.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_details_view.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_edit_view.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/new_day_work_view.dart';
-import 'package:construction_management_app/modules/company_user/project_details/view/project_details_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/day_employee_work_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_details_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_edit_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/new_employee_day_work_view.dart';
+import 'package:construction_management_app/modules/employee_user/project_details/view/employee_project_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DayWorkView extends StatelessWidget {
-  DayWorkView({super.key,required this.projectId});
+
+class DayEmployeeWorkView extends StatelessWidget {
+  DayEmployeeWorkView({super.key,required this.projectId});
 
   final String projectId;
 
   @override
   Widget build(BuildContext context) {
-    DayWorkController dayWorkController = Get.put(DayWorkController(projectId: projectId));
+    DayEmployeeWorkController dayEmployeeWorkController = Get.put(DayEmployeeWorkController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -23,7 +24,7 @@ class DayWorkView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: Obx(()=>dayWorkController.isLoading.value == true  ?
+          child: Obx(()=>dayEmployeeWorkController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -32,7 +33,7 @@ class DayWorkView extends StatelessWidget {
           ) :
           RefreshIndicator(
             onRefresh: () async {
-              Get.off(()=>DayWorkView(projectId: projectId),preventDuplicates: false);
+              Get.off(()=>DayEmployeeWorkView(projectId: projectId),preventDuplicates: false);
             },
             child: CustomScrollView(
               slivers: [
@@ -41,7 +42,7 @@ class DayWorkView extends StatelessWidget {
                 CustomAppBarHelper.normalAppBar(
                   context: context,
                   onBackPressed: () {
-                    Get.off(()=>ProjectDetailsView(projectId: projectId),preventDuplicates: false);
+                    Get.off(()=>EmployeeProjectDetailsView(projectId: projectId),preventDuplicates: false);
                   },
                   title: "All Day Work",
                 ),
@@ -78,7 +79,7 @@ class DayWorkView extends StatelessWidget {
                               context: context,
                               height: 40,
                               onPressed: () async {
-                                Get.off(()=>NewDayWorkView(projectId: projectId),preventDuplicates: false);
+                                Get.off(()=>NewEmployeeDayWorkView(projectId: projectId),preventDuplicates: false);
                               },
                               text: "Add Day Work",
                               icon: Icons.add,
@@ -95,7 +96,7 @@ class DayWorkView extends StatelessWidget {
 
                         CustomTextFormFieldClass.build(
                           context: context,
-                          controller: dayWorkController.searchController.value,
+                          controller: dayEmployeeWorkController.searchController.value,
                           hintText: "Search site diary...",
                           textColor: Color.fromRGBO(173, 174, 188, 1),
                           borderColor: Color.fromRGBO(229, 231, 235, 1),
@@ -121,10 +122,10 @@ class DayWorkView extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           onChanged: (siteDiaryValue) async {
                             if(siteDiaryValue == "") {
-                              dayWorkController.getAllDayWorkSearchResponseList.value = dayWorkController.getAllDayWorkResponseList;
-                              dayWorkController.getAllDayWorkSearchResponseList.refresh();
+                              dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList.value = dayEmployeeWorkController.getEmployeeAllDayWorkResponseList;
+                              dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList.refresh();
                             } else {
-                              dayWorkController.getAllDayWorkSearchResponseList.value = dayWorkController.getAllDayWorkSearchResponseList.where((value)=>value.name.toString().toLowerCase().contains(siteDiaryValue.toString().toLowerCase()) == true).toList();
+                              dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList.value = dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList.where((value)=>value.name.toString().toLowerCase().contains(siteDiaryValue.toString().toLowerCase()) == true).toList();
                             }
                           },
                         ),
@@ -140,7 +141,7 @@ class DayWorkView extends StatelessWidget {
 
 
 
-                dayWorkController.getAllDayWorkSearchResponseList.isEmpty == true ?
+                dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList.isEmpty == true ?
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
@@ -198,7 +199,7 @@ class DayWorkView extends StatelessWidget {
                                       children: [
                                         TextHelperClass.headingText(
                                           context: context,
-                                          text: dayWorkController.getAllDayWorkSearchResponseList[index].name,
+                                          text: dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].name,
                                           fontSize: 18,
                                           textColor: Color.fromRGBO(31, 41, 55, 1),
                                           fontWeight: FontWeight.w700,
@@ -206,7 +207,7 @@ class DayWorkView extends StatelessWidget {
                                         SpaceHelperClass.v(4.h(context)),
                                         TextHelperClass.headingText(
                                           context: context,
-                                          text: dayWorkController.getAllDayWorkSearchResponseList[index].location,
+                                          text: dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].location,
                                           fontSize: 15,
                                           textColor: Color.fromRGBO(107, 114, 128, 1),
                                           fontWeight: FontWeight.w500,
@@ -230,7 +231,7 @@ class DayWorkView extends StatelessWidget {
                                               Expanded(
                                                 child: TextHelperClass.headingText(
                                                   context: context,
-                                                  text: dayWorkController.getTimeDifference(dayWorkController.getAllDayWorkSearchResponseList[index].createdAt),
+                                                  text: dayEmployeeWorkController.getTimeDifference(dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].createdAt),
                                                   fontSize: 15,
                                                   textColor: Color.fromRGBO(75, 85, 99, 1),
                                                   fontWeight: FontWeight.w500,
@@ -315,7 +316,7 @@ class DayWorkView extends StatelessWidget {
                                                         Column(
                                                           children: [
 
-                                                            dayWorkController.isDelete.value == true ?
+                                                            dayEmployeeWorkController.isDelete.value == true ?
                                                             CustomLoaderButton().customLoaderButton(
                                                               backgroundColor: Colors.transparent,
                                                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -331,9 +332,9 @@ class DayWorkView extends StatelessWidget {
                                                               borderRadius: 8,
                                                               backgroundColor: Color.fromRGBO(220, 20, 60, 1),
                                                               onPressed: () async {
-                                                                dayWorkController.isDelete.value = true;
-                                                                await dayWorkController.deleteDayWorkController(
-                                                                  dayWorkId: dayWorkController.getAllDayWorkSearchResponseList[index].sId,
+                                                                dayEmployeeWorkController.isDelete.value = true;
+                                                                await dayEmployeeWorkController.deleteEmployeeDayWorkController(
+                                                                  dayWorkId: dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].sId,
                                                                 );
                                                               },
                                                             ),
@@ -403,7 +404,7 @@ class DayWorkView extends StatelessWidget {
                                   Expanded(
                                     child: TextHelperClass.headingText(
                                       context: context,
-                                      text: "${dayWorkController.getAllDayWorkSearchResponseList[index].totalWorkforces} Workforce",
+                                      text: "${dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].totalWorkforces} Workforce",
                                       fontSize: 15,
                                       textColor: Color.fromRGBO(75, 85, 99, 1),
                                       fontWeight: FontWeight.w500,
@@ -433,7 +434,7 @@ class DayWorkView extends StatelessWidget {
                                   Expanded(
                                     child: TextHelperClass.headingText(
                                       context: context,
-                                      text: "${dayWorkController.getAllDayWorkSearchResponseList[index].totalEquipments} Equipments",
+                                      text: "${dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].totalEquipments} Equipments",
                                       fontSize: 15,
                                       textColor: Color.fromRGBO(75, 85, 99, 1),
                                       fontWeight: FontWeight.w500,
@@ -458,7 +459,7 @@ class DayWorkView extends StatelessWidget {
                                     fontSize: 18,
                                     text: 'View Details →',
                                     onPressed: () {
-                                      Get.off(()=>DayWorkDetailsView(dayWorkId: dayWorkController.getAllDayWorkSearchResponseList[index].sId, projectId: projectId));
+                                      Get.off(()=>DayEmployeeWorkDetailsView(dayWorkId: dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].sId, projectId: projectId));
                                     },
                                   ),
 
@@ -468,7 +469,7 @@ class DayWorkView extends StatelessWidget {
                                     height: 50.h(context),
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        Get.off(()=>DayWorkEditView(dayWorkId: dayWorkController.getAllDayWorkSearchResponseList[index].sId, projectId: projectId),preventDuplicates: false);
+                                        Get.off(()=>DayEmployeeWorkEditView(dayWorkId: dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList[index].sId, projectId: projectId),preventDuplicates: false);
                                       },
                                       style: OutlinedButton.styleFrom(
                                         padding: EdgeInsets.symmetric(
@@ -519,7 +520,7 @@ class DayWorkView extends StatelessWidget {
                         ),
                       );
                     },
-                    childCount: dayWorkController.getAllDayWorkSearchResponseList.length
+                    childCount: dayEmployeeWorkController.getEmployeeAllDayWorkSearchResponseList.length
                 ),),
 
 

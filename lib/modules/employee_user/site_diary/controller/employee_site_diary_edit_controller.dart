@@ -4,6 +4,7 @@ import 'package:construction_management_app/modules/employee_user/project_detail
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/site_diary/model/get_employee_single_site_diary_details_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/site_diary/view/site_employee_diary_details_view.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -426,7 +427,7 @@ class EmployeeSiteDiaryEditController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>SiteDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
+        Get.off(()=>SiteEmployeeDiaryDetailsView(projectId: projectId, siteDiaryId: siteDiaryId,),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];

@@ -4,24 +4,24 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/day_work/model/get_all_day_work_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/model/get_employee_all_day_work_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/common.dart';
 
-class DayWorkController extends GetxController {
+class DayEmployeeWorkController extends GetxController {
 
 
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
-  Rx<GetAllDayWorkResponseModel> getAllDayWorkResponseModel = GetAllDayWorkResponseModel().obs;
+  Rx<GetEmployeeAllDayWorkResponseModel> getEmployeeAllDayWorkResponseModel = GetEmployeeAllDayWorkResponseModel().obs;
   Rx<TextEditingController> searchController = TextEditingController().obs;
-  RxList<GetAllDayWork> getAllDayWorkResponseList = <GetAllDayWork>[].obs;
-  RxList<GetAllDayWork> getAllDayWorkSearchResponseList = <GetAllDayWork>[].obs;
+  RxList<GetEmployeeAllDayWork> getEmployeeAllDayWorkResponseList = <GetEmployeeAllDayWork>[].obs;
+  RxList<GetEmployeeAllDayWork> getEmployeeAllDayWorkSearchResponseList = <GetEmployeeAllDayWork>[].obs;
   RxBool isLoading = false.obs;
   RxBool isDelete = false.obs;
   String projectId;
-  DayWorkController({required this.projectId});
+  DayEmployeeWorkController({required this.projectId});
 
   @override
   void onInit() {
@@ -29,22 +29,22 @@ class DayWorkController extends GetxController {
     super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
-      await getAllDayWorkController(projectId: projectId);
+      await getEmployeeAllDayWorkController(projectId: projectId);
     });
   }
 
   Future<void> cleanList() async {
-    getAllDayWorkResponseList.clear();
-    getAllDayWorkSearchResponseList.clear();
+    getEmployeeAllDayWorkResponseList.clear();
+    getEmployeeAllDayWorkSearchResponseList.clear();
   }
 
 
   Future<void> refreshList() async {
-    getAllDayWorkResponseList.refresh();
-    getAllDayWorkSearchResponseList.refresh();
+    getEmployeeAllDayWorkResponseList.refresh();
+    getEmployeeAllDayWorkSearchResponseList.refresh();
   }
 
-  Future<void> getAllDayWorkController({required String projectId}) async {
+  Future<void> getEmployeeAllDayWorkController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -66,10 +66,10 @@ class DayWorkController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllDayWorkResponseModel.value = GetAllDayWorkResponseModel.fromJson(responseBody);
-        getAllDayWorkResponseModel.value.data?.data?.forEach((value) {
-          getAllDayWorkResponseList.add(value);
-          getAllDayWorkSearchResponseList.add(value);
+        getEmployeeAllDayWorkResponseModel.value = GetEmployeeAllDayWorkResponseModel.fromJson(responseBody);
+        getEmployeeAllDayWorkResponseModel.value.data?.data?.forEach((value) {
+          getEmployeeAllDayWorkResponseList.add(value);
+          getEmployeeAllDayWorkSearchResponseList.add(value);
         });
       } else {
         throw "Data retrieve is Failed";
@@ -103,7 +103,7 @@ class DayWorkController extends GetxController {
   }
 
 
-  Future<void> deleteDayWorkController({required String dayWorkId}) async {
+  Future<void> deleteEmployeeDayWorkController({required String dayWorkId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -124,7 +124,7 @@ class DayWorkController extends GetxController {
         print("hello ${jsonEncode(responseBody)}");
         Get.back();
         kSnackBar(message: "Site diary delete successful", bgColor: AppColors.green);
-        await getAllDayWorkController(projectId: projectId);
+        await getEmployeeAllDayWorkController(projectId: projectId);
         //kSnackBar(message: "Employee create successful", bgColor: AppColors.green);
       } else {
         throw "Site diary  Retrieve is Failed!";

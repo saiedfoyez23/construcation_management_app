@@ -1,38 +1,40 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:construction_management_app/data/api.dart';
-import 'package:construction_management_app/data/base_client.dart';
-import 'package:construction_management_app/modules/company_user/day_work/model/get_single_day_work_details_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_equipments_response_model.dart';
-import 'package:construction_management_app/modules/company_user/resources/model/get_all_workforces_response_model.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:open_file/open_file.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/pdf.dart';
+
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
+import 'package:construction_management_app/data/api.dart';
+import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/model/get_single_day_work_details_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
+
 import '../../../../common/common.dart';
 
-class GetDayWorkDetailsController extends GetxController {
+class GetEmployeeDayWorkDetailsController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPdf = false.obs;
   RxBool isExcelOpen = false.obs;
-  RxList<DayWorkWorkforce> workforce = <DayWorkWorkforce>[].obs;
-  RxList<DayWorkEquipment> equipment = <DayWorkEquipment>[].obs;
-  RxList<DayWorkDetailsTask> taskList = <DayWorkDetailsTask>[].obs;
+  RxList<EmployeeDayWorkWorkforce> workforce = <EmployeeDayWorkWorkforce>[].obs;
+  RxList<EmployeeDayWorkEquipment> equipment = <EmployeeDayWorkEquipment>[].obs;
+  RxList<EmployeeDayWorkDetailsTask> taskList = <EmployeeDayWorkDetailsTask>[].obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
-  Rx<GetSingleDayWorkDetailsResponseModel> getSingleDayWorkDetailsResponseModel = GetSingleDayWorkDetailsResponseModel().obs;
-  Rx<GetAllEquipmentsResponseModel> getAllEquipmentsResponseModel = GetAllEquipmentsResponseModel().obs;
-  Rx<GetAllWorkforcesResponseModel> getAllWorkforcesResponseModel = GetAllWorkforcesResponseModel().obs;
+  Rx<GetEmployeeSingleDayWorkDetailsResponseModel> getEmployeeSingleDayWorkDetailsResponseModel = GetEmployeeSingleDayWorkDetailsResponseModel().obs;
+  Rx<GetEmployeeAllEquipmentsResponseModel> getEmployeeAllEquipmentsResponseModel = GetEmployeeAllEquipmentsResponseModel().obs;
+  Rx<GetEmployeeAllWorkforcesResponseModel> getEmployeeAllWorkforcesResponseModel = GetEmployeeAllWorkforcesResponseModel().obs;
   String dayWorkId;
   String projectId;
-  GetDayWorkDetailsController({required this.dayWorkId,required this.projectId});
+  GetEmployeeDayWorkDetailsController({required this.dayWorkId,required this.projectId});
 
 
   @override
@@ -41,14 +43,14 @@ class GetDayWorkDetailsController extends GetxController {
     super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
-      await getAllEquipmentsController(projectId: projectId);
-      await getAllWorkforceController(projectId: projectId);
-      await getDayWorkDetailsController(dayWorkId: dayWorkId);
+      await getEmployeeAllEquipmentsController(projectId: projectId);
+      await getEmployeeAllWorkforceController(projectId: projectId);
+      await getEmployeeDayWorkDetailsController(dayWorkId: dayWorkId);
     });
   }
 
 
-  Future<void> getDayWorkDetailsController({required String dayWorkId}) async {
+  Future<void> getEmployeeDayWorkDetailsController({required String dayWorkId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -68,8 +70,8 @@ class GetDayWorkDetailsController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getSingleDayWorkDetailsResponseModel.value = GetSingleDayWorkDetailsResponseModel.fromJson(responseBody);
-        taskList.value = getSingleDayWorkDetailsResponseModel.value.toTaskList();
+        getEmployeeSingleDayWorkDetailsResponseModel.value = GetEmployeeSingleDayWorkDetailsResponseModel.fromJson(responseBody);
+        taskList.value = getEmployeeSingleDayWorkDetailsResponseModel.value.toTaskList();
       } else {
         throw "Data retrieve is Failed";
       }
@@ -147,7 +149,7 @@ class GetDayWorkDetailsController extends GetxController {
     }
   }
 
-  Future<void> getAllWorkforceController({required String projectId}) async {
+  Future<void> getEmployeeAllWorkforceController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -166,7 +168,7 @@ class GetDayWorkDetailsController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllWorkforcesResponseModel.value = GetAllWorkforcesResponseModel.fromJson(responseBody);
+        getEmployeeAllWorkforcesResponseModel.value = GetEmployeeAllWorkforcesResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -179,7 +181,7 @@ class GetDayWorkDetailsController extends GetxController {
   }
 
 
-  Future<void> getAllEquipmentsController({required String projectId}) async {
+  Future<void> getEmployeeAllEquipmentsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -198,7 +200,7 @@ class GetDayWorkDetailsController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getAllEquipmentsResponseModel.value = GetAllEquipmentsResponseModel.fromJson(responseBody);
+        getEmployeeAllEquipmentsResponseModel.value = GetEmployeeAllEquipmentsResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -438,41 +440,41 @@ class GetDayWorkDetailsController extends GetxController {
 
 
 
-class DayWorkDetailsTask {
+class EmployeeDayWorkDetailsTask {
   final String name;
-  final List<DayWorkWorkforce> workforce;
-  final List<DayWorkEquipment> equipment;
+  final List<EmployeeDayWorkWorkforce> workforce;
+  final List<EmployeeDayWorkEquipment> equipment;
 
-  DayWorkDetailsTask(this.name, this.workforce, this.equipment);
+  EmployeeDayWorkDetailsTask(this.name, this.workforce, this.equipment);
 
 }
 
-class DayWorkWorkforce {
+class EmployeeDayWorkWorkforce {
   final String typeId;
   final int quantity;
   final int duration;
 
-  DayWorkWorkforce(this.typeId, this.quantity, this.duration);
+  EmployeeDayWorkWorkforce(this.typeId, this.quantity, this.duration);
 
 }
 
-class DayWorkEquipment {
+class EmployeeDayWorkEquipment {
   final String typeId;
   final int quantity;
   final int duration;
 
-  DayWorkEquipment(this.typeId, this.quantity, this.duration);
+  EmployeeDayWorkEquipment(this.typeId, this.quantity, this.duration);
 }
 
 
-extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
-  List<DayWorkDetailsTask> toTaskList() {
+extension DayWorkMapper on GetEmployeeSingleDayWorkDetailsResponseModel {
+  List<EmployeeDayWorkDetailsTask> toTaskList() {
     if (data?.tasks == null) return [];
 
     return data!.tasks!.map((task) {
       // Map Workforces
       final workforceList = task.workforces?.map((wf) {
-        return DayWorkWorkforce(
+        return EmployeeDayWorkWorkforce(
           wf.workforce?.sId ?? "",
           (wf.quantity is int)
               ? wf.quantity
@@ -483,7 +485,7 @@ extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
 
       // Map Equipments
       final equipmentList = task.equipments?.map((eq) {
-        return DayWorkEquipment(
+        return EmployeeDayWorkEquipment(
           eq.equipment?.sId ?? "",
           (eq.quantity is int)
               ? eq.quantity
@@ -493,7 +495,7 @@ extension DayWorkMapper on GetSingleDayWorkDetailsResponseModel {
       }).toList() ?? [];
 
       // Return Task
-      return DayWorkDetailsTask(
+      return EmployeeDayWorkDetailsTask(
         task.name ?? "",
         workforceList,
         equipmentList,

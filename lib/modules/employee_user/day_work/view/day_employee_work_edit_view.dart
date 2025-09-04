@@ -1,18 +1,18 @@
 import 'dart:convert';
-import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/day_work_edit_controller.dart';
-import 'package:construction_management_app/modules/company_user/day_work/view/day_work_details_view.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_edit_widget/edit_day_work_add_task_section_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_edit_widget/edit_day_work_delay_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_edit_widget/edit_day_work_image_and_location_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_edit_widget/edit_day_work_material_used_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_edit_widget/edit_day_work_task_details_widget.dart';
-import 'package:construction_management_app/modules/company_user/day_work/widget/day_work_edit_widget/edit_day_work_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/day_employee_work_edit_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_details_view.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_day_work_edit_widget/edit_day_work_image_and_location_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_day_work_edit_widget/employee_edit_day_work_add_task_section_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_day_work_edit_widget/employee_edit_day_work_delay_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_day_work_edit_widget/employee_edit_day_work_material_used_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_day_work_edit_widget/employee_edit_day_work_task_details_widget.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/widget/employee_day_work_edit_widget/employee_edit_day_work_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../common/common.dart';
 
-class DayWorkEditView extends StatelessWidget {
-  DayWorkEditView({super.key,required this.dayWorkId,required this.projectId});
+class DayEmployeeWorkEditView extends StatelessWidget {
+  DayEmployeeWorkEditView({super.key,required this.dayWorkId,required this.projectId});
 
   final String dayWorkId;
   final String projectId;
@@ -20,7 +20,7 @@ class DayWorkEditView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DayWorkEditController dayWorkEditController = Get.put(DayWorkEditController(projectId: projectId, dayWorkId: dayWorkId));
+    DayEmployeeWorkEditController dayEmployeeWorkEditController = Get.put(DayEmployeeWorkEditController(projectId: projectId, dayWorkId: dayWorkId));
     return Scaffold(
       body:  SafeArea(
         child: Container(
@@ -29,7 +29,7 @@ class DayWorkEditView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: Obx(()=> dayWorkEditController.isLoading.value == true  ?
+          child: Obx(()=> dayEmployeeWorkEditController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -44,7 +44,7 @@ class DayWorkEditView extends StatelessWidget {
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 onBackPressed: () {
-                  Get.off(()=>DayWorkDetailsView(projectId: projectId,dayWorkId: dayWorkId,),preventDuplicates: false);
+                  Get.off(()=>DayEmployeeWorkDetailsView(projectId: projectId,dayWorkId: dayWorkId,),preventDuplicates: false);
                 },
                 title: "Edit Day Work",
               ),
@@ -58,7 +58,7 @@ class DayWorkEditView extends StatelessWidget {
 
                       SpaceHelperClass.v(24.h(context)),
 
-                      EditDayWorkWidget.projectSelectionAndDescriptionBuilder(context: context, controller: dayWorkEditController),
+                      EmployeeEditDayWorkWidget.employeeProjectSelectionAndDescriptionBuilder(context: context, controller: dayEmployeeWorkEditController),
 
 
                       SpaceHelperClass.v(24.h(context)),
@@ -66,16 +66,16 @@ class DayWorkEditView extends StatelessWidget {
 
 
 
-                      EditDayWorkAddTaskSectionWidget().editDayWorkAddTaskSectionBuilder(context: context,controller: dayWorkEditController),
+                      EmployeeEditDayWorkAddTaskSectionWidget().employeeEditDayWorkAddTaskSectionBuilder(context: context,controller: dayEmployeeWorkEditController),
 
                       SpaceHelperClass.v(24.h(context)),
 
                       ...[
-                        for (int i = 0; i < dayWorkEditController.taskList.length; i++)
-                          EditDayWorkTaskDetailsWidget().editDayWorkTaskDetailsBuilder(
+                        for (int i = 0; i < dayEmployeeWorkEditController.taskList.length; i++)
+                          EmployeeEditDayWorkTaskDetailsWidget().employeeEditDayWorkTaskDetailsBuilder(
                             context: context,
-                            controller: dayWorkEditController,
-                            item: dayWorkEditController.taskList[i],
+                            controller: dayEmployeeWorkEditController,
+                            item: dayEmployeeWorkEditController.taskList[i],
                             index: i,
                             dayWorkId: dayWorkId,
                           ),
@@ -85,17 +85,17 @@ class DayWorkEditView extends StatelessWidget {
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      EditDayWorkMaterialUsedWidget().editDayWorkMaterialsUsedSection(context: context, controller: dayWorkEditController),
+                      EmployeeEditDayWorkMaterialUsedWidget().employeeEditDayWorkMaterialsUsedSection(context: context, controller: dayEmployeeWorkEditController),
 
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      EditDayWorkCommandWidget().editDayWorkCommendWidget(context: context, controller: dayWorkEditController),
+                      EmployeeEditDayWorkCommandWidget().employeeEditDayWorkCommendWidget(context: context, controller: dayEmployeeWorkEditController),
 
                       SpaceHelperClass.v(24.h(context)),
 
 
-                      EditDayWorkImageAndLocationWidget().editDayWorkImageAndLocationBuilder(context: context, controller: dayWorkEditController),
+                      EmployeeEditDayWorkImageAndLocationWidget().employeeEditDayWorkImageAndLocationBuilder(context: context, controller: dayEmployeeWorkEditController),
 
                       SpaceHelperClass.v(35.h(context)),
 
@@ -104,7 +104,7 @@ class DayWorkEditView extends StatelessWidget {
 
 
                           Expanded(
-                            child: dayWorkEditController.isSubmit.value == true ?
+                            child: dayEmployeeWorkEditController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -120,22 +120,22 @@ class DayWorkEditView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(dayWorkEditController.nameController.value.text == ""){
+                                if(dayEmployeeWorkEditController.nameController.value.text == ""){
                                   kSnackBar(message: "Please enter the site diary name", bgColor: AppColors.red);
-                                } else if(dayWorkEditController.descriptionController.value.text == "") {
+                                } else if(dayEmployeeWorkEditController.descriptionController.value.text == "") {
                                   kSnackBar(message: "Please enter the description", bgColor: AppColors.red);
-                                } else if(dayWorkEditController.dateTimeController.value.text == "") {
+                                } else if(dayEmployeeWorkEditController.dateTimeController.value.text == "") {
                                   kSnackBar(message: "Please select a date", bgColor: AppColors.red);
-                                } else if(dayWorkEditController.weatherConditionController.value.text == "") {
+                                } else if(dayEmployeeWorkEditController.weatherConditionController.value.text == "") {
                                   kSnackBar(message: "Please enter a weather condition", bgColor: AppColors.red);
-                                } else if(dayWorkEditController.locationController.value.text == "") {
+                                } else if(dayEmployeeWorkEditController.locationController.value.text == "") {
                                   kSnackBar(message: "Please enter location", bgColor: AppColors.red);
-                                } else if(dayWorkEditController.taskList.isEmpty == true) {
+                                } else if(dayEmployeeWorkEditController.taskList.isEmpty == true) {
                                   kSnackBar(message: "Please add minium 1 task", bgColor: AppColors.red);
                                 } else {
-                                  dayWorkEditController.isSubmit.value = true;
+                                  dayEmployeeWorkEditController.isSubmit.value = true;
 
-                                  List<Map<String, dynamic>> tasksToJson(List<DayWorkEditTask> tasks) {
+                                  List<Map<String, dynamic>> tasksToJson(List<EmployeeDayWorkEditTask> tasks) {
                                     return tasks.map((task) {
                                       return {
                                         "name": task.name,
@@ -158,20 +158,20 @@ class DayWorkEditView extends StatelessWidget {
                                   }
 
                                   Map<String,dynamic> payload = {
-                                    "name": dayWorkEditController.nameController.value.text,
-                                    "project": dayWorkEditController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                                    "description": dayWorkEditController.descriptionController.value.text,
-                                    "date": dayWorkEditController.dateTimeController.value.text,
-                                    "weather_condition": dayWorkEditController.weatherConditionController.value.text,
-                                    "comment": dayWorkEditController.commendController.value.text,
-                                    "materials": dayWorkEditController.materialUsedController.value.text,
-                                    "location": dayWorkEditController.locationController.value.text,
+                                    "name": dayEmployeeWorkEditController.nameController.value.text,
+                                    "project": dayEmployeeWorkEditController.getEmployeeProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "description": dayEmployeeWorkEditController.descriptionController.value.text,
+                                    "date": dayEmployeeWorkEditController.dateTimeController.value.text,
+                                    "weather_condition": dayEmployeeWorkEditController.weatherConditionController.value.text,
+                                    "duration": dayEmployeeWorkEditController.delayController.value.text,
+                                    "materials": dayEmployeeWorkEditController.materialUsedController.value.text,
+                                    "location": dayEmployeeWorkEditController.locationController.value.text,
                                   };
                                   print(jsonEncode(payload));
                                   //Get.off(()=>DashboardView(index: 0),preventDuplicates: false);
-                                  await dayWorkEditController.updateSiteDiaryController(
+                                  await dayEmployeeWorkEditController.updateSiteDiaryController(
                                     payload: payload,
-                                    image: dayWorkEditController.selectedImage.value,
+                                    image: dayEmployeeWorkEditController.selectedImage.value,
                                     projectId: projectId,
                                     dayWorkId: dayWorkId
                                   );
@@ -196,7 +196,7 @@ class DayWorkEditView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.off(()=>DayWorkDetailsView(projectId: projectId, dayWorkId: dayWorkId,),preventDuplicates: false);
+                                Get.off(()=>DayEmployeeWorkDetailsView(projectId: projectId, dayWorkId: dayWorkId,),preventDuplicates: false);
                               },
                             ),
                           ),

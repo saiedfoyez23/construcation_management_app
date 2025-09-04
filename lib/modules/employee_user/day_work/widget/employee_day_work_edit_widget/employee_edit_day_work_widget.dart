@@ -1,12 +1,13 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/day_work/controller/new_day_work_controller.dart';
+import 'package:construction_management_app/modules/employee_user/day_work/controller/day_employee_work_edit_controller.dart';
 import 'package:flutter/material.dart';
 
-class NewAddDayWorkWidget {
+class EmployeeEditDayWorkWidget {
 
-  static Widget newDayWorkProjectSelectionAndDescriptionBuilder({
+
+  static Widget employeeProjectSelectionAndDescriptionBuilder({
     required BuildContext context,
-    required NewDayWorkController controller,
+    required DayEmployeeWorkEditController controller,
   }) {
     return Container(
       width: 375.w(context),
@@ -22,11 +23,43 @@ class NewAddDayWorkWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // TextHelperClass.headingText(
+          //   context: context,
+          //   text: "Project Select",
+          //   fontSize: 17,
+          //   textColor: AppColors.black65,
+          //   fontWeight: FontWeight.w700,
+          // ),
+          //
+          // SpaceHelperClass.v(8.h(context)),
+          //
+          // CustomDropdownHelperClass<GetAllProject>(
+          //   value: controller.selectSingleProject.value.name == null ? null : controller.selectSingleProject.value,
+          //   items: controller.getAllProjectResponseModel.value.data!.data!.toList(),
+          //   onChanged: (value) async {
+          //     controller.selectSingleProject.value = value!;
+          //     controller.isLoading.value = true;
+          //     await controller.getProjectDetailsController(projectId: controller.selectSingleProject.value.sId);
+          //     await controller.getAllWorkforceController(projectId: controller.selectSingleProject.value.sId);
+          //     await controller.getAllEquipmentsController(projectId:  controller.selectSingleProject.value.sId);
+          //   },
+          //   itemBuilder: (value) {
+          //     return TextHelperClass.headingText(
+          //       context: context,
+          //       text: value.name,
+          //       fontSize: 20.sp(context),
+          //       textColor: AppColors.black,
+          //       fontWeight: FontWeight.w700,
+          //     );
+          //   },
+          //   hintText: "Select project",
+          // ),
+
           SpaceHelperClass.v(16.h(context)),
 
           TextHelperClass.headingText(
             context: context,
-            text: "Day work name",
+            text: "Site diary name",
             fontSize: 17,
             textColor: AppColors.black65,
             fontWeight: FontWeight.w700,
@@ -61,8 +94,8 @@ class NewAddDayWorkWidget {
 
           TextHelperClass.headingText(
             context: context,
-            text: controller.getProjectDetailsResponseModel.value.data == null ? "" :
-            controller.getProjectDetailsResponseModel.value.data?.participants?.first.participants?.where((element)=> element.user?.type == "supervisor").first.user?.name,
+            text: controller.getEmployeeProjectDetailsResponseModel.value.data == null ? "" :
+            controller.getEmployeeProjectDetailsResponseModel.value.data?.participants?.first.participants?.where((element)=> element.user?.type == "supervisor").first.user?.name,
             fontSize: 15,
             textColor: AppColors.black38,
             fontWeight: FontWeight.w500,
@@ -243,8 +276,4 @@ class NewAddDayWorkWidget {
     );
   }
 
-
-
 }
-
-

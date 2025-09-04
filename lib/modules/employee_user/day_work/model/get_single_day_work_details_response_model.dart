@@ -1,14 +1,14 @@
-class GetSingleDayWorkDetailsResponseModel {
+class GetEmployeeSingleDayWorkDetailsResponseModel {
   var success;
   var message;
-  GetSingleDayWorkDetailsResponse? data;
+  GetEmployeeSingleDayWorkDetailsResponse? data;
 
-  GetSingleDayWorkDetailsResponseModel({this.success, this.message, this.data});
+  GetEmployeeSingleDayWorkDetailsResponseModel({this.success, this.message, this.data});
 
-  GetSingleDayWorkDetailsResponseModel.fromJson(Map<String, dynamic> json) {
+  GetEmployeeSingleDayWorkDetailsResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? new GetSingleDayWorkDetailsResponse.fromJson(json['data']) : null;
+    data = json['data'] != null ? new GetEmployeeSingleDayWorkDetailsResponse.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,7 +22,7 @@ class GetSingleDayWorkDetailsResponseModel {
   }
 }
 
-class GetSingleDayWorkDetailsResponse {
+class GetEmployeeSingleDayWorkDetailsResponse {
   var sId;
   AddedBy? addedBy;
   var name;
@@ -40,7 +40,7 @@ class GetSingleDayWorkDetailsResponse {
   var iV;
   var comment;
 
-  GetSingleDayWorkDetailsResponse({
+  GetEmployeeSingleDayWorkDetailsResponse({
     this.sId,
     this.addedBy,
     this.name,
@@ -59,7 +59,7 @@ class GetSingleDayWorkDetailsResponse {
     this.comment
   });
 
-  GetSingleDayWorkDetailsResponse.fromJson(Map<String, dynamic> json) {
+  GetEmployeeSingleDayWorkDetailsResponse.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     addedBy = json['added_by'] != null
         ? new AddedBy.fromJson(json['added_by'])

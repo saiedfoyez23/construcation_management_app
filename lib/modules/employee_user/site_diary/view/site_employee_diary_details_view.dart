@@ -254,7 +254,7 @@ class SiteEmployeeDiaryDetailsView extends StatelessWidget {
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "${getEmployeeSiteDiaryDetailsController.getEmployeeSingleSiteDiaryDetailsResponseModel.value.data?.comment}",
+                              text: "${getEmployeeSiteDiaryDetailsController.getEmployeeSingleSiteDiaryDetailsResponseModel.value.data?.comment ?? ""}",
                               fontSize: 15,
                               textColor: Color.fromRGBO(75, 85, 99, 1), // White text
                               fontWeight: FontWeight.w500,
