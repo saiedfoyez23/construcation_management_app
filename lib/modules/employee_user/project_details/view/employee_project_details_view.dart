@@ -3,6 +3,7 @@ import 'package:construction_management_app/modules/employee_user/calculator_too
 import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
 import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_view.dart';
 import 'package:construction_management_app/modules/employee_user/folder/view/employee_folder_view.dart';
+import 'package:construction_management_app/modules/employee_user/planning/view/employee_planing_view.dart';
 import 'package:construction_management_app/modules/employee_user/project_details/controller/employee_project_view_controller.dart';
 import 'package:construction_management_app/modules/employee_user/resources/view/employee_resources_view.dart';
 import 'package:construction_management_app/modules/employee_user/site_diary/view/site_employee_diary_view.dart';
@@ -435,7 +436,7 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.planningBlackIcon,
                             text: "Planning",
                             onTap: () {
-                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                              Get.off(()=>EmployeePlaningView(projectId: projectId), preventDuplicates: false);
                             },
                           ),
 

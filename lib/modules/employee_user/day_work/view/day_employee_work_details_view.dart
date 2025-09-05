@@ -245,13 +245,12 @@ class DayEmployeeWorkDetailsView extends StatelessWidget {
                                 children: [
                                   ImageHelperClass.customImageContainer(
                                     context: context,
-                                    height: 20.h(context),
-                                    width: 20.w(context),
-                                    imagePath: AppImages.delay,
-                                    imageFit: BoxFit.contain,
+                                    height: 25.h(context),
+                                    width: 25.w(context),
+                                    imagePath: AppImages.messageSendIcon,
                                     fit: BoxFit.cover,
+                                    imageFit: BoxFit.contain,
                                   ),
-
 
                                   SpaceHelperClass.h(12.w(context)),
 
@@ -259,7 +258,7 @@ class DayEmployeeWorkDetailsView extends StatelessWidget {
                                   Expanded(
                                     child: TextHelperClass.headingText(
                                       context: context,
-                                      text: "Delay",
+                                      text: "Comment",
                                       fontSize: 18,
                                       textColor: Color.fromRGBO(31, 41, 55, 1), // White text
                                       fontWeight: FontWeight.w500,
@@ -274,7 +273,7 @@ class DayEmployeeWorkDetailsView extends StatelessWidget {
 
                               TextHelperClass.headingText(
                                 context: context,
-                                text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.duration}",
+                                text: "${getEmployeeDayWorkDetailsController.getEmployeeSingleDayWorkDetailsResponseModel.value.data?.comment ?? ""}",
                                 fontSize: 15,
                                 textColor: Color.fromRGBO(75, 85, 99, 1), // White text
                                 fontWeight: FontWeight.w500,
