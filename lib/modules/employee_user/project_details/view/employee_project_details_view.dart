@@ -305,7 +305,9 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                                               ),
                                               TextHelperClass.headingText(
                                                 context: context,
-                                                text: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.participants![0].participants![index].user?.type ?? "",
+                                                text: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.participants![0].participants![index].userType == "CompanyAdmin" ?
+                                                employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.participants![0].participants![index].userType :
+                                                employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.participants![0].participants![index].user?.type,
                                                 fontSize: 15,
                                                 textColor: Color.fromRGBO(107, 114, 128, 1),
                                                 fontWeight: FontWeight.w500,
@@ -314,17 +316,6 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                                           ),
                                         ),
 
-                                        SpaceHelperClass.h(4.w(context)),
-
-                                        ImageHelperClass.customImageButtonContainer(
-                                          onPressed: () async {},
-                                          context: context,
-                                          height: 42.h(context),
-                                          width: 42.w(context),
-                                          imagePath: AppImages.messageSendIcon,
-                                          fit: BoxFit.cover,
-                                          imageFit: BoxFit.contain,
-                                        ),
                                       ],
                                     ),
                                   );

@@ -4,6 +4,7 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/planning/view/employee_planing_view.dart';
 import 'package:construction_management_app/modules/employee_user/project_details/model/get_employee_project_details_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_equipments_response_model.dart';
 import 'package:construction_management_app/modules/employee_user/resources/model/get_employee_all_workforces_response_model.dart';
@@ -22,6 +23,12 @@ class EmployeeNewPlaningController extends GetxController {
   Rx<TextEditingController> dueDateController = TextEditingController().obs;
   Rx<TextEditingController> dueTimeController = TextEditingController().obs;
 
+  Rx<TextEditingController> taskNameController = TextEditingController().obs;
+  Rx<TextEditingController> workforceQuantityController = TextEditingController().obs;
+  Rx<TextEditingController> workForceDurationController = TextEditingController().obs;
+  Rx<TextEditingController> equipmentQuantityController = TextEditingController().obs;
+  Rx<TextEditingController> equipmentDurationController = TextEditingController().obs;
+
   RxList<EmployeePlaningWorkforce> workforceList = <EmployeePlaningWorkforce>[].obs;
   RxList<EmployeePlaningEquipment> equipmentList = <EmployeePlaningEquipment>[].obs;
   RxList<EmployeePlaningTask> taskList = <EmployeePlaningTask>[].obs;
@@ -36,7 +43,7 @@ class EmployeeNewPlaningController extends GetxController {
   Rx<GetEmployeeAllWorkforcesResponse> selectedWorkforces = GetEmployeeAllWorkforcesResponse().obs;
   Rx<GetEmployeeAllWorkforcesResponseModel> getEmployeeAllWorkforcesResponseModel = GetEmployeeAllWorkforcesResponseModel().obs;
 
-  Future<void> pickDateTime(BuildContext context) async {
+  Future<void> pickDateTime({required BuildContext context}) async {
     // Pick Date
     final DateTime? pick = await showDatePicker(
       context: context,
@@ -65,7 +72,7 @@ class EmployeeNewPlaningController extends GetxController {
     );
 
     date.value = dateTime;
-    dueDateController.value.text = DateFormat("MMM d, y  h:mm a").format(dateTime);
+    dueDateController.value.text = DateFormat("MMM d, y").format(dateTime);
     dueTimeController.value.text = DateFormat("h:mm a").format(dateTime);
   }
 
@@ -162,6 +169,40 @@ class EmployeeNewPlaningController extends GetxController {
       kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
     } finally {
       isLoading(false);
+    }
+  }
+
+
+  Future<void> createPlanController({required Map<String,dynamic> data}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.postRequest(
+          api: "${Api.createPlans}",
+          headers: headers,
+          body: jsonEncode(data),
+        ),
+      );
+
+      if (responseBody != null) {
+        String successMessage = responseBody['message'];
+        kSnackBar(message: successMessage, bgColor: AppColors.green);
+        Get.off(()=>EmployeePlaningView(projectId: projectId),preventDuplicates: false);
+      } else {
+        throw "Data send is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data send is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isSubmit(false);
     }
   }
 

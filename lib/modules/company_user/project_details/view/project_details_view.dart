@@ -2,6 +2,7 @@ import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/calculator_tools/view/calculator_view.dart';
 import 'package:construction_management_app/modules/company_user/day_work/view/day_work_view.dart';
 import 'package:construction_management_app/modules/company_user/folder/view/folder_view.dart';
+import 'package:construction_management_app/modules/company_user/planning/view/planing_view.dart';
 import 'package:construction_management_app/modules/company_user/project_details/controller/project_view_controller.dart';
 import 'package:construction_management_app/modules/company_user/resources/view/resources_view.dart';
 import 'package:construction_management_app/modules/company_user/site_diary/view/site_diary_view.dart';
@@ -423,7 +424,7 @@ class ProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.planningBlackIcon,
                             text: "Planning",
                             onTap: () {
-                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                              Get.off(()=>PlaningView(projectId: projectId), preventDuplicates: false);
                             },
                           ),
 

@@ -9,9 +9,8 @@ import 'package:construction_management_app/modules/company_user/check_list/view
 import 'package:construction_management_app/modules/company_user/check_list/view/widget/project_detalis_checklist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../message/view/group_message.dart';
-import '../../tomorrow_task/view/project_detalis_planning.dart';
+
 
 class ProjectDetalisChecklist extends StatefulWidget {
   const ProjectDetalisChecklist({super.key});
@@ -223,17 +222,17 @@ class _ProjectDetalisChecklistState extends State<ProjectDetalisChecklist> {
                     //     ),
                     //   ),
                     // ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProjectDetalisPlanningScreen());
-                        },
-                        child: ProjectDetalisChecklistCard(
-                          image: AppImages.planning,
-                          name: "Planning",
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(() => ProjectDetalisPlanningScreen());
+                    //     },
+                    //     child: ProjectDetalisChecklistCard(
+                    //       image: AppImages.planning,
+                    //       name: "Planning",
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 8),
