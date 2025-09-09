@@ -52,6 +52,7 @@ class CalculatorView extends StatelessWidget {
                     color: Color.fromRGBO(255, 255, 255, 1),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 16.vpm(context),horizontal: 16.hpm(context)),
+                  margin: EdgeInsets.only(top: 16.tpm(context)),
                   child: ListView.builder(
                     itemCount: calculators.length,
                     itemBuilder: (context, index) {

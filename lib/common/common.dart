@@ -10,5 +10,6 @@ export 'screen_utils/responsive_utils.dart';
 export 'custom_widget/custom_button_helper.dart';
 export 'custom_mime_type/costom_mime_type.dart';
 export 'custom_widget/custom_loader.dart';
+export 'custom_widget/report_info_helper.dart';
 export 'app_color/app_color.dart';
 export 'app_images/app_images.dart';

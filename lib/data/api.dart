@@ -88,4 +88,11 @@ class Api {
   static const addTaskPlaning = "$baseUrl/plans"; // done
   static const updatePlaning = "$baseUrl/plans"; // done
 
+  ///check sheet
+  static const getDuctingReports = "$baseUrl/ducting-reports"; // done
+  static const getExcavationReports = "$baseUrl/excavation-reports"; // done
+  static const getPostPourInspectionReports = "$baseUrl/post-pour-inspection-reports"; // done
+  static const postPostPourInspectionReports = "$baseUrl/post-pour-inspection-reports"; // done
+  static const postExcavationHardcoreStoneFillReport = "$baseUrl/excavation-reports"; // done
+
 }

@@ -22,7 +22,7 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
   final double borderWidth;
 
   const CustomDropdownHelperClass({
-    Key? key,
+    super.key,
     required this.value,
     required this.items,
     required this.onChanged,
@@ -41,7 +41,7 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
     this.borderColor = const Color.fromRGBO(229, 231, 235, 1),
     this.borderRadius = 8,
     this.borderWidth = 1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

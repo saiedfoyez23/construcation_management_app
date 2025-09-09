@@ -1,6 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/planning/controller/get_planing_controller.dart';
-import 'package:construction_management_app/modules/company_user/planning/view/employee_planning_details_view.dart';
+import 'package:construction_management_app/modules/company_user/planning/view/planning_details_view.dart';
 import 'package:construction_management_app/modules/company_user/project_details/view/project_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
