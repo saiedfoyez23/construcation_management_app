@@ -94,5 +94,6 @@ class Api {
   static const getPostPourInspectionReports = "$baseUrl/post-pour-inspection-reports"; // done
   static const postPostPourInspectionReports = "$baseUrl/post-pour-inspection-reports"; // done
   static const postExcavationHardcoreStoneFillReport = "$baseUrl/excavation-reports"; // done
+  static const postDrainageDuctingReport = "$baseUrl/ducting-reports"; // done
 
 }

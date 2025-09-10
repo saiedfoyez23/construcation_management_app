@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/excavation_hardcore_store_file_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/controller/drainage_ducting_report_controller.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_drainage_ducting_report_controller.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/widget/post_pour_Inspection_report_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,15 +12,14 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
-class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
-  ExcavationHardcoreStoreFileReportView({super.key,required this.projectId});
-
+class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
+  EditDrainageDuctingReportThirdPageView({super.key,required this.projectId});
   final String projectId;
-  final ExcavationHardcoreStoreFileReportController excavationHardcoreStoreFileReportController = Get.put(ExcavationHardcoreStoreFileReportController());
 
 
   @override
   Widget build(BuildContext context) {
+    EditDrainageDuctingReportController editDrainageDuctingReportController = Get.put(EditDrainageDuctingReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Obx(()=>Container(
@@ -32,99 +31,13 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
 
-
-              CustomAppBarHelper.normalAppBar(
-                context: context,
-                height: 80,
-                onBackPressed: () {
-                  Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
-                },
-                title: "Excavation / Hardcore / Stone Fill Report",
-              ),
-
-
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
                   child: Column(
                     children: [
-
-
-
                       SpaceHelperClass.v(24.h(context)),
 
-                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
-                        context: context,
-                        controller: excavationHardcoreStoreFileReportController.contractController.value,
-                        label: "Contract : ",
-                        hintText: "Enter contract number",
-                      ),
-
-                      SpaceHelperClass.v(12.h(context)),
-
-
-                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
-                        context: context,
-                        readOnly: true,
-                        controller: excavationHardcoreStoreFileReportController.dateController.value,
-                        label: "Date : ",
-                        hintText: "Enter date",
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8.vpm(context),
-                            horizontal: 16.hpm(context),
-                          ),
-                          child: ImageHelperClass.customImageContainer(
-                            context: context,
-                            height: 24.h(context),
-                            width: 24.w(context),
-                            imagePath: AppImages.addSiteDiary,
-                            imageFit: BoxFit.contain,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        onTap: () async {
-                          DateTime? picked = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (picked != null) {
-                            excavationHardcoreStoreFileReportController.dateController.value.text = picked.toLocal().toString();
-                          }
-                        },
-                      ),
-
-                      SpaceHelperClass.v(12.h(context)),
-
-                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
-                        context: context,
-                        controller: excavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value,
-                        label: "Drawing Reference Incl Revision : ",
-                        hintText: "Enter drawing reference",
-                      ),
-
-                      SpaceHelperClass.v(12.h(context)),
-
-
-                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
-                        context: context,
-                        controller: excavationHardcoreStoreFileReportController.revisionController.value,
-                        label: "Revision : ",
-                        hintText: "Enter revision reference",
-                      ),
-
-                      SpaceHelperClass.v(12.h(context)),
-
-                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
-                        context: context,
-                        controller: excavationHardcoreStoreFileReportController.locationController.value,
-                        label: "Location of work : ",
-                        hintText: "Enter work  location",
-                      ),
-
-                      SpaceHelperClass.v(12.h(context)),
-
 
                       Container(
                         width: 375.w(context),
@@ -148,7 +61,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Completion Status : ",
+                              text: "Pipe haunching / surrounding: ",
                               fontSize: 20,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w700,
@@ -161,75 +74,12 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: excavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ? null : excavationHardcoreStoreFileReportController.selectCompletionStatus.value,
-                              items: ['in-process','completed','not-completed'],
-                              onChanged: (value) async {
-                                excavationHardcoreStoreFileReportController.selectCompletionStatus.value = value!;
-                              },
-                              hintText: "Select Completion Status",
-                            ),
-
-
-                          ],
-                        ),
-                      ),
-
-
-
-                      SpaceHelperClass.v(12.h(context)),
-
-
-                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
-                        context: context,
-                        controller: excavationHardcoreStoreFileReportController.subContractorController.value,
-                        label: "Sub-Contractor : ",
-                        hintText: "Enter sub-contractor",
-                      ),
-
-                      SpaceHelperClass.v(12.h(context)),
-
-
-                      Container(
-                        width: 375.w(context),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12.hpm(context),
-                          vertical: 12.vpm(context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.r(context)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromRGBO(4, 6, 15, 0.05),
-                              blurRadius: 60,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Compliance Check : ",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-                            SpaceHelperClass.v(8.h(context)),
-
-                            CustomDropdownHelperClass<String>(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.hpm(context),
-                                vertical: 8.vpm(context),
-                              ),
-                              value: excavationHardcoreStoreFileReportController.selectComplianceCheck.value == "" ? null : excavationHardcoreStoreFileReportController.selectComplianceCheck.value,
+                              value: editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ? null : editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                excavationHardcoreStoreFileReportController.selectComplianceCheck.value = value!;
+                                editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value = value!;
                               },
-                              hintText: "Select Compliance Check",
+                              hintText: "Select Pipe haunching / surrounding",
                             ),
 
 
@@ -237,6 +87,56 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                         ),
                       ),
 
+                      SpaceHelperClass.v(12.h(context)),
+
+
+                      Container(
+                        width: 375.w(context),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.hpm(context),
+                          vertical: 12.vpm(context),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r(context)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(4, 6, 15, 0.05),
+                              blurRadius: 60,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Compaction : ",
+                              fontSize: 20,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w700,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: editDrainageDuctingReportController.selectCompaction.value == "" ? null : editDrainageDuctingReportController.selectCompaction.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                editDrainageDuctingReportController.selectCompaction.value = value!;
+                              },
+                              hintText: "Select Compaction",
+                            ),
+
+
+                          ],
+                        ),
+                      ),
 
 
                       SpaceHelperClass.v(12.h(context)),
@@ -264,7 +164,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Check for Underground Services : ",
+                              text: "Backfill : ",
                               fontSize: 20,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w700,
@@ -277,12 +177,12 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == "" ? null : excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value,
+                              value: editDrainageDuctingReportController.selectBackfill.value == "" ? null : editDrainageDuctingReportController.selectBackfill.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value = value!;
+                                editDrainageDuctingReportController.selectBackfill.value = value!;
                               },
-                              hintText: "Select Underground Services",
+                              hintText: "Select Backfill",
                             ),
 
 
@@ -293,14 +193,178 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                       SpaceHelperClass.v(12.h(context)),
 
+
+                      Container(
+                        width: 375.w(context),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.hpm(context),
+                          vertical: 12.vpm(context),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r(context)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(4, 6, 15, 0.05),
+                              blurRadius: 60,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Thickness : ",
+                              fontSize: 20,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w700,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: editDrainageDuctingReportController.selectThickness.value == "" ? null : editDrainageDuctingReportController.selectThickness.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                editDrainageDuctingReportController.selectThickness.value = value!;
+                              },
+                              hintText: "Select Thickness",
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
+                      SpaceHelperClass.v(12.h(context)),
+
+
+                      Container(
+                        width: 375.w(context),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.hpm(context),
+                          vertical: 12.vpm(context),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r(context)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(4, 6, 15, 0.05),
+                              blurRadius: 60,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Type : ",
+                              fontSize: 20,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w700,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: editDrainageDuctingReportController.selectType.value == "" ? null : editDrainageDuctingReportController.selectType.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                editDrainageDuctingReportController.selectType.value = value!;
+                              },
+                              hintText: "Select Thickness",
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
+
+                      SpaceHelperClass.v(12.h(context)),
+
+
+                      Container(
+                        width: 375.w(context),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.hpm(context),
+                          vertical: 12.vpm(context),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r(context)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(4, 6, 15, 0.05),
+                              blurRadius: 60,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Marker tape : ",
+                              fontSize: 20,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w700,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: editDrainageDuctingReportController.selectMakerTape.value == "" ? null : editDrainageDuctingReportController.selectMakerTape.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                editDrainageDuctingReportController.selectMakerTape.value = value!;
+                              },
+                              hintText: "Select Maker Tape",
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
+                      SpaceHelperClass.v(12.h(context)),
+
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.commentController.value,
+                        controller: editDrainageDuctingReportController.installByController.value,
+                        label: "Install By : ",
+                        hintText: "Enter Name",
+                      ),
+
+
+                      SpaceHelperClass.v(12.h(context)),
+
+                      PostPourInspectionReportWidget().postPourInspectionReportWidget(
+                        context: context,
+                        controller: editDrainageDuctingReportController.commentController.value,
                         label: "Write Comment : ",
                         hintText: "Add additional comments...",
                       ),
 
-                      SpaceHelperClass.v(12.h(context)),
+                      SpaceHelperClass.v(14.h(context)),
 
 
                       Container(
@@ -324,6 +388,22 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                             SpaceHelperClass.v(14.h(context)),
 
+
+                            editDrainageDuctingReportController.signedOnCompletion.value.path == "" ?
+                            SizedBox.shrink() :
+                            ImageHelperClass.customFileImageContainer(
+                              context: context,
+                              imageFit: BoxFit.contain,
+                              fit: BoxFit.contain,
+                              height: 150.h(context),
+                              width: 375.w(context),
+                              imagePath: editDrainageDuctingReportController.signedOnCompletion.value,
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
                             // Signature area with color options
                             Container(
                               height: 150.h(context),
@@ -332,7 +412,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: excavationHardcoreStoreFileReportController.signedOnCompletionController.value,
+                                controller: editDrainageDuctingReportController.signedOnCompletionController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -356,7 +436,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      excavationHardcoreStoreFileReportController.clearSignedOnCompletion();
+                                      editDrainageDuctingReportController.clearSignedOnCompletion();
                                     },
                                   ),
                                 ),
@@ -376,13 +456,13 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await excavationHardcoreStoreFileReportController.signedOnCompletionController.value.toPngBytes();
+                                      Uint8List? data = await editDrainageDuctingReportController.signedOnCompletionController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        excavationHardcoreStoreFileReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
-                                        await excavationHardcoreStoreFileReportController.signedOnCompletion.value.writeAsBytes(data);
-                                        print("Saved at: ${excavationHardcoreStoreFileReportController.signedOnCompletion.value.path}");
-                                        final result = await OpenFile.open(excavationHardcoreStoreFileReportController.signedOnCompletion.value.path);
+                                        editDrainageDuctingReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
+                                        await editDrainageDuctingReportController.signedOnCompletion.value.writeAsBytes(data);
+                                        print("Saved at: ${editDrainageDuctingReportController.signedOnCompletion.value.path}");
+                                        final result = await OpenFile.open(editDrainageDuctingReportController.signedOnCompletion.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -407,7 +487,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
 
 
-                      SpaceHelperClass.v(12.h(context)),
+                      SpaceHelperClass.v(14.h(context)),
 
 
                       Container(
@@ -431,6 +511,20 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                             SpaceHelperClass.v(14.h(context)),
 
+                            editDrainageDuctingReportController.clientApproved.value.path == "" ?
+                            SizedBox.shrink() :
+                            ImageHelperClass.customFileImageContainer(
+                              context: context,
+                              imageFit: BoxFit.contain,
+                              fit: BoxFit.contain,
+                              height: 150.h(context),
+                              width: 375.w(context),
+                              imagePath: editDrainageDuctingReportController.clientApproved.value,
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
                             // Signature area with color options
                             Container(
                               height: 150.h(context),
@@ -439,7 +533,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: excavationHardcoreStoreFileReportController.clientApprovedController.value,
+                                controller: editDrainageDuctingReportController.clientApprovedController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -463,7 +557,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      excavationHardcoreStoreFileReportController.clearClientApproved();
+                                      editDrainageDuctingReportController.clearClientApproved();
                                     },
                                   ),
                                 ),
@@ -483,13 +577,13 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await excavationHardcoreStoreFileReportController.clientApprovedController.value.toPngBytes();
+                                      Uint8List? data = await editDrainageDuctingReportController.clientApprovedController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        excavationHardcoreStoreFileReportController.clientApproved.value = File('${directory.path}/client_signature.png');
-                                        await excavationHardcoreStoreFileReportController.clientApproved.value.writeAsBytes(data);
-                                        print("Saved at: ${excavationHardcoreStoreFileReportController.clientApproved.value.path}");
-                                        final result = await OpenFile.open(excavationHardcoreStoreFileReportController.clientApproved.value.path);
+                                        editDrainageDuctingReportController.clientApproved.value = File('${directory.path}/client_signature.png');
+                                        await editDrainageDuctingReportController.clientApproved.value.writeAsBytes(data);
+                                        print("Saved at: ${editDrainageDuctingReportController.clientApproved.value.path}");
+                                        final result = await OpenFile.open(editDrainageDuctingReportController.clientApproved.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -502,6 +596,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                                 SpaceHelperClass.h(12.w(context)),
 
+
+
+
+
                               ],
                             ),
                           ],
@@ -509,10 +607,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                       ),
 
 
+
                       SpaceHelperClass.v(35.h(context)),
 
-
-                      excavationHardcoreStoreFileReportController.isSubmit.value == true ?
+                      editDrainageDuctingReportController.isSubmit.value == true ?
                       CustomLoaderButton().customLoaderButton(
                         backgroundColor: Colors.transparent,
                         loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -528,43 +626,56 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                         borderRadius: 8,
                         backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                         onPressed: () async {
-                          if(excavationHardcoreStoreFileReportController.contractController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.dateController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.revisionController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.locationController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ||
-                              excavationHardcoreStoreFileReportController.subContractorController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.selectComplianceCheck.value == "" ||
-                              excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == ""
+                          if(editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ||
+                              editDrainageDuctingReportController.selectCompaction.value == "" ||
+                              editDrainageDuctingReportController.selectBackfill.value == "" ||
+                              editDrainageDuctingReportController.selectThickness.value == "" ||
+                              editDrainageDuctingReportController.selectType.value == "" ||
+                              editDrainageDuctingReportController.selectMakerTape.value == "" ||
+                              editDrainageDuctingReportController.installByController.value.text == ""
                           ) {
                             kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
-                          } else if(excavationHardcoreStoreFileReportController.signedOnCompletion.value.path == "") {
+                          } else if(editDrainageDuctingReportController.signedOnCompletion.value.path == "") {
                             kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
-                          } else if(excavationHardcoreStoreFileReportController.clientApproved.value.path == "") {
+                          } else if(editDrainageDuctingReportController.clientApproved.value.path == "") {
                             kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
                           } else {
                             Map<String,dynamic> payload = {
                               "project": projectId,
-                              "contract": excavationHardcoreStoreFileReportController.contractController.value.text,
-                              "date": excavationHardcoreStoreFileReportController.dateController.value.text,
-                              "drawing_reference_incl_revision":  excavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value.text,
-                              "revision": excavationHardcoreStoreFileReportController.revisionController.value.text,
-                              "location_of_work": excavationHardcoreStoreFileReportController.locationController.value.text,
-                              "completion_status": excavationHardcoreStoreFileReportController.selectCompletionStatus.value,
-                              "sub_contractor": excavationHardcoreStoreFileReportController.subContractorController.value.text,
-                              "compliance_check": excavationHardcoreStoreFileReportController.selectComplianceCheck.value == "Yes" ? true : false,
-                              "check_for_underground_services": excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == "Yes" ? true : false,
-                              "comment": excavationHardcoreStoreFileReportController.commentController.value.text,
+                              "contract": editDrainageDuctingReportController.contractController.value.text,
+                              "date": editDrainageDuctingReportController.dateController.value.text,
+                              "drawing_reference_incl_revision": editDrainageDuctingReportController.drawingReferenceInclRevisionController.value.text,
+                              "location_of_work": editDrainageDuctingReportController.locationController.value.text,
+                              "completion_status": editDrainageDuctingReportController.selectCompletionStatus.value,
+                              "sub_contractor": editDrainageDuctingReportController.subContractorController.value.text,
+                              "bed_type_and_thickness": editDrainageDuctingReportController.selectBedTypeAndThickness.value == "Yes" ? true : false,
+                              "installation_pipe_type": editDrainageDuctingReportController.pipeTypeController.value.text,
+                              "line": editDrainageDuctingReportController.selectLine.value == "Yes" ? true : false,
+                              "level": editDrainageDuctingReportController.selectLevel.value == "Yes" ? true : false,
+                              "position": editDrainageDuctingReportController.selectPosition.value == "Yes" ? true : false,
+                              "gradient": editDrainageDuctingReportController.selectGradient.value == "Yes" ? true : false,
+                              "pop_up_dealed_off": editDrainageDuctingReportController.selectPopUpDealedOff.value == "Yes" ? true : false,
+                              "test_air_water_cctv_mandrill": editDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "Yes" ? true : false,
+                              "test_certificate_reference": editDrainageDuctingReportController.testCertificateReferenceController.value.text,
+                              "pipe_haunching_surrounding": editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "Yes" ? true : false,
+                              "pipe_type": editDrainageDuctingReportController.pipeTypeController.value.text,
+                              "compaction": editDrainageDuctingReportController.selectCompaction.value == "Yes" ? true : false,
+                              "backfill": editDrainageDuctingReportController.selectBackfill.value == "Yes" ? true : false,
+                              "thickness": editDrainageDuctingReportController.selectThickness.value == "Yes" ? true : false,
+                              "type": editDrainageDuctingReportController.selectType.value == "Yes" ? true : false,
+                              "marker_tape": editDrainageDuctingReportController.selectMakerTape.value == "Yes" ? true : false,
+                              "install_by": editDrainageDuctingReportController.installByController.value.text,
+                              "comment": editDrainageDuctingReportController.commentController.value.text,
                             };
                             print(jsonEncode(payload));
-                            excavationHardcoreStoreFileReportController.isSubmit.value = true;
-                            await excavationHardcoreStoreFileReportController.createExcavationHardcoreStoreFileReportController(
+
+                            editDrainageDuctingReportController.isSubmit.value = true;
+                            await editDrainageDuctingReportController.editDrainageDuctingReportController(
                               payload: payload,
+                              clientApprovedSignature: editDrainageDuctingReportController.clientApproved.value,
+                              signedOnCompletionSignature: editDrainageDuctingReportController.signedOnCompletion.value,
                               projectId: projectId,
-                              clientApprovedSignature: excavationHardcoreStoreFileReportController.clientApproved.value,
-                              signedOnCompletionSignature: excavationHardcoreStoreFileReportController.signedOnCompletion.value,
-                            );  // excavationHardcoreStoreFileReportController.isSubmit.value = true;
+                            );
                           }
 
                         },
@@ -572,11 +683,6 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
 
                       SpaceHelperClass.v(35.h(context)),
-
-
-
-
-
 
 
                     ],

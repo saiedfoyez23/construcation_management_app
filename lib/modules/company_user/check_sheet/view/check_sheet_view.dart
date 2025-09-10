@@ -1,5 +1,8 @@
 import 'package:construction_management_app/modules/company_user/check_sheet/controller/check_sheet_view_controller.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/create_view/drainage_ducting_report_first_page_view.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/get_view/drainage_ducting_report_get_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/excavation_hardcore_stone_file_report/create_view/excavation_hardcore_store_file_report_view.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/excavation_hardcore_stone_file_report/get_view/excavation_hardcore_store_file_report_get_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/create_view/post_pour_inspection_report_first_page_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/get_view/post_pour_inspection_report_get_view.dart';
 import 'package:construction_management_app/modules/company_user/project_details/view/project_details_view.dart';
@@ -65,11 +68,11 @@ class CheckSheetView extends StatelessWidget {
                       return InkWell(
                         onTap: () async {
                           if(checkSheetViewController.isDuctingReports.value == true && index == 0) {
-                            //Get.off(()=>ConcreteVolumeCalculatorView(projectId: projectId,),preventDuplicates: false);
+                            Get.off(()=>DrainageDuctingReportGetView(projectId: projectId),preventDuplicates: false);
                           } else if(checkSheetViewController.isDuctingReports.value == false && index == 0) {
-
+                            Get.off(()=>DrainageDuctingReportFirstPageView(projectId: projectId),preventDuplicates: false);
                           } else if(checkSheetViewController.isExcavationReports.value == true && index == 1) {
-                            //Get.off(()=>StoneCalculatorView(projectId: projectId),preventDuplicates: false);
+                            Get.off(()=>ExcavationHardcoreStoreFileReportGetView(projectId: projectId),preventDuplicates: false);
                           } else if(checkSheetViewController.isExcavationReports.value == false && index == 1) {
                             Get.off(()=>ExcavationHardcoreStoreFileReportView(projectId: projectId),preventDuplicates: false);
                           } else if(checkSheetViewController.isPostPourInspectionReports.value == true && index == 2) {

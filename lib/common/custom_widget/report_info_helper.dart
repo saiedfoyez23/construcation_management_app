@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../common.dart';
 
 class ReportInfoHelper {
@@ -15,7 +14,7 @@ class ReportInfoHelper {
     FontWeight labelFontWeight = FontWeight.w500,
     FontWeight valueFontWeight = FontWeight.w500,
     double horizontalSpace = 7,
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
   }) {
     return Row(

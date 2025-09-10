@@ -1,28 +1,29 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/get_post_pour_inspection_report_controller.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_drainage_ducting_report_controller.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/controller/get_drainage_ducting_report_controller.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_first_page_view.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/edit_view/edit_drainage_ducting_report_first_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PostPourInspectionReportGetView extends StatelessWidget {
-  PostPourInspectionReportGetView({super.key,required this.projectId});
+
+class DrainageDuctingReportGetView extends StatelessWidget {
+  DrainageDuctingReportGetView({super.key,required this.projectId});
+
   final String projectId;
-
-
   @override
   Widget build(BuildContext context) {
-    GetPostPourInspectionReportController getPostPourInspectionReportController = Get.put(GetPostPourInspectionReportController(projectId: projectId));
+    GetDrainageDuctingReportController getDrainageDuctingReportController = Get.put(GetDrainageDuctingReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
-        child: Container(
+        child: Obx(()=>Container(
           height: 812.h(context),
           width: 375.w(context),
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: Obx(()=>getPostPourInspectionReportController.isLoading.value == true  ?
+          child: getDrainageDuctingReportController.isLoading.value == true ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -32,13 +33,14 @@ class PostPourInspectionReportGetView extends StatelessWidget {
           CustomScrollView(
             slivers: [
 
+
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 height: 60,
                 onBackPressed: () {
                   Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
                 },
-                title: "Post Pour Inspection Report",
+                title: "Drainage/Ducting Report",
               ),
 
 
@@ -48,7 +50,6 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
 
                       SpaceHelperClass.v(24.h(context)),
 
@@ -70,7 +71,8 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                           ImageHelperClass.customImageButtonContainer(
                             onPressed: () async {
-                              Get.off(()=>EditPostPourInspectionReportFirstPageView(projectId: projectId),preventDuplicates: false);
+                              Get.delete<EditDrainageDuctingReportController>(force: true);
+                              Get.off(()=>EditDrainageDuctingReportFirstPageView(projectId: projectId),preventDuplicates: false);
                             },
                             context: context,
                             height: 30.h(context),
@@ -100,40 +102,32 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Project",
-                              value: getPostPourInspectionReportController.getProjectDetailsResponseModel.value.data?.name ?? "",
+                              label: "Contact",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.contract ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Pour No",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.pourNo ?? "",
+                              label: "Date",
+                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.date)),
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Pour Date",
-                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.pourDate)),
+                              label: "Drawing Reference Incl Revision",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.drawingReferenceInclRevision ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Inspection date",
-                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.inspectionDate)),
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Drawing/Sketch No. & Revision",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.drawingNo ?? "",
+                              label: "Location of work",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.locationOfWork ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -141,16 +135,40 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "GA Drawing",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.gaDrawing ?? "",
+                              label: "Completion Status",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.completionStatus ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Rebar Drgs",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.rebarDrgs ?? "",
+                              label: "Sub-Contractor",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.subContractor ?? "",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Pipe Type",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.pipeType ?? "",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Test Certificate Reference",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.testCertificateReference ?? "",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Install By",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.installBy ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -158,8 +176,24 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Temporary Works",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.temporaryWorks ?? "",
+                              label: "Bed Type and Thickness",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.bedTypeAndThickness == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Line",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.line == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Level",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.level == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -167,343 +201,100 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                             ReportInfoHelper.projectInfoRow(
                               context: context,
-                              label: "Pour Reference",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.pourReference ?? "",
+                              label: "Position",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.position == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
+
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Gradient",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.gradient == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Pop up dealed off",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.popUpDealedOff == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Test(Air/Water/CCTV/Mandrill)",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.testAirWaterCctvMandrill == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "PIPE HAUNCHING / SURROUNDING",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.pipeHaunchingSurrounding == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "COMPACTION",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.compaction == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "BACKFILL",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.backfill == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "THICKNESS",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.thickness == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "TYPE",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.type == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "MARKER TAPE",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.markerTape == true ? "Yes" : "No",
+                            ),
+
+                            SpaceHelperClass.v(10.h(context)),
+
+                            ReportInfoHelper.projectInfoRow(
+                              context: context,
+                              label: "Comment",
+                              value: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.comment ?? "",
+                            ),
+
+
 
 
 
                           ],
                         ),
                       ),
-
-                      SpaceHelperClass.v(16.h(context)),
-
-
-                      Container(
-                        width: 375.w(context),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16.vpm(context),
-                          horizontal: 16.hpm(context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.r(context)),
-                        ),
-                        child: Column(
-                          children: [
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Setting Out",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Line / Level / Position",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.settingOut?.line ?? "",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.settingOut?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.settingOut?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                          ],
-                        ),
-                      ),
-
-
-                      SpaceHelperClass.v(16.h(context)),
-
-
-                      Container(
-                        width: 375.w(context),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16.vpm(context),
-                          horizontal: 16.hpm(context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.r(context)),
-                        ),
-                        child: Column(
-                          children: [
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Concrete Finish",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Concrete Finish Type",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.concreteFinishType?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.concreteFinishType?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Chamfers,Edging etc",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                          ],
-                        ),
-                      ),
-
-
-                      SpaceHelperClass.v(16.h(context)),
-
-
-                      Container(
-                        width: 375.w(context),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16.vpm(context),
-                          horizontal: 16.hpm(context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.r(context)),
-                        ),
-                        child: Column(
-                          children: [
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Cast in items",
-                              fontSize: 20,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Drainage Elements",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.drainageElements?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.drainageElements?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Holding Down Bolts",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Crack Inducers",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.crackInducers?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.crackInducers?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Waterproofling Membrane",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.comment ?? "",
-                            ),
-
-
-                            SpaceHelperClass.v(15.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Other",
-                              fontSize: 15,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-
-                            SpaceHelperClass.v(8.h(context)),
-
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.others?.inspection == true ? "Yes" : "No",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                            ReportInfoHelper.projectInfoRow(
-                              context: context,
-                              label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.others?.comment ?? "",
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-                          ],
-                        ),
-                      ),
-
 
                       SpaceHelperClass.v(16.h(context)),
 
@@ -545,7 +336,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                                     fit: BoxFit.contain,
                                     height: 35.h(context),
                                     width: 65.w(context),
-                                    imagePath: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.clientApprovedSignature,
+                                    imagePath: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.clientApprovedSignature,
                                   ),
                                 )
 
@@ -579,7 +370,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                                     width: 65.w(context),
                                     imageFit: BoxFit.contain,
                                     fit: BoxFit.contain,
-                                    imagePath: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.signedOnCompletionSignature,
+                                    imagePath: getDrainageDuctingReportController.getDuctingReportResponseModel.value.data?.signedOnCompletionSignature,
                                   ),
                                 )
 
@@ -591,11 +382,9 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                         ),
                       ),
 
-
-
                       SpaceHelperClass.v(16.h(context)),
 
-                      getPostPourInspectionReportController.isPdf.value == true  ?
+                      getDrainageDuctingReportController.isPdf.value == true  ?
                       CustomLoaderButton().customLoaderButton(
                         backgroundColor: Colors.transparent,
                         loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -606,7 +395,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                         height: 50.h(context),
                         child: OutlinedButton(
                           onPressed: () async {
-                            await getPostPourInspectionReportController.createAndOpenPdf(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data!);
+                            await getDrainageDuctingReportController.createAndOpenPdf(getDrainageDuctingReportController.getDuctingReportResponseModel.value);
                           },
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
@@ -656,7 +445,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                       SpaceHelperClass.v(16.h(context)),
 
 
-                      getPostPourInspectionReportController.isExcelOpen.value == true  ?
+                      getDrainageDuctingReportController.isExcelOpen.value == true  ?
                       CustomLoaderButton().customLoaderButton(
                         backgroundColor: Colors.transparent,
                         loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -667,8 +456,8 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                         height: 50.h(context),
                         child: OutlinedButton(
                           onPressed: () async {
-                            getPostPourInspectionReportController.isExcelOpen.value = true;
-                            await getPostPourInspectionReportController.generateAndOpenExcel(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data!);
+                            getDrainageDuctingReportController.isExcelOpen.value = true;
+                            await getDrainageDuctingReportController.generateAndOpenExcel(getDrainageDuctingReportController.getDuctingReportResponseModel.value);
                           },
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
@@ -726,11 +515,9 @@ class PostPourInspectionReportGetView extends StatelessWidget {
               )
 
 
-
-
             ],
-          )),
-        ),
+          ),
+        )),
       ),
     );
   }

@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/excavation_hardcore_store_file_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_excavation_hardcore_store_file_report_controller.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/excavation_hardcore_stone_file_report/get_view/excavation_hardcore_store_file_report_get_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/widget/post_pour_Inspection_report_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +10,15 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
+import '../../../../../../common/common.dart';
 
-class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
-  ExcavationHardcoreStoreFileReportView({super.key,required this.projectId});
+class ExcavationHardcoreStoreFileReportEditView extends StatelessWidget {
+  const ExcavationHardcoreStoreFileReportEditView({super.key,required this.projectId});
 
   final String projectId;
-  final ExcavationHardcoreStoreFileReportController excavationHardcoreStoreFileReportController = Get.put(ExcavationHardcoreStoreFileReportController());
-
-
   @override
   Widget build(BuildContext context) {
+    EditExcavationHardcoreStoreFileReportController editExcavationHardcoreStoreFileReportController = Get.put(EditExcavationHardcoreStoreFileReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Obx(()=>Container(
@@ -29,19 +27,24 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: CustomScrollView(
+          child: editExcavationHardcoreStoreFileReportController.isLoading.value == true  ?
+          CustomLoaderButton().customLoaderButton(
+            backgroundColor: Colors.transparent,
+            loaderColor: Color.fromRGBO(38, 50, 56, 1),
+            height: 812,
+            context: context,
+          ) :
+          CustomScrollView(
             slivers: [
-
 
               CustomAppBarHelper.normalAppBar(
                 context: context,
                 height: 80,
                 onBackPressed: () {
-                  Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
+                  Get.off(()=>ExcavationHardcoreStoreFileReportGetView(projectId: projectId),preventDuplicates: false);
                 },
                 title: "Excavation / Hardcore / Stone Fill Report",
               ),
-
 
               SliverToBoxAdapter(
                 child: Padding(
@@ -50,12 +53,11 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                     children: [
 
 
-
                       SpaceHelperClass.v(24.h(context)),
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.contractController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.contractController.value,
                         label: "Contract : ",
                         hintText: "Enter contract number",
                       ),
@@ -66,7 +68,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
                         readOnly: true,
-                        controller: excavationHardcoreStoreFileReportController.dateController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.dateController.value,
                         label: "Date : ",
                         hintText: "Enter date",
                         suffixIcon: Padding(
@@ -90,7 +92,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                             lastDate: DateTime(2100),
                           );
                           if (picked != null) {
-                            excavationHardcoreStoreFileReportController.dateController.value.text = picked.toLocal().toString();
+                            editExcavationHardcoreStoreFileReportController.dateController.value.text = picked.toLocal().toString();
                           }
                         },
                       ),
@@ -99,7 +101,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value,
                         label: "Drawing Reference Incl Revision : ",
                         hintText: "Enter drawing reference",
                       ),
@@ -109,7 +111,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.revisionController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.revisionController.value,
                         label: "Revision : ",
                         hintText: "Enter revision reference",
                       ),
@@ -118,7 +120,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.locationController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.locationController.value,
                         label: "Location of work : ",
                         hintText: "Enter work  location",
                       ),
@@ -161,10 +163,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: excavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ? null : excavationHardcoreStoreFileReportController.selectCompletionStatus.value,
+                              value: editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ? null : editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value,
                               items: ['in-process','completed','not-completed'],
                               onChanged: (value) async {
-                                excavationHardcoreStoreFileReportController.selectCompletionStatus.value = value!;
+                                editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value = value!;
                               },
                               hintText: "Select Completion Status",
                             ),
@@ -181,7 +183,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.subContractorController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.subContractorController.value,
                         label: "Sub-Contractor : ",
                         hintText: "Enter sub-contractor",
                       ),
@@ -224,10 +226,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: excavationHardcoreStoreFileReportController.selectComplianceCheck.value == "" ? null : excavationHardcoreStoreFileReportController.selectComplianceCheck.value,
+                              value: editExcavationHardcoreStoreFileReportController.selectComplianceCheck.value == "" ? null : editExcavationHardcoreStoreFileReportController.selectComplianceCheck.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                excavationHardcoreStoreFileReportController.selectComplianceCheck.value = value!;
+                                editExcavationHardcoreStoreFileReportController.selectComplianceCheck.value = value!;
                               },
                               hintText: "Select Compliance Check",
                             ),
@@ -277,10 +279,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == "" ? null : excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value,
+                              value: editExcavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == "" ? null : editExcavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value = value!;
+                                editExcavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value = value!;
                               },
                               hintText: "Select Underground Services",
                             ),
@@ -295,12 +297,12 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: excavationHardcoreStoreFileReportController.commentController.value,
+                        controller: editExcavationHardcoreStoreFileReportController.commentController.value,
                         label: "Write Comment : ",
                         hintText: "Add additional comments...",
                       ),
 
-                      SpaceHelperClass.v(12.h(context)),
+                      SpaceHelperClass.v(14.h(context)),
 
 
                       Container(
@@ -324,6 +326,22 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                             SpaceHelperClass.v(14.h(context)),
 
+
+                            editExcavationHardcoreStoreFileReportController.signedOnCompletion.value.path == "" ?
+                            SizedBox.shrink() :
+                            ImageHelperClass.customFileImageContainer(
+                              context: context,
+                              imageFit: BoxFit.contain,
+                              fit: BoxFit.contain,
+                              height: 150.h(context),
+                              width: 375.w(context),
+                              imagePath: editExcavationHardcoreStoreFileReportController.signedOnCompletion.value,
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
                             // Signature area with color options
                             Container(
                               height: 150.h(context),
@@ -332,7 +350,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: excavationHardcoreStoreFileReportController.signedOnCompletionController.value,
+                                controller: editExcavationHardcoreStoreFileReportController.signedOnCompletionController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -356,7 +374,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      excavationHardcoreStoreFileReportController.clearSignedOnCompletion();
+                                      editExcavationHardcoreStoreFileReportController.clearSignedOnCompletion();
                                     },
                                   ),
                                 ),
@@ -376,13 +394,13 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await excavationHardcoreStoreFileReportController.signedOnCompletionController.value.toPngBytes();
+                                      Uint8List? data = await editExcavationHardcoreStoreFileReportController.signedOnCompletionController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        excavationHardcoreStoreFileReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
-                                        await excavationHardcoreStoreFileReportController.signedOnCompletion.value.writeAsBytes(data);
-                                        print("Saved at: ${excavationHardcoreStoreFileReportController.signedOnCompletion.value.path}");
-                                        final result = await OpenFile.open(excavationHardcoreStoreFileReportController.signedOnCompletion.value.path);
+                                        editExcavationHardcoreStoreFileReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
+                                        await editExcavationHardcoreStoreFileReportController.signedOnCompletion.value.writeAsBytes(data);
+                                        print("Saved at: ${editExcavationHardcoreStoreFileReportController.signedOnCompletion.value.path}");
+                                        final result = await OpenFile.open(editExcavationHardcoreStoreFileReportController.signedOnCompletion.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -407,7 +425,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
 
 
-                      SpaceHelperClass.v(12.h(context)),
+                      SpaceHelperClass.v(14.h(context)),
 
 
                       Container(
@@ -431,6 +449,20 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                             SpaceHelperClass.v(14.h(context)),
 
+                            editExcavationHardcoreStoreFileReportController.clientApproved.value.path == "" ?
+                            SizedBox.shrink() :
+                            ImageHelperClass.customFileImageContainer(
+                              context: context,
+                              imageFit: BoxFit.contain,
+                              fit: BoxFit.contain,
+                              height: 150.h(context),
+                              width: 375.w(context),
+                              imagePath: editExcavationHardcoreStoreFileReportController.clientApproved.value,
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
                             // Signature area with color options
                             Container(
                               height: 150.h(context),
@@ -439,7 +471,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: excavationHardcoreStoreFileReportController.clientApprovedController.value,
+                                controller: editExcavationHardcoreStoreFileReportController.clientApprovedController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -463,7 +495,7 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      excavationHardcoreStoreFileReportController.clearClientApproved();
+                                      editExcavationHardcoreStoreFileReportController.clearClientApproved();
                                     },
                                   ),
                                 ),
@@ -483,13 +515,13 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await excavationHardcoreStoreFileReportController.clientApprovedController.value.toPngBytes();
+                                      Uint8List? data = await editExcavationHardcoreStoreFileReportController.clientApprovedController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        excavationHardcoreStoreFileReportController.clientApproved.value = File('${directory.path}/client_signature.png');
-                                        await excavationHardcoreStoreFileReportController.clientApproved.value.writeAsBytes(data);
-                                        print("Saved at: ${excavationHardcoreStoreFileReportController.clientApproved.value.path}");
-                                        final result = await OpenFile.open(excavationHardcoreStoreFileReportController.clientApproved.value.path);
+                                        editExcavationHardcoreStoreFileReportController.clientApproved.value = File('${directory.path}/client_signature.png');
+                                        await editExcavationHardcoreStoreFileReportController.clientApproved.value.writeAsBytes(data);
+                                        print("Saved at: ${editExcavationHardcoreStoreFileReportController.clientApproved.value.path}");
+                                        final result = await OpenFile.open(editExcavationHardcoreStoreFileReportController.clientApproved.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -502,6 +534,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
                                 SpaceHelperClass.h(12.w(context)),
 
+
+
+
+
                               ],
                             ),
                           ],
@@ -509,10 +545,11 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                       ),
 
 
+
                       SpaceHelperClass.v(35.h(context)),
 
 
-                      excavationHardcoreStoreFileReportController.isSubmit.value == true ?
+                      editExcavationHardcoreStoreFileReportController.isSubmit.value == true ?
                       CustomLoaderButton().customLoaderButton(
                         backgroundColor: Colors.transparent,
                         loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -528,42 +565,42 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
                         borderRadius: 8,
                         backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                         onPressed: () async {
-                          if(excavationHardcoreStoreFileReportController.contractController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.dateController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.revisionController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.locationController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ||
-                              excavationHardcoreStoreFileReportController.subContractorController.value.text == "" ||
-                              excavationHardcoreStoreFileReportController.selectComplianceCheck.value == "" ||
-                              excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == ""
+                          if(editExcavationHardcoreStoreFileReportController.contractController.value.text == "" ||
+                              editExcavationHardcoreStoreFileReportController.dateController.value.text == "" ||
+                              editExcavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value.text == "" ||
+                              editExcavationHardcoreStoreFileReportController.revisionController.value.text == "" ||
+                              editExcavationHardcoreStoreFileReportController.locationController.value.text == "" ||
+                              editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ||
+                              editExcavationHardcoreStoreFileReportController.subContractorController.value.text == "" ||
+                              editExcavationHardcoreStoreFileReportController.selectComplianceCheck.value == "" ||
+                              editExcavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == ""
                           ) {
                             kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
-                          } else if(excavationHardcoreStoreFileReportController.signedOnCompletion.value.path == "") {
+                          } else if(editExcavationHardcoreStoreFileReportController.signedOnCompletion.value.path == "") {
                             kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
-                          } else if(excavationHardcoreStoreFileReportController.clientApproved.value.path == "") {
+                          } else if(editExcavationHardcoreStoreFileReportController.clientApproved.value.path == "") {
                             kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
                           } else {
                             Map<String,dynamic> payload = {
                               "project": projectId,
-                              "contract": excavationHardcoreStoreFileReportController.contractController.value.text,
-                              "date": excavationHardcoreStoreFileReportController.dateController.value.text,
-                              "drawing_reference_incl_revision":  excavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value.text,
-                              "revision": excavationHardcoreStoreFileReportController.revisionController.value.text,
-                              "location_of_work": excavationHardcoreStoreFileReportController.locationController.value.text,
-                              "completion_status": excavationHardcoreStoreFileReportController.selectCompletionStatus.value,
-                              "sub_contractor": excavationHardcoreStoreFileReportController.subContractorController.value.text,
-                              "compliance_check": excavationHardcoreStoreFileReportController.selectComplianceCheck.value == "Yes" ? true : false,
-                              "check_for_underground_services": excavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == "Yes" ? true : false,
-                              "comment": excavationHardcoreStoreFileReportController.commentController.value.text,
+                              "contract": editExcavationHardcoreStoreFileReportController.contractController.value.text,
+                              "date": editExcavationHardcoreStoreFileReportController.dateController.value.text,
+                              "drawing_reference_incl_revision": editExcavationHardcoreStoreFileReportController.drawingReferenceInclRevisionController.value.text,
+                              "revision": editExcavationHardcoreStoreFileReportController.revisionController.value.text,
+                              "location_of_work": editExcavationHardcoreStoreFileReportController.locationController.value.text,
+                              "completion_status": editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value,
+                              "sub_contractor": editExcavationHardcoreStoreFileReportController.subContractorController.value.text,
+                              "compliance_check": editExcavationHardcoreStoreFileReportController.selectComplianceCheck.value == "Yes" ? true : false,
+                              "check_for_underground_services": editExcavationHardcoreStoreFileReportController.selectCheckForUndergroundService.value == "Yes" ? true : false,
+                              "comment": editExcavationHardcoreStoreFileReportController.commentController.value.text,
                             };
                             print(jsonEncode(payload));
-                            excavationHardcoreStoreFileReportController.isSubmit.value = true;
-                            await excavationHardcoreStoreFileReportController.createExcavationHardcoreStoreFileReportController(
+                            editExcavationHardcoreStoreFileReportController.isSubmit.value = true;
+                            await editExcavationHardcoreStoreFileReportController.createExcavationHardcoreStoreFileReportController(
                               payload: payload,
                               projectId: projectId,
-                              clientApprovedSignature: excavationHardcoreStoreFileReportController.clientApproved.value,
-                              signedOnCompletionSignature: excavationHardcoreStoreFileReportController.signedOnCompletion.value,
+                              clientApprovedSignature: editExcavationHardcoreStoreFileReportController.clientApproved.value,
+                              signedOnCompletionSignature: editExcavationHardcoreStoreFileReportController.signedOnCompletion.value,
                             );  // excavationHardcoreStoreFileReportController.isSubmit.value = true;
                           }
 
@@ -575,15 +612,10 @@ class ExcavationHardcoreStoreFileReportView extends StatelessWidget {
 
 
 
-
-
-
-
                     ],
                   ),
                 ),
               )
-
 
 
             ],
