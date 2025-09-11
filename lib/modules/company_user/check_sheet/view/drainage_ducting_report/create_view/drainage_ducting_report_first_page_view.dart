@@ -154,7 +154,7 @@ class DrainageDuctingReportFirstPageView extends StatelessWidget {
                                 vertical: 8.vpm(context),
                               ),
                               value: drainageDuctingReportController.selectCompletionStatus.value == "" ? null : drainageDuctingReportController.selectCompletionStatus.value,
-                              items: ['in-process','completed','not-completed'],
+                              items: ['in-progress','completed','not-completed'],
                               onChanged: (value) async {
                                 drainageDuctingReportController.selectCompletionStatus.value = value!;
                               },
@@ -183,7 +183,7 @@ class DrainageDuctingReportFirstPageView extends StatelessWidget {
 
                       CustomButtonHelper.customRoundedButton(
                         context: context,
-                        text: "Save",
+                        text: "Next",
                         fontSize: 16,
                         textColor: Color.fromRGBO(255, 255, 255, 1),
                         fontWeight: FontWeight.w600,

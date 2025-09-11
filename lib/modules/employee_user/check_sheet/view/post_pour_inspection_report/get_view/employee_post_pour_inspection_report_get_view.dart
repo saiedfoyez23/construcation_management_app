@@ -1,20 +1,20 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_post_pour_inspection_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/get_post_pour_inspection_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_first_page_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_edit_post_pour_inspection_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_get_post_pour_inspection_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/employee_check_sheet_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/post_pour_inspection_report/edit_view/employee_edit_post_pour_inspection_report_first_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PostPourInspectionReportGetView extends StatelessWidget {
-  PostPourInspectionReportGetView({super.key,required this.projectId});
+class EmployeePostPourInspectionReportGetView extends StatelessWidget {
+  EmployeePostPourInspectionReportGetView({super.key,required this.projectId});
   final String projectId;
 
 
   @override
   Widget build(BuildContext context) {
-    GetPostPourInspectionReportController getPostPourInspectionReportController = Get.put(GetPostPourInspectionReportController(projectId: projectId));
+    EmployeeGetPostPourInspectionReportController employeeGetPostPourInspectionReportController = Get.put(EmployeeGetPostPourInspectionReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -23,7 +23,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: Obx(()=>getPostPourInspectionReportController.isLoading.value == true  ?
+          child: Obx(()=>employeeGetPostPourInspectionReportController.isLoading.value == true  ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -37,7 +37,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                 context: context,
                 height: 60,
                 onBackPressed: () {
-                  Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
+                  Get.off(()=>EmployeeCheckSheetView(projectId: projectId),preventDuplicates: false);
                 },
                 title: "Post Pour Inspection Report",
               ),
@@ -71,8 +71,8 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                           ImageHelperClass.customImageButtonContainer(
                             onPressed: () async {
-                              Get.delete<EditPostPourInspectionReportController>(force: true);
-                              Get.off(()=>EditPostPourInspectionReportFirstPageView(projectId: projectId),preventDuplicates: false);
+                              Get.delete<EmployeeEditPostPourInspectionReportController>(force: true);
+                              Get.off(()=>EmployeeEditPostPourInspectionReportFirstPageView(projectId: projectId),preventDuplicates: false);
                             },
                             context: context,
                             height: 30.h(context),
@@ -103,7 +103,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Project",
-                              value: getPostPourInspectionReportController.getProjectDetailsResponseModel.value.data?.name ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeeProjectDetailsResponseModel.value.data?.name ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -111,7 +111,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Pour No",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.pourNo ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.pourNo ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -119,7 +119,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Pour Date",
-                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.pourDate)),
+                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.pourDate)),
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -127,7 +127,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection date",
-                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.inspectionDate)),
+                              value: DateFormat("MMM dd yyyy").format(DateTime.parse(employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.inspectionDate)),
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -135,7 +135,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Drawing/Sketch No. & Revision",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.drawingNo ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.drawingNo ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -144,7 +144,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "GA Drawing",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.gaDrawing ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.gaDrawing ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -152,7 +152,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Rebar Drgs",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.rebarDrgs ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.rebarDrgs ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -161,7 +161,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Temporary Works",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.temporaryWorks ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.temporaryWorks ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -170,7 +170,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Pour Reference",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.pourReference ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.pourReference ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -213,7 +213,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Line / Level / Position",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.settingOut?.line ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.settingOut?.line ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -221,7 +221,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.settingOut?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.settingOut?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -229,7 +229,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.settingOut?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.settingOut?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -282,7 +282,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.concreteFinishType?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.concreteFinishType?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -290,7 +290,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.concreteFinishType?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.concreteFinishType?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(15.h(context)),
@@ -311,7 +311,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -319,7 +319,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -372,7 +372,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.drainageElements?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.drainageElements?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -380,7 +380,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.drainageElements?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.drainageElements?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(15.h(context)),
@@ -401,7 +401,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -409,7 +409,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(15.h(context)),
@@ -430,7 +430,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.crackInducers?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.crackInducers?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -438,7 +438,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.crackInducers?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.crackInducers?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(15.h(context)),
@@ -459,7 +459,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -467,7 +467,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.comment ?? "",
                             ),
 
 
@@ -489,7 +489,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Inspection",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.others?.inspection == true ? "Yes" : "No",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.others?.inspection == true ? "Yes" : "No",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -497,7 +497,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                             ReportInfoHelper.projectInfoRow(
                               context: context,
                               label: "Comment",
-                              value: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.others?.comment ?? "",
+                              value: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.others?.comment ?? "",
                             ),
 
                             SpaceHelperClass.v(10.h(context)),
@@ -547,7 +547,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                                     fit: BoxFit.contain,
                                     height: 35.h(context),
                                     width: 65.w(context),
-                                    imagePath: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.clientApprovedSignature,
+                                    imagePath: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.clientApprovedSignature,
                                   ),
                                 )
 
@@ -581,7 +581,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                                     width: 65.w(context),
                                     imageFit: BoxFit.contain,
                                     fit: BoxFit.contain,
-                                    imagePath: getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data?.signedOnCompletionSignature,
+                                    imagePath: employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data?.signedOnCompletionSignature,
                                   ),
                                 )
 
@@ -597,7 +597,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
                       SpaceHelperClass.v(16.h(context)),
 
-                      getPostPourInspectionReportController.isPdf.value == true  ?
+                      employeeGetPostPourInspectionReportController.isPdf.value == true  ?
                       CustomLoaderButton().customLoaderButton(
                         backgroundColor: Colors.transparent,
                         loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -608,7 +608,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                         height: 50.h(context),
                         child: OutlinedButton(
                           onPressed: () async {
-                            await getPostPourInspectionReportController.createAndOpenPdf(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data!);
+                            await employeeGetPostPourInspectionReportController.createAndOpenPdf(employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data!);
                           },
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
@@ -658,7 +658,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                       SpaceHelperClass.v(16.h(context)),
 
 
-                      getPostPourInspectionReportController.isExcelOpen.value == true  ?
+                      employeeGetPostPourInspectionReportController.isExcelOpen.value == true  ?
                       CustomLoaderButton().customLoaderButton(
                         backgroundColor: Colors.transparent,
                         loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -669,8 +669,8 @@ class PostPourInspectionReportGetView extends StatelessWidget {
                         height: 50.h(context),
                         child: OutlinedButton(
                           onPressed: () async {
-                            getPostPourInspectionReportController.isExcelOpen.value = true;
-                            await getPostPourInspectionReportController.generateAndOpenExcel(getPostPourInspectionReportController.getPostPourInspectionReportResponseModel.value.data!);
+                            employeeGetPostPourInspectionReportController.isExcelOpen.value = true;
+                            await employeeGetPostPourInspectionReportController.generateAndOpenExcel(employeeGetPostPourInspectionReportController.getEmployeePostPourInspectionReportResponseModel.value.data!);
                           },
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.symmetric(

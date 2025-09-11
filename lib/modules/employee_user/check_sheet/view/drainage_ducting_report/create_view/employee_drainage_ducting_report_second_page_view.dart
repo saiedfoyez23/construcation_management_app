@@ -1,19 +1,21 @@
+
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_post_pour_inspection_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_first_page_view.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_third_page_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_drainage_ducting_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/drainage_ducting_report/create_view/employee_drainage_ducting_report_first_page_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/drainage_ducting_report/create_view/employee_drainage_ducting_report_third_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
-  EditPostPourInspectionReportSecondPageView({super.key,required this.projectId});
-
+class EmployeeDrainageDuctingReportSecondPageView extends StatelessWidget {
+  EmployeeDrainageDuctingReportSecondPageView({super.key,required this.projectId});
   final String projectId;
+  final EmployeeDrainageDuctingReportController employeeDrainageDuctingReportController = Get.put(EmployeeDrainageDuctingReportController());
+
+
 
   @override
   Widget build(BuildContext context) {
-    EditPostPourInspectionReportController editPostPourInspectionReportController = Get.put(EditPostPourInspectionReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -26,6 +28,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
             slivers: [
 
 
+
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.hpm(context)),
@@ -34,6 +37,16 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                       SpaceHelperClass.v(24.h(context)),
 
+                      TextHelperClass.headingText(
+                        context: context,
+                        text: "Specification Compliance Check",
+                        fontSize: 16,
+                        textColor: AppColors.black255,
+                        fontWeight: FontWeight.w700,
+                      ),
+
+
+                      SpaceHelperClass.v(24.h(context)),
 
                       Container(
                         width: 375.w(context),
@@ -49,11 +62,12 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+
                             SpaceHelperClass.v(16.h(context)),
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Setting Out",
+                              text: "Installation Details",
                               fontSize: 20,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w700,
@@ -63,7 +77,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Line / Level / Position",
+                              text: "Bed Type and Thickness",
                               fontSize: 16,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w500,
@@ -71,55 +85,26 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             SpaceHelperClass.v(8.h(context)),
 
-                            CustomTextFormFieldClass.build(
-                              context: context,
-                              controller: editPostPourInspectionReportController.lineLevelPositionController.value,
-                              hintText: "Enter Line / Level / Position",
-                              borderColor: Color.fromRGBO(229, 231, 235, 1),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.hpm(context),
-                                vertical: 8.vpm(context),
-                              ),
-                              borderRadius: 8,
-                              keyboardType: TextInputType.text,
-                            ),
-
-                            SpaceHelperClass.v(16.h(context)),
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Inspection",
-                              fontSize: 16,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-                            SpaceHelperClass.v(8.h(context)),
 
                             CustomDropdownHelperClass<String>(
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectInspection.value == "" ? null : editPostPourInspectionReportController.selectInspection.value,
+                              value: employeeDrainageDuctingReportController.selectBedTypeAndThickness.value == "" ? null : employeeDrainageDuctingReportController.selectBedTypeAndThickness.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                if(value == "Yes") {
-                                  editPostPourInspectionReportController.isInspection.value = true;
-                                  editPostPourInspectionReportController.selectInspection.value = value!;
-                                } else {
-                                  editPostPourInspectionReportController.isInspection.value = false;
-                                  editPostPourInspectionReportController.selectInspection.value = value!;
-                                }
+                                employeeDrainageDuctingReportController.selectBedTypeAndThickness.value = value!;
                               },
-                              hintText: "Select Inspection",
+                              hintText: "Select Bed Type And Thickness",
                             ),
 
-                            SpaceHelperClass.v(16.h(context)),
+
+                            SpaceHelperClass.v(14.h(context)),
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Comment : ",
+                              text: "Pipe Type",
                               fontSize: 16,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w500,
@@ -127,10 +112,11 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             SpaceHelperClass.v(8.h(context)),
 
+
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentInspectionController.value,
-                              hintText: "Enter comment",
+                              controller: employeeDrainageDuctingReportController.pipeTypeController.value,
+                              hintText: "Enter Pipe type",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.hpm(context),
@@ -139,12 +125,191 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                               borderRadius: 8,
                               keyboardType: TextInputType.text,
                             ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
+
                           ],
                         ),
                       ),
 
                       SpaceHelperClass.v(14.h(context)),
 
+                      Container(
+                        width: 375.w(context),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 16.vpm(context),
+                          horizontal: 16.hpm(context),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r(context)),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+                            SpaceHelperClass.v(16.h(context)),
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Positioning & Alignment",
+                              fontSize: 20,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w700,
+                            ),
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Line",
+                              fontSize: 16,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: employeeDrainageDuctingReportController.selectLine.value == "" ? null : employeeDrainageDuctingReportController.selectLine.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                employeeDrainageDuctingReportController.selectLine.value = value!;
+                              },
+                              hintText: "Select line",
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Level",
+                              fontSize: 16,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: employeeDrainageDuctingReportController.selectLevel.value == "" ? null : employeeDrainageDuctingReportController.selectLevel.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                employeeDrainageDuctingReportController.selectLevel.value = value!;
+                              },
+                              hintText: "Select level",
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Position",
+                              fontSize: 16,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: employeeDrainageDuctingReportController.selectPosition.value == "" ? null : employeeDrainageDuctingReportController.selectPosition.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                employeeDrainageDuctingReportController.selectPosition.value = value!;
+                              },
+                              hintText: "Select position",
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Gradient",
+                              fontSize: 16,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: employeeDrainageDuctingReportController.selectGradient.value == "" ? null : employeeDrainageDuctingReportController.selectGradient.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                employeeDrainageDuctingReportController.selectGradient.value = value!;
+                              },
+                              hintText: "Select gradient",
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+                            TextHelperClass.headingText(
+                              context: context,
+                              text: "Pop up dealed off",
+                              fontSize: 16,
+                              textColor: AppColors.black65,
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            SpaceHelperClass.v(8.h(context)),
+
+
+                            CustomDropdownHelperClass<String>(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.hpm(context),
+                                vertical: 8.vpm(context),
+                              ),
+                              value: employeeDrainageDuctingReportController.selectPopUpDealedOff.value == "" ? null : employeeDrainageDuctingReportController.selectPopUpDealedOff.value,
+                              items: ['Yes','No'],
+                              onChanged: (value) async {
+                                employeeDrainageDuctingReportController.selectPopUpDealedOff.value = value!;
+                              },
+                              hintText: "Select gradient",
+                            ),
+
+
+                            SpaceHelperClass.v(14.h(context)),
+
+
+
+                          ],
+                        ),
+                      ),
+
+                      SpaceHelperClass.v(14.h(context)),
 
                       Container(
                         width: 375.w(context),
@@ -160,11 +325,12 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+
                             SpaceHelperClass.v(16.h(context)),
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Concrete Finish",
+                              text: "Testing & Certification",
                               fontSize: 20,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w700,
@@ -174,50 +340,34 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Concrete Finish Type",
-                              fontSize: 16,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Inspection",
+                              text: "Test(Air/Water/CCTV/Mandrill)",
                               fontSize: 16,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w500,
                             ),
 
                             SpaceHelperClass.v(8.h(context)),
+
 
                             CustomDropdownHelperClass<String>(
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value,
+                              value: employeeDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "" ? null : employeeDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                if(value == "Yes") {
-                                  editPostPourInspectionReportController.isConcreteFinishTypeInspection.value = true;
-                                  editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value = value!;
-                                } else {
-                                  editPostPourInspectionReportController.isConcreteFinishTypeInspection.value = false;
-                                  editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value = value!;
-                                }
+                                employeeDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value = value!;
                               },
-                              hintText: "Select Inspection",
+                              hintText: "Test(Air/Water/CCTV/Mandrill)",
                             ),
 
-                            SpaceHelperClass.v(16.h(context)),
+
+                            SpaceHelperClass.v(14.h(context)),
 
                             TextHelperClass.headingText(
                               context: context,
-                              text: "Comment : ",
+                              text: "Test Certificate Reference:",
                               fontSize: 16,
                               textColor: AppColors.black65,
                               fontWeight: FontWeight.w500,
@@ -225,10 +375,11 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             SpaceHelperClass.v(8.h(context)),
 
+
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.concreteFinishTypeCommentController.value,
-                              hintText: "Write Comment",
+                              controller: employeeDrainageDuctingReportController.testCertificateReferenceController.value,
+                              hintText: "Enter Test Certificate Reference",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.hpm(context),
@@ -239,74 +390,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                             ),
 
 
-                            SpaceHelperClass.v(16.h(context)),
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Chamfers,Edging etc",
-                              fontSize: 16,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-                            SpaceHelperClass.v(10.h(context)),
-
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Inspection",
-                              fontSize: 16,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-                            SpaceHelperClass.v(8.h(context)),
-
-                            CustomDropdownHelperClass<String>(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.hpm(context),
-                                vertical: 8.vpm(context),
-                              ),
-                              value: editPostPourInspectionReportController.selectChamfersEdgingInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectChamfersEdgingInspection.value,
-                              items: ['Yes','No'],
-                              onChanged: (value) async {
-                                if(value == "Yes") {
-                                  editPostPourInspectionReportController.isChamfersEdgingInspection.value = true;
-                                  editPostPourInspectionReportController.selectChamfersEdgingInspection.value = value!;
-                                } else {
-                                  editPostPourInspectionReportController.isChamfersEdgingInspection.value = false;
-                                  editPostPourInspectionReportController.selectChamfersEdgingInspection.value = value!;
-                                }
-                              },
-                              hintText: "Select Inspection",
-                            ),
-
-                            SpaceHelperClass.v(16.h(context)),
-
-                            TextHelperClass.headingText(
-                              context: context,
-                              text: "Comment : ",
-                              fontSize: 16,
-                              textColor: AppColors.black65,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-                            SpaceHelperClass.v(8.h(context)),
-
-                            CustomTextFormFieldClass.build(
-                              context: context,
-                              controller: editPostPourInspectionReportController.chamfersEdgingCommentController.value,
-                              hintText: "Write Comment",
-                              borderColor: Color.fromRGBO(229, 231, 235, 1),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.hpm(context),
-                                vertical: 8.vpm(context),
-                              ),
-                              borderRadius: 8,
-                              keyboardType: TextInputType.text,
-                            ),
-
+                            SpaceHelperClass.v(14.h(context)),
 
 
 
@@ -321,8 +405,6 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                         children: [
 
 
-
-
                           Expanded(
                             child: CustomButtonHelper.customRoundedButton(
                               context: context,
@@ -335,7 +417,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.to(()=>EditPostPourInspectionReportFirstPageView(projectId: projectId));
+                                Get.to(()=>EmployeeDrainageDuctingReportFirstPageView(projectId: projectId));
                               },
                             ),
                           ),
@@ -354,22 +436,23 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(editPostPourInspectionReportController.lineLevelPositionController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectInspection.value == "" ||
-                                    editPostPourInspectionReportController.commentInspectionController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "" ||
-                                    editPostPourInspectionReportController.concreteFinishTypeCommentController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectChamfersEdgingInspection.value == "" ||
-                                    editPostPourInspectionReportController.chamfersEdgingCommentController.value.text == "") {
+                                if(employeeDrainageDuctingReportController.selectBedTypeAndThickness.value == "" ||
+                                    employeeDrainageDuctingReportController.pipeTypeController.value.text == "" ||
+                                    employeeDrainageDuctingReportController.selectLine.value == "" ||
+                                    employeeDrainageDuctingReportController.selectLevel.value == "" ||
+                                    employeeDrainageDuctingReportController.selectPosition.value == "" ||
+                                    employeeDrainageDuctingReportController.selectGradient.value == "" ||
+                                    employeeDrainageDuctingReportController.selectPopUpDealedOff.value == "" ||
+                                    employeeDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "" ||
+                                    employeeDrainageDuctingReportController.testCertificateReferenceController.value.text == "") {
                                   kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
                                 } else {
-                                  Get.to(()=>EditPostPourInspectionReportThirdPageView(projectId: projectId));
+                                  Get.to(()=>EmployeeDrainageDuctingReportThirdPageView(projectId: projectId));
                                 }
 
                               },
                             ),
                           ),
-
 
 
 
@@ -381,10 +464,11 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                       SpaceHelperClass.v(35.h(context)),
 
 
+
                     ],
                   ),
                 ),
-              ),
+              )
 
 
             ],

@@ -1,5 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/employee_user/calculator_tools/view/employee_calculator_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/employee_check_sheet_view.dart';
 import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
 import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_view.dart';
 import 'package:construction_management_app/modules/employee_user/folder/view/employee_folder_view.dart';
@@ -458,7 +459,7 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                             imagePath: AppImages.checkSheetBlackIcon,
                             text: "Checksheet",
                             onTap: () {
-                              //Get.off(()=>AddDayWorkView(), preventDuplicates: false);
+                              Get.off(()=>EmployeeCheckSheetView(projectId: projectId,),preventDuplicates: false);
                             },
                           ),
 

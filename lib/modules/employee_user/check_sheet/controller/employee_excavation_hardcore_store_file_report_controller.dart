@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
-import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/employee_check_sheet_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:signature/signature.dart';
-
 import '../../../../common/common.dart';
+import '../../../authentication/sign_in/model/login_response_model.dart';
 
-class ExcavationHardcoreStoreFileReportController extends GetxController {
+class EmployeeExcavationHardcoreStoreFileReportController extends GetxController {
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   Rx<TextEditingController> contractController = TextEditingController().obs;
   Rx<TextEditingController> dateController = TextEditingController().obs;
@@ -56,7 +56,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
   }
 
 
-  Future<void> createExcavationHardcoreStoreFileReportController({
+  Future<void> createEmployeeExcavationHardcoreStoreFileReportController({
     required Map<String,dynamic> payload,
     required File clientApprovedSignature,
     required File signedOnCompletionSignature,
@@ -133,7 +133,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>EmployeeCheckSheetView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];

@@ -1,19 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
+import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/model/get_employee_excavation_hardcore_store_file_report_model.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/excavation_hardcore_stone_file_report/get_view/employee_excavation_hardcore_store_file_report_get_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 import '../../../../common/common.dart';
 
-class ExcavationHardcoreStoreFileReportController extends GetxController {
+class EmployeeEditExcavationHardcoreStoreFileReportController extends GetxController {
+  RxBool isLoading = false.obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   Rx<TextEditingController> contractController = TextEditingController().obs;
   Rx<TextEditingController> dateController = TextEditingController().obs;
@@ -22,6 +27,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
   Rx<TextEditingController> locationController = TextEditingController().obs;
   RxString selectCompletionStatus = "".obs;
   Rx<TextEditingController> subContractorController = TextEditingController().obs;
+  Rx<GetEmployeeExcavationHardcoreStoreFileReportModel> getEmployeeExcavationHardcoreStoreFileReportModel = GetEmployeeExcavationHardcoreStoreFileReportModel().obs;
   RxString selectComplianceCheck = "".obs;
   RxString selectCheckForUndergroundService = "".obs;
   Rx<TextEditingController> commentController = TextEditingController().obs;
@@ -55,8 +61,65 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
     clientApprovedController.value.clear();
   }
 
+  String projectId;
+  EmployeeEditExcavationHardcoreStoreFileReportController({required this.projectId});
 
-  Future<void> createExcavationHardcoreStoreFileReportController({
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    isLoading(true);
+    Future.delayed(Duration(seconds: 1),() async {
+      await getEmployeeExcavationReportsController(projectId: projectId);
+    });
+  }
+
+
+  Future<void> getEmployeeExcavationReportsController({required String projectId}) async {
+    try {
+      loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${loginResponseModel.value.data!.accessToken}',
+      };
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: "${Api.getExcavationReports}/${projectId}",
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null) {
+        print("hello ${jsonEncode(responseBody)}");
+        getEmployeeExcavationHardcoreStoreFileReportModel.value = GetEmployeeExcavationHardcoreStoreFileReportModel.fromJson(responseBody);
+        contractController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.contract ?? "";
+        dateController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.date ?? "";
+        drawingReferenceInclRevisionController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.drawingReferenceInclRevision ?? "";
+        revisionController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.revision ?? "";
+        locationController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.locationOfWork ?? "";
+        selectCompletionStatus.value = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.completionStatus;
+        subContractorController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.subContractor ?? "";
+        selectComplianceCheck.value = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.complianceCheck == true ? "Yes" : "No";
+        selectCheckForUndergroundService.value = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.checkForUndergroundServices == true ? "Yes" : "No";
+        commentController.value.text = getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.comment ?? "";
+        signedOnCompletion.value = File("${await downloadFile(getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.signedOnCompletionSignature, "signedOnCompletionSignature")}");
+        clientApproved.value = File("${await downloadFile(getEmployeeExcavationHardcoreStoreFileReportModel.value.data?.clientApprovedSignature, "clientApprovedSignature")}");
+      } else {
+        throw "Data retrieve is Failed";
+      }
+    } catch (e) {
+      debugPrint("Catch Error.........$e");
+      kSnackBar(message: "Data retrieve is Failed: $e", bgColor: AppColors.red);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+  Future<void> editEmployeeExcavationHardcoreStoreFileReportController({
     required Map<String,dynamic> payload,
     required File clientApprovedSignature,
     required File signedOnCompletionSignature,
@@ -133,7 +196,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>EmployeeExcavationHardcoreStoreFileReportGetView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -147,6 +210,31 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
       isSubmit(false);
     }
   }
+
+  Future<String> downloadFile(String url, String fileName) async {
+    try {
+      // 1. Get the app's document directory
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String filePath = '${appDocDir.path}/${fileName}.png';
+
+      // 2. Download the file
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        // 3. Write file to local storage
+        File file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+        print('File saved at $filePath');
+        return filePath;
+      } else {
+        throw Exception('Failed to download file: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return '';
+    }
+  }
+
+
 
 
 }

@@ -1,24 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_post_pour_inspection_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_second_page_view.dart';
-import 'package:flutter/foundation.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_edit_post_pour_inspection_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/post_pour_inspection_report/edit_view/employee_edit_post_pour_inspection_report_second_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
-
-class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
-  EditPostPourInspectionReportThirdPageView({super.key,required this.projectId});
+class EmployeeEditPostPourInspectionReportThirdPageView extends StatelessWidget {
+  EmployeeEditPostPourInspectionReportThirdPageView({super.key,required this.projectId});
 
   final String projectId;
 
   @override
   Widget build(BuildContext context) {
-    EditPostPourInspectionReportController editPostPourInspectionReportController = Get.put(EditPostPourInspectionReportController(projectId: projectId));
+    EmployeeEditPostPourInspectionReportController employeeEditPostPourInspectionReportController = Get.put(EmployeeEditPostPourInspectionReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Obx(()=>Container(
@@ -93,16 +93,14 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectDrainageElementsInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectDrainageElementsInspection.value,
+                              value: employeeEditPostPourInspectionReportController.selectDrainageElementsInspection.value == "" ?
+                              null : employeeEditPostPourInspectionReportController.selectDrainageElementsInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isDrainageElementsInspection.value = true;
-                                  editPostPourInspectionReportController.selectDrainageElementsInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectDrainageElementsInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isDrainageElementsInspection.value = false;
-                                  editPostPourInspectionReportController.selectDrainageElementsInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectDrainageElementsInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -123,7 +121,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentDrainageElementsController.value,
+                              controller: employeeEditPostPourInspectionReportController.commentDrainageElementsController.value,
                               hintText: "Enter comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -165,16 +163,14 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectHoldingDownBoltsInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectHoldingDownBoltsInspection.value,
+                              value: employeeEditPostPourInspectionReportController.selectHoldingDownBoltsInspection.value == "" ?
+                              null : employeeEditPostPourInspectionReportController.selectHoldingDownBoltsInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isHoldingDownBoltsInspection.value = true;
-                                  editPostPourInspectionReportController.selectHoldingDownBoltsInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectHoldingDownBoltsInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isHoldingDownBoltsInspection.value = false;
-                                  editPostPourInspectionReportController.selectHoldingDownBoltsInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectHoldingDownBoltsInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -195,7 +191,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentHoldingDownBoltsController.value,
+                              controller: employeeEditPostPourInspectionReportController.commentHoldingDownBoltsController.value,
                               hintText: "Enter comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -237,16 +233,14 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectCrackInducersInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectCrackInducersInspection.value,
+                              value: employeeEditPostPourInspectionReportController.selectCrackInducersInspection.value == "" ?
+                              null : employeeEditPostPourInspectionReportController.selectCrackInducersInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isCrackInducersInspection.value = true;
-                                  editPostPourInspectionReportController.selectCrackInducersInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectCrackInducersInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isCrackInducersInspection.value = false;
-                                  editPostPourInspectionReportController.selectCrackInducersInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectCrackInducersInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -267,7 +261,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentCrackInducersController.value,
+                              controller: employeeEditPostPourInspectionReportController.commentCrackInducersController.value,
                               hintText: "Enter comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -308,16 +302,14 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value,
+                              value: employeeEditPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "" ?
+                              null : employeeEditPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isWaterprooflingMembraneInspection.value = true;
-                                  editPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isWaterprooflingMembraneInspection.value = false;
-                                  editPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -338,7 +330,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentWaterprooflingMembraneController.value,
+                              controller: employeeEditPostPourInspectionReportController.commentWaterprooflingMembraneController.value,
                               hintText: "Enter comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -381,16 +373,14 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectOthersInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectOthersInspection.value,
+                              value: employeeEditPostPourInspectionReportController.selectOthersInspection.value == "" ?
+                              null : employeeEditPostPourInspectionReportController.selectOthersInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isOthersInspection.value = true;
-                                  editPostPourInspectionReportController.selectOthersInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectOthersInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isOthersInspection.value = false;
-                                  editPostPourInspectionReportController.selectOthersInspection.value = value!;
+                                  employeeEditPostPourInspectionReportController.selectOthersInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -411,7 +401,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentOthersController.value,
+                              controller: employeeEditPostPourInspectionReportController.commentOthersController.value,
                               hintText: "Enter comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -451,7 +441,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                             SpaceHelperClass.v(14.h(context)),
 
 
-                            editPostPourInspectionReportController.signedOnCompletion.value.path == "" ?
+                            employeeEditPostPourInspectionReportController.signedOnCompletion.value.path == "" ?
                             SizedBox.shrink() :
                             ImageHelperClass.customFileImageContainer(
                               context: context,
@@ -459,7 +449,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                               fit: BoxFit.contain,
                               height: 150.h(context),
                               width: 375.w(context),
-                              imagePath: editPostPourInspectionReportController.signedOnCompletion.value,
+                              imagePath: employeeEditPostPourInspectionReportController.signedOnCompletion.value,
                             ),
 
 
@@ -474,7 +464,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: editPostPourInspectionReportController.signedOnCompletionController.value,
+                                controller: employeeEditPostPourInspectionReportController.signedOnCompletionController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -498,7 +488,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      editPostPourInspectionReportController.clearSignedOnCompletion();
+                                      employeeEditPostPourInspectionReportController.clearSignedOnCompletion();
                                     },
                                   ),
                                 ),
@@ -518,13 +508,13 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await editPostPourInspectionReportController.signedOnCompletionController.value.toPngBytes();
+                                      Uint8List? data = await employeeEditPostPourInspectionReportController.signedOnCompletionController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        editPostPourInspectionReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
-                                        await editPostPourInspectionReportController.signedOnCompletion.value.writeAsBytes(data);
-                                        print("Saved at: ${editPostPourInspectionReportController.signedOnCompletion.value.path}");
-                                        final result = await OpenFile.open(editPostPourInspectionReportController.signedOnCompletion.value.path);
+                                        employeeEditPostPourInspectionReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
+                                        await employeeEditPostPourInspectionReportController.signedOnCompletion.value.writeAsBytes(data);
+                                        print("Saved at: ${employeeEditPostPourInspectionReportController.signedOnCompletion.value.path}");
+                                        final result = await OpenFile.open(employeeEditPostPourInspectionReportController.signedOnCompletion.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -573,7 +563,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
                             SpaceHelperClass.v(14.h(context)),
 
-                            editPostPourInspectionReportController.clientApproved.value.path == "" ?
+                            employeeEditPostPourInspectionReportController.clientApproved.value.path == "" ?
                             SizedBox.shrink() :
                             ImageHelperClass.customFileImageContainer(
                               context: context,
@@ -581,7 +571,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                               fit: BoxFit.contain,
                               height: 150.h(context),
                               width: 375.w(context),
-                              imagePath: editPostPourInspectionReportController.clientApproved.value,
+                              imagePath: employeeEditPostPourInspectionReportController.clientApproved.value,
                             ),
 
 
@@ -595,7 +585,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: editPostPourInspectionReportController.clientApprovedController.value,
+                                controller: employeeEditPostPourInspectionReportController.clientApprovedController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -619,7 +609,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      editPostPourInspectionReportController.clearClientApproved();
+                                      employeeEditPostPourInspectionReportController.clearClientApproved();
                                     },
                                   ),
                                 ),
@@ -639,13 +629,13 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await editPostPourInspectionReportController.clientApprovedController.value.toPngBytes();
+                                      Uint8List? data = await employeeEditPostPourInspectionReportController.clientApprovedController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        editPostPourInspectionReportController.clientApproved.value = File('${directory.path}/client_signature.png');
-                                        await editPostPourInspectionReportController.clientApproved.value.writeAsBytes(data);
-                                        print("Saved at: ${editPostPourInspectionReportController.clientApproved.value.path}");
-                                        final result = await OpenFile.open(editPostPourInspectionReportController.clientApproved.value.path);
+                                        employeeEditPostPourInspectionReportController.clientApproved.value = File('${directory.path}/client_signature.png');
+                                        await employeeEditPostPourInspectionReportController.clientApproved.value.writeAsBytes(data);
+                                        print("Saved at: ${employeeEditPostPourInspectionReportController.clientApproved.value.path}");
+                                        final result = await OpenFile.open(employeeEditPostPourInspectionReportController.clientApproved.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -677,7 +667,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                         children: [
 
 
-
+                          SpaceHelperClass.h(12.w(context)),
 
                           Expanded(
                             child: CustomButtonHelper.customRoundedButton(
@@ -691,7 +681,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.to(()=>EditPostPourInspectionReportSecondPageView(projectId: projectId));
+                                Get.to(()=>EmployeeEditPostPourInspectionReportSecondPageView(projectId: projectId));
                               },
                             ),
                           ),
@@ -701,7 +691,7 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
 
 
                           Expanded(
-                            child: editPostPourInspectionReportController.isSubmit.value == true ?
+                            child: employeeEditPostPourInspectionReportController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -717,82 +707,79 @@ class EditPostPourInspectionReportThirdPageView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(editPostPourInspectionReportController.commentDrainageElementsController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectDrainageElementsInspection.value == "" ||
-                                    editPostPourInspectionReportController.commentHoldingDownBoltsController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectHoldingDownBoltsInspection.value == "" ||
-                                    editPostPourInspectionReportController.commentCrackInducersController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectCrackInducersInspection.value == "" ||
-                                    editPostPourInspectionReportController.commentWaterprooflingMembraneController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "" ||
-                                    editPostPourInspectionReportController.commentOthersController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectOthersInspection.value == ""
+                                if(employeeEditPostPourInspectionReportController.commentDrainageElementsController.value.text == "" ||
+                                    employeeEditPostPourInspectionReportController.selectDrainageElementsInspection.value == "" ||
+                                    employeeEditPostPourInspectionReportController.commentHoldingDownBoltsController.value.text == "" ||
+                                    employeeEditPostPourInspectionReportController.selectHoldingDownBoltsInspection.value == "" ||
+                                    employeeEditPostPourInspectionReportController.commentCrackInducersController.value.text == "" ||
+                                    employeeEditPostPourInspectionReportController.selectCrackInducersInspection.value == "" ||
+                                    employeeEditPostPourInspectionReportController.commentWaterprooflingMembraneController.value.text == "" ||
+                                    employeeEditPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "" ||
+                                    employeeEditPostPourInspectionReportController.commentOthersController.value.text == "" ||
+                                    employeeEditPostPourInspectionReportController.selectOthersInspection.value == ""
                                 ) {
                                   kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
-                                } else if(editPostPourInspectionReportController.signedOnCompletion.value.path == "") {
+                                } else if(employeeEditPostPourInspectionReportController.signedOnCompletion.value.path == "") {
                                   kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
-                                } else if(editPostPourInspectionReportController.clientApproved.value.path == "") {
+                                } else if(employeeEditPostPourInspectionReportController.clientApproved.value.path == "") {
                                   kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
                                 } else {
                                   Map<String,dynamic> payload = {
-                                    "project": editPostPourInspectionReportController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                                    "pour_no": editPostPourInspectionReportController.pourNoController.value.text,
-                                    "pour_date": editPostPourInspectionReportController.pourDateController.value.text,
-                                    "inspection_date": editPostPourInspectionReportController.inspectionDataTimeController.value.text,
-                                    "drawing_no": editPostPourInspectionReportController.drawingSketchNoRevisionController.value.text,
-                                    "ga_drawing": editPostPourInspectionReportController.gaDrawingController.value.text,
-                                    "rebar_drgs": editPostPourInspectionReportController.rebarDrgsController.value.text,
-                                    "temporary_works": editPostPourInspectionReportController.temporaryWorksController.value.text,
-                                    "pour_reference": editPostPourInspectionReportController.pourReferenceController.value.text,
+                                    "project": employeeEditPostPourInspectionReportController.getEmployeeProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "pour_no": employeeEditPostPourInspectionReportController.pourNoController.value.text,
+                                    "pour_date": employeeEditPostPourInspectionReportController.pourDateController.value.text,
+                                    "inspection_date": employeeEditPostPourInspectionReportController.inspectionDataTimeController.value.text,
+                                    "drawing_no": employeeEditPostPourInspectionReportController.drawingSketchNoRevisionController.value.text,
+                                    "ga_drawing": employeeEditPostPourInspectionReportController.gaDrawingController.value.text,
+                                    "rebar_drgs": employeeEditPostPourInspectionReportController.rebarDrgsController.value.text,
+                                    "temporary_works": employeeEditPostPourInspectionReportController.temporaryWorksController.value.text,
+                                    "pour_reference": employeeEditPostPourInspectionReportController.pourReferenceController.value.text,
                                     "setting_out": {
-                                      "line": editPostPourInspectionReportController.lineLevelPositionController.value.text,
-                                      "inspection": editPostPourInspectionReportController.selectInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.commentInspectionController.value.text
+                                      "line": employeeEditPostPourInspectionReportController.lineLevelPositionController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.commentInspectionController.value.text
                                     },
                                     "concrete_finish_type": {
-                                      "inspection": editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.concreteFinishTypeCommentController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.concreteFinishTypeCommentController.value.text,
                                     },
                                     "chamfers_edging_etc": {
-                                      "inspection": editPostPourInspectionReportController.selectChamfersEdgingInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.chamfersEdgingCommentController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectChamfersEdgingInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.chamfersEdgingCommentController.value.text,
                                     },
                                     "drainage_elements": {
-                                      "inspection": editPostPourInspectionReportController.selectDrainageElementsInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.commentDrainageElementsController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectDrainageElementsInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.commentDrainageElementsController.value.text,
                                     },
                                     "holding_down_bolts": {
-                                      "inspection": editPostPourInspectionReportController.selectHoldingDownBoltsInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.commentHoldingDownBoltsController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectHoldingDownBoltsInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.commentHoldingDownBoltsController.value.text,
                                     },
                                     "crack_inducers": {
-                                      "inspection": editPostPourInspectionReportController.selectCrackInducersInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.commentCrackInducersController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectCrackInducersInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.commentCrackInducersController.value.text,
                                     },
                                     "waterproofing_membrane": {
-                                      "inspection": editPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.commentWaterprooflingMembraneController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.commentWaterprooflingMembraneController.value.text,
                                     },
                                     "others": {
-                                      "inspection": editPostPourInspectionReportController.selectOthersInspection.value == "Yes" ? true : false,
-                                      "comment": editPostPourInspectionReportController.commentOthersController.value.text,
+                                      "inspection": employeeEditPostPourInspectionReportController.selectOthersInspection.value == "Yes" ? true : false,
+                                      "comment": employeeEditPostPourInspectionReportController.commentOthersController.value.text,
                                     },
                                   };
                                   print(jsonEncode(payload));
-                                  editPostPourInspectionReportController.isSubmit.value = true;
-                                  await editPostPourInspectionReportController.editPostPostPourInspectionReportsController(
+                                  employeeEditPostPourInspectionReportController.isSubmit.value = true;
+                                  await employeeEditPostPourInspectionReportController.editEmployeePostPostPourInspectionReportsController(
                                     payload: payload,
-                                    clientApprovedSignature: editPostPourInspectionReportController.clientApproved.value,
-                                    signedOnCompletionSignature: editPostPourInspectionReportController.signedOnCompletion.value,
+                                    clientApprovedSignature: employeeEditPostPourInspectionReportController.clientApproved.value,
+                                    signedOnCompletionSignature: employeeEditPostPourInspectionReportController.signedOnCompletion.value,
                                   );
                                 }
 
                               },
                             ),
                           ),
-
-
-
 
 
                         ],

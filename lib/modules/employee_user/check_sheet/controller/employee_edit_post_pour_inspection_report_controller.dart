@@ -1,23 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/model/get_post_pour_inspection_report_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/get_view/post_pour_inspection_report_get_view.dart';
-import 'package:construction_management_app/modules/company_user/project_details/model/get_project_details_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/model/get_employee_post_pour_inspection_report_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/post_pour_inspection_report/get_view/employee_post_pour_inspection_report_get_view.dart';
+import 'package:construction_management_app/modules/employee_user/project_details/model/get_employee_project_details_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
+
 import '../../../../common/common.dart';
 
-class EditPostPourInspectionReportController extends GetxController {
-
+class EmployeeEditPostPourInspectionReportController extends GetxController {
 
   Rx<TextEditingController> projectNameController = TextEditingController().obs;
   Rx<TextEditingController> pourNoController = TextEditingController().obs;
@@ -29,34 +30,26 @@ class EditPostPourInspectionReportController extends GetxController {
   Rx<TextEditingController> temporaryWorksController = TextEditingController().obs;
   Rx<TextEditingController> pourReferenceController = TextEditingController().obs;
   Rx<TextEditingController> lineLevelPositionController = TextEditingController().obs;
-  Rx<GetPostPourInspectionReportResponseModel> getPostPourInspectionReportResponseModel = GetPostPourInspectionReportResponseModel().obs;
+  Rx<GetEmployeePostPourInspectionReportResponseModel> getEmployeePostPourInspectionReportResponseModel = GetEmployeePostPourInspectionReportResponseModel().obs;
   RxBool isSubmit = false.obs;
 
-  Rx<GetProjectDetailsResponseModel> getProjectDetailsResponseModel = GetProjectDetailsResponseModel().obs;
+  Rx<GetEmployeeProjectDetailsResponseModel> getEmployeeProjectDetailsResponseModel = GetEmployeeProjectDetailsResponseModel().obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   RxString selectInspection = "".obs;
-  RxBool isInspection = false.obs;
   Rx<TextEditingController> concreteFinishTypeCommentController = TextEditingController().obs;
   RxString selectConcreteFinishTypeInspection = "".obs;
-  RxBool isConcreteFinishTypeInspection = false.obs;
   Rx<TextEditingController> chamfersEdgingCommentController = TextEditingController().obs;
   RxString selectChamfersEdgingInspection = "".obs;
-  RxBool isChamfersEdgingInspection = false.obs;
   Rx<TextEditingController> commentInspectionController = TextEditingController().obs;
   RxString selectDrainageElementsInspection = "".obs;
-  RxBool isDrainageElementsInspection = false.obs;
   Rx<TextEditingController> commentDrainageElementsController = TextEditingController().obs;
   RxString selectHoldingDownBoltsInspection = "".obs;
-  RxBool isHoldingDownBoltsInspection = false.obs;
   Rx<TextEditingController> commentHoldingDownBoltsController = TextEditingController().obs;
   RxString selectCrackInducersInspection = "".obs;
-  RxBool isCrackInducersInspection = false.obs;
   Rx<TextEditingController> commentCrackInducersController = TextEditingController().obs;
   RxString selectWaterprooflingMembraneInspection = "".obs;
-  RxBool isWaterprooflingMembraneInspection = false.obs;
   Rx<TextEditingController> commentWaterprooflingMembraneController = TextEditingController().obs;
   RxString selectOthersInspection = "".obs;
-  RxBool isOthersInspection = false.obs;
   Rx<TextEditingController> commentOthersController = TextEditingController().obs;
 
   Rx<Color> selectedSignedOnCompletionColor = Colors.black.obs;
@@ -93,9 +86,9 @@ class EditPostPourInspectionReportController extends GetxController {
   RxBool isLoading = false.obs;
   String projectId;
 
-  EditPostPourInspectionReportController({required this.projectId});
+  EmployeeEditPostPourInspectionReportController({required this.projectId});
 
-  Future<void> getProjectDetailsController({required String projectId}) async {
+  Future<void> getEmployeeProjectDetailsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -114,7 +107,7 @@ class EditPostPourInspectionReportController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getProjectDetailsResponseModel.value = GetProjectDetailsResponseModel.fromJson(responseBody);
+        getEmployeeProjectDetailsResponseModel.value = GetEmployeeProjectDetailsResponseModel.fromJson(responseBody);
       } else {
         throw "Data retrieve is Failed";
       }
@@ -127,7 +120,7 @@ class EditPostPourInspectionReportController extends GetxController {
   }
 
 
-  Future<void> getPostPourInspectionReportsController({required String projectId}) async {
+  Future<void> getEmployeePostPourInspectionReportsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -146,35 +139,35 @@ class EditPostPourInspectionReportController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getPostPourInspectionReportResponseModel.value = GetPostPourInspectionReportResponseModel.fromJson(responseBody);
-        projectNameController.value.text = getProjectDetailsResponseModel.value.data?.name ?? "";
-        pourNoController.value.text = getPostPourInspectionReportResponseModel.value.data?.pourNo ?? "";
-        pourDateController.value.text = getPostPourInspectionReportResponseModel.value.data?.pourDate ?? "";
-        inspectionDataTimeController.value.text = getPostPourInspectionReportResponseModel.value.data?.inspectionDate ?? "";
-        drawingSketchNoRevisionController.value.text = getPostPourInspectionReportResponseModel.value.data?.drawingNo ?? "";
-        gaDrawingController.value.text = getPostPourInspectionReportResponseModel.value.data?.gaDrawing ?? "";
-        rebarDrgsController.value.text = getPostPourInspectionReportResponseModel.value.data?.rebarDrgs ?? "";
-        temporaryWorksController.value.text = getPostPourInspectionReportResponseModel.value.data?.temporaryWorks ?? "";
-        pourReferenceController.value.text = getPostPourInspectionReportResponseModel.value.data?.pourReference ?? "";
-        lineLevelPositionController.value.text = getPostPourInspectionReportResponseModel.value.data?.settingOut?.line ?? "";
-        concreteFinishTypeCommentController.value.text = getPostPourInspectionReportResponseModel.value.data?.concreteFinishType?.comment ?? "";
-        selectInspection.value = getPostPourInspectionReportResponseModel.value.data?.settingOut?.inspection == true ? "Yes" : "No";
-        selectConcreteFinishTypeInspection.value = getPostPourInspectionReportResponseModel.value.data?.concreteFinishType?.inspection == true ? "Yes" : "No";
-        chamfersEdgingCommentController.value.text = getPostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.comment ?? "";
-        selectChamfersEdgingInspection.value = getPostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.inspection == true ? "Yes" : "No";
-        commentInspectionController.value.text = getPostPourInspectionReportResponseModel.value.data?.settingOut?.comment ?? "";
-        selectDrainageElementsInspection.value = getPostPourInspectionReportResponseModel.value.data?.drainageElements?.inspection == true ? "Yes" : "No";
-        commentDrainageElementsController.value.text = getPostPourInspectionReportResponseModel.value.data?.drainageElements?.comment ?? "";
-        selectHoldingDownBoltsInspection.value = getPostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.inspection == true ? "Yes" : "No";
-        commentHoldingDownBoltsController.value.text = getPostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.comment ?? "";
-        selectCrackInducersInspection.value = getPostPourInspectionReportResponseModel.value.data?.crackInducers?.inspection == true ? "Yes" : "No";
-        commentCrackInducersController.value.text = getPostPourInspectionReportResponseModel.value.data?.crackInducers?.comment ?? "";
-        selectWaterprooflingMembraneInspection.value = getPostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.inspection == true ? "Yes" : "No";
-        commentWaterprooflingMembraneController.value.text = getPostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.comment ?? "";
-        selectOthersInspection.value = getPostPourInspectionReportResponseModel.value.data?.others?.inspection == true ? "Yes" : "No";
-        commentOthersController.value.text = getPostPourInspectionReportResponseModel.value.data?.others?.comment ?? "";
-        signedOnCompletion.value = File("${await downloadFile(getPostPourInspectionReportResponseModel.value.data?.signedOnCompletionSignature, "signedOnCompletionSignature")}");
-        clientApproved.value = File("${await downloadFile(getPostPourInspectionReportResponseModel.value.data?.clientApprovedSignature, "clientApprovedSignature")}");
+        getEmployeePostPourInspectionReportResponseModel.value = GetEmployeePostPourInspectionReportResponseModel.fromJson(responseBody);
+        projectNameController.value.text = getEmployeeProjectDetailsResponseModel.value.data?.name ?? "";
+        pourNoController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.pourNo ?? "";
+        pourDateController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.pourDate ?? "";
+        inspectionDataTimeController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.inspectionDate ?? "";
+        drawingSketchNoRevisionController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.drawingNo ?? "";
+        gaDrawingController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.gaDrawing ?? "";
+        rebarDrgsController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.rebarDrgs ?? "";
+        temporaryWorksController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.temporaryWorks ?? "";
+        pourReferenceController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.pourReference ?? "";
+        lineLevelPositionController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.settingOut?.line ?? "";
+        concreteFinishTypeCommentController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.concreteFinishType?.comment ?? "";
+        selectInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.settingOut?.inspection == true ? "Yes" : "No";
+        selectConcreteFinishTypeInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.concreteFinishType?.inspection == true ? "Yes" : "No";
+        chamfersEdgingCommentController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.comment ?? "";
+        selectChamfersEdgingInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.chamfersEdgingEtc?.inspection == true ? "Yes" : "No";
+        commentInspectionController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.settingOut?.comment ?? "";
+        selectDrainageElementsInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.drainageElements?.inspection == true ? "Yes" : "No";
+        commentDrainageElementsController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.drainageElements?.comment ?? "";
+        selectHoldingDownBoltsInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.inspection == true ? "Yes" : "No";
+        commentHoldingDownBoltsController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.holdingDownBolts?.comment ?? "";
+        selectCrackInducersInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.crackInducers?.inspection == true ? "Yes" : "No";
+        commentCrackInducersController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.crackInducers?.comment ?? "";
+        selectWaterprooflingMembraneInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.inspection == true ? "Yes" : "No";
+        commentWaterprooflingMembraneController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.waterproofingMembrane?.comment ?? "";
+        selectOthersInspection.value = getEmployeePostPourInspectionReportResponseModel.value.data?.others?.inspection == true ? "Yes" : "No";
+        commentOthersController.value.text = getEmployeePostPourInspectionReportResponseModel.value.data?.others?.comment ?? "";
+        signedOnCompletion.value = File("${await downloadFile(getEmployeePostPourInspectionReportResponseModel.value.data?.signedOnCompletionSignature, "signedOnCompletionSignature")}");
+        clientApproved.value = File("${await downloadFile(getEmployeePostPourInspectionReportResponseModel.value.data?.clientApprovedSignature, "clientApprovedSignature")}");
       } else {
         throw "Data retrieve is Failed";
       }
@@ -211,7 +204,7 @@ class EditPostPourInspectionReportController extends GetxController {
   }
 
 
-  Future<void> editPostPostPourInspectionReportsController({
+  Future<void> editEmployeePostPostPourInspectionReportsController({
     required Map<String,dynamic> payload,
     required File clientApprovedSignature,
     required File signedOnCompletionSignature,
@@ -287,7 +280,7 @@ class EditPostPourInspectionReportController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>PostPourInspectionReportGetView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>EmployeePostPourInspectionReportGetView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
@@ -310,8 +303,8 @@ class EditPostPourInspectionReportController extends GetxController {
     super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
-      await getProjectDetailsController(projectId: projectId);
-      await getPostPourInspectionReportsController(projectId: projectId);
+      await getEmployeeProjectDetailsController(projectId: projectId);
+      await getEmployeePostPourInspectionReportsController(projectId: projectId);
     });
   }
 

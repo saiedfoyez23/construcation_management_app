@@ -1,19 +1,19 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_post_pour_inspection_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_first_page_view.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/edit_view/edit_post_pour_inspection_report_third_page_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_post_pour_inspection_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/post_pour_inspection_report/create_view/employee_post_pour_inspection_report_first_page_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/post_pour_inspection_report/create_view/employee_post_pour_inspection_report_third_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
-  EditPostPourInspectionReportSecondPageView({super.key,required this.projectId});
+class EmployeePostPourInspectionReportSecondPageView extends StatelessWidget {
+  EmployeePostPourInspectionReportSecondPageView({super.key,required this.projectId});
 
   final String projectId;
 
   @override
   Widget build(BuildContext context) {
-    EditPostPourInspectionReportController editPostPourInspectionReportController = Get.put(EditPostPourInspectionReportController(projectId: projectId));
+    EmployeePostPourInspectionReportController employeePostPourInspectionReportController = Get.put(EmployeePostPourInspectionReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -73,7 +73,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.lineLevelPositionController.value,
+                              controller: employeePostPourInspectionReportController.lineLevelPositionController.value,
                               hintText: "Enter Line / Level / Position",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -101,15 +101,13 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectInspection.value == "" ? null : editPostPourInspectionReportController.selectInspection.value,
+                              value: employeePostPourInspectionReportController.selectInspection.value == "" ? null : employeePostPourInspectionReportController.selectInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isInspection.value = true;
-                                  editPostPourInspectionReportController.selectInspection.value = value!;
+                                  employeePostPourInspectionReportController.selectInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isInspection.value = false;
-                                  editPostPourInspectionReportController.selectInspection.value = value!;
+                                  employeePostPourInspectionReportController.selectInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -129,7 +127,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.commentInspectionController.value,
+                              controller: employeePostPourInspectionReportController.commentInspectionController.value,
                               hintText: "Enter comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -198,16 +196,14 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value,
+                              value: employeePostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "" ?
+                              null : employeePostPourInspectionReportController.selectConcreteFinishTypeInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isConcreteFinishTypeInspection.value = true;
-                                  editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value = value!;
+                                  employeePostPourInspectionReportController.selectConcreteFinishTypeInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isConcreteFinishTypeInspection.value = false;
-                                  editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value = value!;
+                                  employeePostPourInspectionReportController.selectConcreteFinishTypeInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -227,7 +223,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.concreteFinishTypeCommentController.value,
+                              controller: employeePostPourInspectionReportController.concreteFinishTypeCommentController.value,
                               hintText: "Write Comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -267,16 +263,14 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editPostPourInspectionReportController.selectChamfersEdgingInspection.value == "" ?
-                              null : editPostPourInspectionReportController.selectChamfersEdgingInspection.value,
+                              value: employeePostPourInspectionReportController.selectChamfersEdgingInspection.value == "" ?
+                              null : employeePostPourInspectionReportController.selectChamfersEdgingInspection.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
                                 if(value == "Yes") {
-                                  editPostPourInspectionReportController.isChamfersEdgingInspection.value = true;
-                                  editPostPourInspectionReportController.selectChamfersEdgingInspection.value = value!;
+                                  employeePostPourInspectionReportController.selectChamfersEdgingInspection.value = value!;
                                 } else {
-                                  editPostPourInspectionReportController.isChamfersEdgingInspection.value = false;
-                                  editPostPourInspectionReportController.selectChamfersEdgingInspection.value = value!;
+                                  employeePostPourInspectionReportController.selectChamfersEdgingInspection.value = value!;
                                 }
                               },
                               hintText: "Select Inspection",
@@ -296,7 +290,7 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
                             CustomTextFormFieldClass.build(
                               context: context,
-                              controller: editPostPourInspectionReportController.chamfersEdgingCommentController.value,
+                              controller: employeePostPourInspectionReportController.chamfersEdgingCommentController.value,
                               hintText: "Write Comment",
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               contentPadding: EdgeInsets.symmetric(
@@ -322,7 +316,6 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
 
 
 
-
                           Expanded(
                             child: CustomButtonHelper.customRoundedButton(
                               context: context,
@@ -335,11 +328,10 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.to(()=>EditPostPourInspectionReportFirstPageView(projectId: projectId));
+                                Get.to(()=>EmployeePostPourInspectionReportFirstPageView(projectId: projectId));
                               },
                             ),
                           ),
-
 
                           SpaceHelperClass.h(12.w(context)),
 
@@ -354,16 +346,16 @@ class EditPostPourInspectionReportSecondPageView extends StatelessWidget {
                               borderRadius: 8,
                               backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                               onPressed: () async {
-                                if(editPostPourInspectionReportController.lineLevelPositionController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectInspection.value == "" ||
-                                    editPostPourInspectionReportController.commentInspectionController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "" ||
-                                    editPostPourInspectionReportController.concreteFinishTypeCommentController.value.text == "" ||
-                                    editPostPourInspectionReportController.selectChamfersEdgingInspection.value == "" ||
-                                    editPostPourInspectionReportController.chamfersEdgingCommentController.value.text == "") {
+                                if(employeePostPourInspectionReportController.lineLevelPositionController.value.text == "" ||
+                                    employeePostPourInspectionReportController.selectInspection.value == "" ||
+                                    employeePostPourInspectionReportController.commentInspectionController.value.text == "" ||
+                                    employeePostPourInspectionReportController.selectConcreteFinishTypeInspection.value == "" ||
+                                    employeePostPourInspectionReportController.concreteFinishTypeCommentController.value.text == "" ||
+                                    employeePostPourInspectionReportController.selectChamfersEdgingInspection.value == "" ||
+                                    employeePostPourInspectionReportController.chamfersEdgingCommentController.value.text == "") {
                                   kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
                                 } else {
-                                  Get.to(()=>EditPostPourInspectionReportThirdPageView(projectId: projectId));
+                                  Get.to(()=>EmployeePostPourInspectionReportThirdPageView(projectId: projectId));
                                 }
 
                               },

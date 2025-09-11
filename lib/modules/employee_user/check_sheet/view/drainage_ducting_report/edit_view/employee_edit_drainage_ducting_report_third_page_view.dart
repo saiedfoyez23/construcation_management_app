@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_drainage_ducting_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/edit_view/edit_drainage_ducting_report_second_page_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/widget/post_pour_Inspection_report_widget.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_edit_drainage_ducting_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/drainage_ducting_report/edit_view/employee_edit_drainage_ducting_report_second_page_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,14 +12,14 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
-class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
-  EditDrainageDuctingReportThirdPageView({super.key,required this.projectId});
+class EmployeeEditDrainageDuctingReportThirdPageView extends StatelessWidget {
+  EmployeeEditDrainageDuctingReportThirdPageView({super.key,required this.projectId});
   final String projectId;
 
 
   @override
   Widget build(BuildContext context) {
-    EditDrainageDuctingReportController editDrainageDuctingReportController = Get.put(EditDrainageDuctingReportController(projectId: projectId));
+    EmployeeEditDrainageDuctingReportController employeeEditDrainageDuctingReportController = Get.put(EmployeeEditDrainageDuctingReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Obx(()=>Container(
@@ -73,10 +74,10 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ? null : editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value,
+                              value: employeeEditDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ? null : employeeEditDrainageDuctingReportController.selectPipeHaunchingSurrounding.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value = value!;
+                                employeeEditDrainageDuctingReportController.selectPipeHaunchingSurrounding.value = value!;
                               },
                               hintText: "Select Pipe haunching / surrounding",
                             ),
@@ -124,10 +125,10 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectCompaction.value == "" ? null : editDrainageDuctingReportController.selectCompaction.value,
+                              value: employeeEditDrainageDuctingReportController.selectCompaction.value == "" ? null : employeeEditDrainageDuctingReportController.selectCompaction.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectCompaction.value = value!;
+                                employeeEditDrainageDuctingReportController.selectCompaction.value = value!;
                               },
                               hintText: "Select Compaction",
                             ),
@@ -176,10 +177,10 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectBackfill.value == "" ? null : editDrainageDuctingReportController.selectBackfill.value,
+                              value: employeeEditDrainageDuctingReportController.selectBackfill.value == "" ? null : employeeEditDrainageDuctingReportController.selectBackfill.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectBackfill.value = value!;
+                                employeeEditDrainageDuctingReportController.selectBackfill.value = value!;
                               },
                               hintText: "Select Backfill",
                             ),
@@ -228,10 +229,10 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectThickness.value == "" ? null : editDrainageDuctingReportController.selectThickness.value,
+                              value: employeeEditDrainageDuctingReportController.selectThickness.value == "" ? null : employeeEditDrainageDuctingReportController.selectThickness.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectThickness.value = value!;
+                                employeeEditDrainageDuctingReportController.selectThickness.value = value!;
                               },
                               hintText: "Select Thickness",
                             ),
@@ -279,10 +280,10 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectType.value == "" ? null : editDrainageDuctingReportController.selectType.value,
+                              value: employeeEditDrainageDuctingReportController.selectType.value == "" ? null : employeeEditDrainageDuctingReportController.selectType.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectType.value = value!;
+                                employeeEditDrainageDuctingReportController.selectType.value = value!;
                               },
                               hintText: "Select Thickness",
                             ),
@@ -331,10 +332,10 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectMakerTape.value == "" ? null : editDrainageDuctingReportController.selectMakerTape.value,
+                              value: employeeEditDrainageDuctingReportController.selectMakerTape.value == "" ? null :employeeEditDrainageDuctingReportController.selectMakerTape.value,
                               items: ['Yes','No'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectMakerTape.value = value!;
+                                employeeEditDrainageDuctingReportController.selectMakerTape.value = value!;
                               },
                               hintText: "Select Maker Tape",
                             ),
@@ -348,7 +349,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: editDrainageDuctingReportController.installByController.value,
+                        controller: employeeEditDrainageDuctingReportController.installByController.value,
                         label: "Install By : ",
                         hintText: "Enter Name",
                       ),
@@ -358,7 +359,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: editDrainageDuctingReportController.commentController.value,
+                        controller: employeeEditDrainageDuctingReportController.commentController.value,
                         label: "Write Comment : ",
                         hintText: "Add additional comments...",
                       ),
@@ -388,7 +389,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                             SpaceHelperClass.v(14.h(context)),
 
 
-                            editDrainageDuctingReportController.signedOnCompletion.value.path == "" ?
+                            employeeEditDrainageDuctingReportController.signedOnCompletion.value.path == "" ?
                             SizedBox.shrink() :
                             ImageHelperClass.customFileImageContainer(
                               context: context,
@@ -396,7 +397,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                               fit: BoxFit.contain,
                               height: 150.h(context),
                               width: 375.w(context),
-                              imagePath: editDrainageDuctingReportController.signedOnCompletion.value,
+                              imagePath: employeeEditDrainageDuctingReportController.signedOnCompletion.value,
                             ),
 
 
@@ -411,7 +412,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: editDrainageDuctingReportController.signedOnCompletionController.value,
+                                controller: employeeEditDrainageDuctingReportController.signedOnCompletionController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -435,7 +436,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      editDrainageDuctingReportController.clearSignedOnCompletion();
+                                      employeeEditDrainageDuctingReportController.clearSignedOnCompletion();
                                     },
                                   ),
                                 ),
@@ -455,13 +456,13 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await editDrainageDuctingReportController.signedOnCompletionController.value.toPngBytes();
+                                      Uint8List? data = await employeeEditDrainageDuctingReportController.signedOnCompletionController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        editDrainageDuctingReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
-                                        await editDrainageDuctingReportController.signedOnCompletion.value.writeAsBytes(data);
-                                        print("Saved at: ${editDrainageDuctingReportController.signedOnCompletion.value.path}");
-                                        final result = await OpenFile.open(editDrainageDuctingReportController.signedOnCompletion.value.path);
+                                        employeeEditDrainageDuctingReportController.signedOnCompletion.value = File('${directory.path}/signature.png');
+                                        await employeeEditDrainageDuctingReportController.signedOnCompletion.value.writeAsBytes(data);
+                                        print("Saved at: ${employeeEditDrainageDuctingReportController.signedOnCompletion.value.path}");
+                                        final result = await OpenFile.open(employeeEditDrainageDuctingReportController.signedOnCompletion.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -510,7 +511,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
 
                             SpaceHelperClass.v(14.h(context)),
 
-                            editDrainageDuctingReportController.clientApproved.value.path == "" ?
+                            employeeEditDrainageDuctingReportController.clientApproved.value.path == "" ?
                             SizedBox.shrink() :
                             ImageHelperClass.customFileImageContainer(
                               context: context,
@@ -518,7 +519,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                               fit: BoxFit.contain,
                               height: 150.h(context),
                               width: 375.w(context),
-                              imagePath: editDrainageDuctingReportController.clientApproved.value,
+                              imagePath: employeeEditDrainageDuctingReportController.clientApproved.value,
                             ),
 
 
@@ -532,7 +533,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r(context)),
                               ),
                               child: Signature(
-                                controller: editDrainageDuctingReportController.clientApprovedController.value,
+                                controller: employeeEditDrainageDuctingReportController.clientApprovedController.value,
                                 backgroundColor: Color.fromRGBO(247, 247, 247, 1),
                               ),
                             ),
@@ -556,7 +557,7 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                     borderWidth: 1,
                                     borderColor: Color.fromRGBO(229, 231, 235, 1),
                                     onPressed: () {
-                                      editDrainageDuctingReportController.clearClientApproved();
+                                      employeeEditDrainageDuctingReportController.clearClientApproved();
                                     },
                                   ),
                                 ),
@@ -576,13 +577,13 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                                     borderRadius: 8,
                                     backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                                     onPressed: () async {
-                                      Uint8List? data = await editDrainageDuctingReportController.clientApprovedController.value.toPngBytes();
+                                      Uint8List? data = await employeeEditDrainageDuctingReportController.clientApprovedController.value.toPngBytes();
                                       if (data != null) {
                                         final directory = await getApplicationDocumentsDirectory();
-                                        editDrainageDuctingReportController.clientApproved.value = File('${directory.path}/client_signature.png');
-                                        await editDrainageDuctingReportController.clientApproved.value.writeAsBytes(data);
-                                        print("Saved at: ${editDrainageDuctingReportController.clientApproved.value.path}");
-                                        final result = await OpenFile.open(editDrainageDuctingReportController.clientApproved.value.path);
+                                        employeeEditDrainageDuctingReportController.clientApproved.value = File('${directory.path}/client_signature.png');
+                                        await employeeEditDrainageDuctingReportController.clientApproved.value.writeAsBytes(data);
+                                        print("Saved at: ${employeeEditDrainageDuctingReportController.clientApproved.value.path}");
+                                        final result = await OpenFile.open(employeeEditDrainageDuctingReportController.clientApproved.value.path);
                                         if (result.type != ResultType.done) {
                                           print('Failed to open file: ${result.message}');
                                         } else {
@@ -609,7 +610,6 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
 
                       SpaceHelperClass.v(35.h(context)),
 
-
                       Row(
                         children: [
 
@@ -626,16 +626,16 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                               borderWidth: 1,
                               borderColor: Color.fromRGBO(229, 231, 235, 1),
                               onPressed: () {
-                                Get.to(()=>EditDrainageDuctingReportSecondPageView(projectId: projectId));
+                                Get.to(()=>EmployeeEditDrainageDuctingReportSecondPageView(projectId: projectId));
                               },
                             ),
                           ),
 
+
                           SpaceHelperClass.h(12.w(context)),
 
-
                           Expanded(
-                            child: editDrainageDuctingReportController.isSubmit.value == true ?
+                            child: employeeEditDrainageDuctingReportController.isSubmit.value == true ?
                             CustomLoaderButton().customLoaderButton(
                               backgroundColor: Colors.transparent,
                               loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -643,69 +643,70 @@ class EditDrainageDuctingReportThirdPageView extends StatelessWidget {
                               context: context,
                             ) :
                             CustomButtonHelper.customRoundedButton(
-                              context: context,
-                              text: "Save",
-                              fontSize: 16,
-                              textColor: Color.fromRGBO(255, 255, 255, 1),
-                              fontWeight: FontWeight.w600,
-                              borderRadius: 8,
-                              backgroundColor: Color.fromRGBO(24, 147, 248, 1),
-                              onPressed: () async {
-                                if(editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ||
-                                    editDrainageDuctingReportController.selectCompaction.value == "" ||
-                                    editDrainageDuctingReportController.selectBackfill.value == "" ||
-                                    editDrainageDuctingReportController.selectThickness.value == "" ||
-                                    editDrainageDuctingReportController.selectType.value == "" ||
-                                    editDrainageDuctingReportController.selectMakerTape.value == "" ||
-                                    editDrainageDuctingReportController.installByController.value.text == ""
-                                ) {
-                                  kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
-                                } else if(editDrainageDuctingReportController.signedOnCompletion.value.path == "") {
-                                  kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
-                                } else if(editDrainageDuctingReportController.clientApproved.value.path == "") {
-                                  kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
-                                } else {
-                                  Map<String,dynamic> payload = {
-                                    "project": projectId,
-                                    "contract": editDrainageDuctingReportController.contractController.value.text,
-                                    "date": editDrainageDuctingReportController.dateController.value.text,
-                                    "drawing_reference_incl_revision": editDrainageDuctingReportController.drawingReferenceInclRevisionController.value.text,
-                                    "location_of_work": editDrainageDuctingReportController.locationController.value.text,
-                                    "completion_status": editDrainageDuctingReportController.selectCompletionStatus.value,
-                                    "sub_contractor": editDrainageDuctingReportController.subContractorController.value.text,
-                                    "bed_type_and_thickness": editDrainageDuctingReportController.selectBedTypeAndThickness.value == "Yes" ? true : false,
-                                    "installation_pipe_type": editDrainageDuctingReportController.pipeTypeController.value.text,
-                                    "line": editDrainageDuctingReportController.selectLine.value == "Yes" ? true : false,
-                                    "level": editDrainageDuctingReportController.selectLevel.value == "Yes" ? true : false,
-                                    "position": editDrainageDuctingReportController.selectPosition.value == "Yes" ? true : false,
-                                    "gradient": editDrainageDuctingReportController.selectGradient.value == "Yes" ? true : false,
-                                    "pop_up_dealed_off": editDrainageDuctingReportController.selectPopUpDealedOff.value == "Yes" ? true : false,
-                                    "test_air_water_cctv_mandrill": editDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "Yes" ? true : false,
-                                    "test_certificate_reference": editDrainageDuctingReportController.testCertificateReferenceController.value.text,
-                                    "pipe_haunching_surrounding": editDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "Yes" ? true : false,
-                                    "pipe_type": editDrainageDuctingReportController.pipeTypeController.value.text,
-                                    "compaction": editDrainageDuctingReportController.selectCompaction.value == "Yes" ? true : false,
-                                    "backfill": editDrainageDuctingReportController.selectBackfill.value == "Yes" ? true : false,
-                                    "thickness": editDrainageDuctingReportController.selectThickness.value == "Yes" ? true : false,
-                                    "type": editDrainageDuctingReportController.selectType.value == "Yes" ? true : false,
-                                    "marker_tape": editDrainageDuctingReportController.selectMakerTape.value == "Yes" ? true : false,
-                                    "install_by": editDrainageDuctingReportController.installByController.value.text,
-                                    "comment": editDrainageDuctingReportController.commentController.value.text,
-                                  };
-                                  print(jsonEncode(payload));
+                                context: context,
+                                text: "Save",
+                                fontSize: 16,
+                                textColor: Color.fromRGBO(255, 255, 255, 1),
+                                fontWeight: FontWeight.w600,
+                                borderRadius: 8,
+                                backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                                onPressed: () async {
+                                  if(employeeEditDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ||
+                                      employeeEditDrainageDuctingReportController.selectCompaction.value == "" ||
+                                      employeeEditDrainageDuctingReportController.selectBackfill.value == "" ||
+                                      employeeEditDrainageDuctingReportController.selectThickness.value == "" ||
+                                      employeeEditDrainageDuctingReportController.selectType.value == "" ||
+                                      employeeEditDrainageDuctingReportController.selectMakerTape.value == "" ||
+                                      employeeEditDrainageDuctingReportController.installByController.value.text == ""
+                                  ) {
+                                    kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
+                                  } else if(employeeEditDrainageDuctingReportController.signedOnCompletion.value.path == "") {
+                                    kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
+                                  } else if(employeeEditDrainageDuctingReportController.clientApproved.value.path == "") {
+                                    kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
+                                  } else {
+                                    Map<String,dynamic> payload = {
+                                      "project": projectId,
+                                      "contract": employeeEditDrainageDuctingReportController.contractController.value.text,
+                                      "date": employeeEditDrainageDuctingReportController.dateController.value.text,
+                                      "drawing_reference_incl_revision": employeeEditDrainageDuctingReportController.drawingReferenceInclRevisionController.value.text,
+                                      "location_of_work": employeeEditDrainageDuctingReportController.locationController.value.text,
+                                      "completion_status": employeeEditDrainageDuctingReportController.selectCompletionStatus.value,
+                                      "sub_contractor": employeeEditDrainageDuctingReportController.subContractorController.value.text,
+                                      "bed_type_and_thickness": employeeEditDrainageDuctingReportController.selectBedTypeAndThickness.value == "Yes" ? true : false,
+                                      "installation_pipe_type": employeeEditDrainageDuctingReportController.pipeTypeController.value.text,
+                                      "line": employeeEditDrainageDuctingReportController.selectLine.value == "Yes" ? true : false,
+                                      "level": employeeEditDrainageDuctingReportController.selectLevel.value == "Yes" ? true : false,
+                                      "position": employeeEditDrainageDuctingReportController.selectPosition.value == "Yes" ? true : false,
+                                      "gradient": employeeEditDrainageDuctingReportController.selectGradient.value == "Yes" ? true : false,
+                                      "pop_up_dealed_off": employeeEditDrainageDuctingReportController.selectPopUpDealedOff.value == "Yes" ? true : false,
+                                      "test_air_water_cctv_mandrill": employeeEditDrainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "Yes" ? true : false,
+                                      "test_certificate_reference": employeeEditDrainageDuctingReportController.testCertificateReferenceController.value.text,
+                                      "pipe_haunching_surrounding": employeeEditDrainageDuctingReportController.selectPipeHaunchingSurrounding.value == "Yes" ? true : false,
+                                      "pipe_type": employeeEditDrainageDuctingReportController.pipeTypeController.value.text,
+                                      "compaction": employeeEditDrainageDuctingReportController.selectCompaction.value == "Yes" ? true : false,
+                                      "backfill": employeeEditDrainageDuctingReportController.selectBackfill.value == "Yes" ? true : false,
+                                      "thickness": employeeEditDrainageDuctingReportController.selectThickness.value == "Yes" ? true : false,
+                                      "type": employeeEditDrainageDuctingReportController.selectType.value == "Yes" ? true : false,
+                                      "marker_tape": employeeEditDrainageDuctingReportController.selectMakerTape.value == "Yes" ? true : false,
+                                      "install_by": employeeEditDrainageDuctingReportController.installByController.value.text,
+                                      "comment": employeeEditDrainageDuctingReportController.commentController.value.text,
+                                    };
+                                    print(jsonEncode(payload));
 
-                                  editDrainageDuctingReportController.isSubmit.value = true;
-                                  await editDrainageDuctingReportController.editDrainageDuctingReportController(
-                                    payload: payload,
-                                    clientApprovedSignature: editDrainageDuctingReportController.clientApproved.value,
-                                    signedOnCompletionSignature: editDrainageDuctingReportController.signedOnCompletion.value,
-                                    projectId: projectId,
-                                  );
-                                }
+                                    employeeEditDrainageDuctingReportController.isSubmit.value = true;
+                                    await employeeEditDrainageDuctingReportController.editEmployeeDrainageDuctingReportController(
+                                      payload: payload,
+                                      clientApprovedSignature: employeeEditDrainageDuctingReportController.clientApproved.value,
+                                      signedOnCompletionSignature: employeeEditDrainageDuctingReportController.signedOnCompletion.value,
+                                      projectId: projectId,
+                                    );
+                                  }
 
-                              },
-                            ),
-                          ),
+                                },
+                              ),
+                          )
+
 
 
                         ],

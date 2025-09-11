@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/controller/post_pour_inspection_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/create_view/post_pour_inspection_report_first_page_view.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/create_view/post_pour_inspection_report_second_page_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -642,94 +641,132 @@ class PostPourInspectionReportThirdPageView extends StatelessWidget {
 
 
                       SpaceHelperClass.v(35.h(context)),
-                      postPourInspectionReportController.isSubmit.value == true ?
-                      CustomLoaderButton().customLoaderButton(
-                        backgroundColor: Colors.transparent,
-                        loaderColor: Color.fromRGBO(38, 50, 56, 1),
-                        height: 50,
-                        context: context,
-                      ) :
-                      CustomButtonHelper.customRoundedButton(
-                        context: context,
-                        text: "Save",
-                        fontSize: 16,
-                        textColor: Color.fromRGBO(255, 255, 255, 1),
-                        fontWeight: FontWeight.w600,
-                        borderRadius: 8,
-                        backgroundColor: Color.fromRGBO(24, 147, 248, 1),
-                        onPressed: () async {
-                          if(postPourInspectionReportController.commentDrainageElementsController.value.text == "" ||
-                              postPourInspectionReportController.selectDrainageElementsInspection.value == "" ||
-                              postPourInspectionReportController.commentHoldingDownBoltsController.value.text == "" ||
-                              postPourInspectionReportController.selectHoldingDownBoltsInspection.value == "" ||
-                              postPourInspectionReportController.commentCrackInducersController.value.text == "" ||
-                              postPourInspectionReportController.selectCrackInducersInspection.value == "" ||
-                              postPourInspectionReportController.commentWaterprooflingMembraneController.value.text == "" ||
-                              postPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "" ||
-                              postPourInspectionReportController.commentOthersController.value.text == "" ||
-                              postPourInspectionReportController.selectOthersInspection.value == ""
-                          ) {
-                            kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
-                          } else if(postPourInspectionReportController.signedOnCompletion.value.path == "") {
-                            kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
-                          } else if(postPourInspectionReportController.clientApproved.value.path == "") {
-                            kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
-                          } else {
-                            Map<String,dynamic> payload = {
-                              "project": postPourInspectionReportController.getProjectDetailsResponseModel.value.data?.sId ?? "",
-                              "pour_no": postPourInspectionReportController.pourNoController.value.text,
-                              "pour_date": postPourInspectionReportController.pourDateController.value.text,
-                              "inspection_date": postPourInspectionReportController.inspectionDataTimeController.value.text,
-                              "drawing_no": postPourInspectionReportController.drawingSketchNoRevisionController.value.text,
-                              "ga_drawing": postPourInspectionReportController.gaDrawingController.value.text,
-                              "rebar_drgs": postPourInspectionReportController.rebarDrgsController.value.text,
-                              "temporary_works": postPourInspectionReportController.temporaryWorksController.value.text,
-                              "pour_reference":  postPourInspectionReportController.pourReferenceController.value.text,
-                              "setting_out": {
-                                "line": postPourInspectionReportController.lineLevelPositionController.value.text,
-                                "inspection": postPourInspectionReportController.selectInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.commentInspectionController.value.text
-                              },
-                              "concrete_finish_type": {
-                                "inspection": postPourInspectionReportController.selectConcreteFinishTypeInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.concreteFinishTypeCommentController.value.text,
-                              },
-                              "chamfers_edging_etc": {
-                                "inspection": postPourInspectionReportController.selectChamfersEdgingInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.chamfersEdgingCommentController.value.text,
-                              },
-                              "drainage_elements": {
-                                "inspection": postPourInspectionReportController.selectDrainageElementsInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.commentDrainageElementsController.value.text,
-                              },
-                              "holding_down_bolts": {
-                                "inspection": postPourInspectionReportController.selectHoldingDownBoltsInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.commentHoldingDownBoltsController.value.text,
-                              },
-                              "crack_inducers": {
-                                "inspection": postPourInspectionReportController.selectCrackInducersInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.commentCrackInducersController.value.text,
-                              },
-                              "waterproofing_membrane": {
-                                "inspection": postPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.commentWaterprooflingMembraneController.value.text,
-                              },
-                              "others": {
-                                "inspection": postPourInspectionReportController.selectOthersInspection.value == "Yes" ? true : false,
-                                "comment": postPourInspectionReportController.commentOthersController.value.text,
-                              },
-                            };
-                            print(jsonEncode(payload));
-                            postPourInspectionReportController.isSubmit.value = true;
-                            await postPourInspectionReportController.createPostPostPourInspectionReportsController(
-                              payload: payload,
-                              clientApprovedSignature: postPourInspectionReportController.clientApproved.value,
-                              signedOnCompletionSignature: postPourInspectionReportController.signedOnCompletion.value,
-                            );
-                          }
 
-                        },
+
+                      Row(
+                        children: [
+
+
+
+
+                          Expanded(
+                            child: CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Previous",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(75, 85, 99, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                              borderWidth: 1,
+                              borderColor: Color.fromRGBO(229, 231, 235, 1),
+                              onPressed: () {
+                                Get.to(()=>PostPourInspectionReportSecondPageView(projectId: projectId));
+                              },
+                            ),
+                          ),
+
+                          SpaceHelperClass.h(12.w(context)),
+
+
+                          Expanded(
+                            child: postPourInspectionReportController.isSubmit.value == true ?
+                            CustomLoaderButton().customLoaderButton(
+                              backgroundColor: Colors.transparent,
+                              loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                              height: 50,
+                              context: context,
+                            ) :
+                            CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Save",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(255, 255, 255, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                              onPressed: () async {
+                                if(postPourInspectionReportController.commentDrainageElementsController.value.text == "" ||
+                                    postPourInspectionReportController.selectDrainageElementsInspection.value == "" ||
+                                    postPourInspectionReportController.commentHoldingDownBoltsController.value.text == "" ||
+                                    postPourInspectionReportController.selectHoldingDownBoltsInspection.value == "" ||
+                                    postPourInspectionReportController.commentCrackInducersController.value.text == "" ||
+                                    postPourInspectionReportController.selectCrackInducersInspection.value == "" ||
+                                    postPourInspectionReportController.commentWaterprooflingMembraneController.value.text == "" ||
+                                    postPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "" ||
+                                    postPourInspectionReportController.commentOthersController.value.text == "" ||
+                                    postPourInspectionReportController.selectOthersInspection.value == ""
+                                ) {
+                                  kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
+                                } else if(postPourInspectionReportController.signedOnCompletion.value.path == "") {
+                                  kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
+                                } else if(postPourInspectionReportController.clientApproved.value.path == "") {
+                                  kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
+                                } else {
+                                  Map<String,dynamic> payload = {
+                                    "project": postPourInspectionReportController.getProjectDetailsResponseModel.value.data?.sId ?? "",
+                                    "pour_no": postPourInspectionReportController.pourNoController.value.text,
+                                    "pour_date": postPourInspectionReportController.pourDateController.value.text,
+                                    "inspection_date": postPourInspectionReportController.inspectionDataTimeController.value.text,
+                                    "drawing_no": postPourInspectionReportController.drawingSketchNoRevisionController.value.text,
+                                    "ga_drawing": postPourInspectionReportController.gaDrawingController.value.text,
+                                    "rebar_drgs": postPourInspectionReportController.rebarDrgsController.value.text,
+                                    "temporary_works": postPourInspectionReportController.temporaryWorksController.value.text,
+                                    "pour_reference":  postPourInspectionReportController.pourReferenceController.value.text,
+                                    "setting_out": {
+                                      "line": postPourInspectionReportController.lineLevelPositionController.value.text,
+                                      "inspection": postPourInspectionReportController.selectInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.commentInspectionController.value.text
+                                    },
+                                    "concrete_finish_type": {
+                                      "inspection": postPourInspectionReportController.selectConcreteFinishTypeInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.concreteFinishTypeCommentController.value.text,
+                                    },
+                                    "chamfers_edging_etc": {
+                                      "inspection": postPourInspectionReportController.selectChamfersEdgingInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.chamfersEdgingCommentController.value.text,
+                                    },
+                                    "drainage_elements": {
+                                      "inspection": postPourInspectionReportController.selectDrainageElementsInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.commentDrainageElementsController.value.text,
+                                    },
+                                    "holding_down_bolts": {
+                                      "inspection": postPourInspectionReportController.selectHoldingDownBoltsInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.commentHoldingDownBoltsController.value.text,
+                                    },
+                                    "crack_inducers": {
+                                      "inspection": postPourInspectionReportController.selectCrackInducersInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.commentCrackInducersController.value.text,
+                                    },
+                                    "waterproofing_membrane": {
+                                      "inspection": postPourInspectionReportController.selectWaterprooflingMembraneInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.commentWaterprooflingMembraneController.value.text,
+                                    },
+                                    "others": {
+                                      "inspection": postPourInspectionReportController.selectOthersInspection.value == "Yes" ? true : false,
+                                      "comment": postPourInspectionReportController.commentOthersController.value.text,
+                                    },
+                                  };
+                                  print(jsonEncode(payload));
+                                  postPourInspectionReportController.isSubmit.value = true;
+                                  await postPourInspectionReportController.createPostPostPourInspectionReportsController(
+                                    payload: payload,
+                                    clientApprovedSignature: postPourInspectionReportController.clientApproved.value,
+                                    signedOnCompletionSignature: postPourInspectionReportController.signedOnCompletion.value,
+                                  );
+                                }
+
+                              },
+                            ),
+                          ),
+
+
+
+
+
+                        ],
                       ),
+
 
 
                       SpaceHelperClass.v(35.h(context)),

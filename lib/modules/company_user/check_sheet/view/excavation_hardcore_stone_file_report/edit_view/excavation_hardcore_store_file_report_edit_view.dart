@@ -164,7 +164,7 @@ class ExcavationHardcoreStoreFileReportEditView extends StatelessWidget {
                                 vertical: 8.vpm(context),
                               ),
                               value: editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value == "" ? null : editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value,
-                              items: ['in-process','completed','not-completed'],
+                              items: ['in-progress','completed','not-completed'],
                               onChanged: (value) async {
                                 editExcavationHardcoreStoreFileReportController.selectCompletionStatus.value = value!;
                               },

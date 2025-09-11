@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/controller/drainage_ducting_report_controller.dart';
+import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/create_view/drainage_ducting_report_second_page_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/widget/post_pour_Inspection_report_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
+
+
 class DrainageDuctingReportThirdPageView extends StatelessWidget {
   DrainageDuctingReportThirdPageView({super.key,required this.projectId});
   final String projectId;
@@ -577,76 +579,112 @@ class DrainageDuctingReportThirdPageView extends StatelessWidget {
 
                       SpaceHelperClass.v(35.h(context)),
 
-                      drainageDuctingReportController.isSubmit.value == true ?
-                      CustomLoaderButton().customLoaderButton(
-                        backgroundColor: Colors.transparent,
-                        loaderColor: Color.fromRGBO(38, 50, 56, 1),
-                        height: 50,
-                        context: context,
-                      ) :
-                      CustomButtonHelper.customRoundedButton(
-                        context: context,
-                        text: "Save",
-                        fontSize: 16,
-                        textColor: Color.fromRGBO(255, 255, 255, 1),
-                        fontWeight: FontWeight.w600,
-                        borderRadius: 8,
-                        backgroundColor: Color.fromRGBO(24, 147, 248, 1),
-                        onPressed: () async {
-                          if(drainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ||
-                              drainageDuctingReportController.selectCompaction.value == "" ||
-                              drainageDuctingReportController.selectBackfill.value == "" ||
-                              drainageDuctingReportController.selectThickness.value == "" ||
-                              drainageDuctingReportController.selectType.value == "" ||
-                              drainageDuctingReportController.selectMakerTape.value == "" ||
-                              drainageDuctingReportController.installByController.value.text == ""
-                          ) {
-                            kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
-                          } else if(drainageDuctingReportController.signedOnCompletion.value.path == "") {
-                            kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
-                          } else if(drainageDuctingReportController.clientApproved.value.path == "") {
-                            kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
-                          } else {
-                            Map<String,dynamic> payload = {
-                              "project": projectId,
-                              "contract": drainageDuctingReportController.contractController.value.text,
-                              "date": drainageDuctingReportController.dateController.value.text,
-                              "drawing_reference_incl_revision": drainageDuctingReportController.drawingReferenceInclRevisionController.value.text,
-                              "location_of_work": drainageDuctingReportController.locationController.value.text,
-                              "completion_status": drainageDuctingReportController.selectCompletionStatus.value,
-                              "sub_contractor": drainageDuctingReportController.subContractorController.value.text,
-                              "bed_type_and_thickness": drainageDuctingReportController.selectBedTypeAndThickness.value == "Yes" ? true : false,
-                              "installation_pipe_type": drainageDuctingReportController.pipeTypeController.value.text,
-                              "line": drainageDuctingReportController.selectLine.value == "Yes" ? true : false,
-                              "level": drainageDuctingReportController.selectLevel.value == "Yes" ? true : false,
-                              "position": drainageDuctingReportController.selectPosition.value == "Yes" ? true : false,
-                              "gradient": drainageDuctingReportController.selectGradient.value == "Yes" ? true : false,
-                              "pop_up_dealed_off": drainageDuctingReportController.selectPopUpDealedOff.value == "Yes" ? true : false,
-                              "test_air_water_cctv_mandrill": drainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "Yes" ? true : false,
-                              "test_certificate_reference": drainageDuctingReportController.testCertificateReferenceController.value.text,
-                              "pipe_haunching_surrounding": drainageDuctingReportController.selectPipeHaunchingSurrounding.value == "Yes" ? true : false,
-                              "pipe_type": drainageDuctingReportController.pipeTypeController.value.text,
-                              "compaction": drainageDuctingReportController.selectCompaction.value == "Yes" ? true : false,
-                              "backfill": drainageDuctingReportController.selectBackfill.value == "Yes" ? true : false,
-                              "thickness": drainageDuctingReportController.selectThickness.value == "Yes" ? true : false,
-                              "type": drainageDuctingReportController.selectType.value == "Yes" ? true : false,
-                              "marker_tape": drainageDuctingReportController.selectMakerTape.value == "Yes" ? true : false,
-                              "install_by": drainageDuctingReportController.installByController.value.text,
-                              "comment": drainageDuctingReportController.commentController.value.text,
-                            };
-                            print(jsonEncode(payload));
+                      Row(
+                        children: [
 
-                            drainageDuctingReportController.isSubmit.value = true;
-                            await drainageDuctingReportController.createDrainageDuctingReportController(
-                              payload: payload,
-                              clientApprovedSignature: drainageDuctingReportController.clientApproved.value,
-                              signedOnCompletionSignature: drainageDuctingReportController.signedOnCompletion.value,
-                              projectId: projectId,
-                            );
-                          }
 
-                        },
+
+                          Expanded(
+                            child: CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Previous",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(75, 85, 99, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                              borderWidth: 1,
+                              borderColor: Color.fromRGBO(229, 231, 235, 1),
+                              onPressed: () {
+                                Get.to(()=>DrainageDuctingReportSecondPageView(projectId: projectId));
+                              },
+                            ),
+                          ),
+
+                          SpaceHelperClass.h(12.w(context)),
+
+
+                          Expanded(
+                            child: drainageDuctingReportController.isSubmit.value == true ?
+                            CustomLoaderButton().customLoaderButton(
+                              backgroundColor: Colors.transparent,
+                              loaderColor: Color.fromRGBO(38, 50, 56, 1),
+                              height: 50,
+                              context: context,
+                            ) :
+                            CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Save",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(255, 255, 255, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(24, 147, 248, 1),
+                              onPressed: () async {
+                                if(drainageDuctingReportController.selectPipeHaunchingSurrounding.value == "" ||
+                                    drainageDuctingReportController.selectCompaction.value == "" ||
+                                    drainageDuctingReportController.selectBackfill.value == "" ||
+                                    drainageDuctingReportController.selectThickness.value == "" ||
+                                    drainageDuctingReportController.selectType.value == "" ||
+                                    drainageDuctingReportController.selectMakerTape.value == "" ||
+                                    drainageDuctingReportController.installByController.value.text == ""
+                                ) {
+                                  kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
+                                } else if(drainageDuctingReportController.signedOnCompletion.value.path == "") {
+                                  kSnackBar(message: "Please Upload Signed On Completion", bgColor: AppColors.red);
+                                } else if(drainageDuctingReportController.clientApproved.value.path == "") {
+                                  kSnackBar(message: "Please Upload Client Approved Sign", bgColor: AppColors.red);
+                                } else {
+                                  Map<String,dynamic> payload = {
+                                    "project": projectId,
+                                    "contract": drainageDuctingReportController.contractController.value.text,
+                                    "date": drainageDuctingReportController.dateController.value.text,
+                                    "drawing_reference_incl_revision": drainageDuctingReportController.drawingReferenceInclRevisionController.value.text,
+                                    "location_of_work": drainageDuctingReportController.locationController.value.text,
+                                    "completion_status": drainageDuctingReportController.selectCompletionStatus.value,
+                                    "sub_contractor": drainageDuctingReportController.subContractorController.value.text,
+                                    "bed_type_and_thickness": drainageDuctingReportController.selectBedTypeAndThickness.value == "Yes" ? true : false,
+                                    "installation_pipe_type": drainageDuctingReportController.pipeTypeController.value.text,
+                                    "line": drainageDuctingReportController.selectLine.value == "Yes" ? true : false,
+                                    "level": drainageDuctingReportController.selectLevel.value == "Yes" ? true : false,
+                                    "position": drainageDuctingReportController.selectPosition.value == "Yes" ? true : false,
+                                    "gradient": drainageDuctingReportController.selectGradient.value == "Yes" ? true : false,
+                                    "pop_up_dealed_off": drainageDuctingReportController.selectPopUpDealedOff.value == "Yes" ? true : false,
+                                    "test_air_water_cctv_mandrill": drainageDuctingReportController.selectTestAirWaterCCTVMandrill.value == "Yes" ? true : false,
+                                    "test_certificate_reference": drainageDuctingReportController.testCertificateReferenceController.value.text,
+                                    "pipe_haunching_surrounding": drainageDuctingReportController.selectPipeHaunchingSurrounding.value == "Yes" ? true : false,
+                                    "pipe_type": drainageDuctingReportController.pipeTypeController.value.text,
+                                    "compaction": drainageDuctingReportController.selectCompaction.value == "Yes" ? true : false,
+                                    "backfill": drainageDuctingReportController.selectBackfill.value == "Yes" ? true : false,
+                                    "thickness": drainageDuctingReportController.selectThickness.value == "Yes" ? true : false,
+                                    "type": drainageDuctingReportController.selectType.value == "Yes" ? true : false,
+                                    "marker_tape": drainageDuctingReportController.selectMakerTape.value == "Yes" ? true : false,
+                                    "install_by": drainageDuctingReportController.installByController.value.text,
+                                    "comment": drainageDuctingReportController.commentController.value.text,
+                                  };
+                                  print(jsonEncode(payload));
+
+                                  drainageDuctingReportController.isSubmit.value = true;
+                                  await drainageDuctingReportController.createDrainageDuctingReportController(
+                                    payload: payload,
+                                    clientApprovedSignature: drainageDuctingReportController.clientApproved.value,
+                                    signedOnCompletionSignature: drainageDuctingReportController.signedOnCompletion.value,
+                                    projectId: projectId,
+                                  );
+                                }
+
+                              },
+                            ),
+                          ),
+
+
+
+
+
+                        ],
                       ),
+
+
 
 
                       SpaceHelperClass.v(35.h(context)),

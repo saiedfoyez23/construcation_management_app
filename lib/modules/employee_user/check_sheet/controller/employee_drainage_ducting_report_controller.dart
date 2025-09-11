@@ -4,28 +4,45 @@ import 'package:construction_management_app/common/app_constant/app_constant.dar
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/check_sheet_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/employee_check_sheet_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:signature/signature.dart';
-
 import '../../../../common/common.dart';
 
-class ExcavationHardcoreStoreFileReportController extends GetxController {
+class EmployeeDrainageDuctingReportController extends GetxController {
+  RxBool isSubmit = false.obs;
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
   Rx<TextEditingController> contractController = TextEditingController().obs;
   Rx<TextEditingController> dateController = TextEditingController().obs;
   Rx<TextEditingController> drawingReferenceInclRevisionController = TextEditingController().obs;
-  Rx<TextEditingController> revisionController = TextEditingController().obs;
   Rx<TextEditingController> locationController = TextEditingController().obs;
   RxString selectCompletionStatus = "".obs;
   Rx<TextEditingController> subContractorController = TextEditingController().obs;
-  RxString selectComplianceCheck = "".obs;
-  RxString selectCheckForUndergroundService = "".obs;
+
+
+  RxString selectBedTypeAndThickness = "".obs;
+  Rx<TextEditingController> pipeTypeController = TextEditingController().obs;
+
+  RxString selectLine = "".obs;
+  RxString selectLevel = "".obs;
+  RxString selectPosition = "".obs;
+  RxString selectGradient = "".obs;
+  RxString selectPopUpDealedOff = "".obs;
+  RxString selectTestAirWaterCCTVMandrill = "".obs;
+  Rx<TextEditingController> testCertificateReferenceController = TextEditingController().obs;
+
+  RxString selectPipeHaunchingSurrounding = "".obs;
+  RxString selectCompaction = "".obs;
+  RxString selectBackfill = "".obs;
+  RxString selectThickness = "".obs;
+  RxString selectType = "".obs;
+  RxString selectMakerTape = "".obs;
+  Rx<TextEditingController> installByController = TextEditingController().obs;
   Rx<TextEditingController> commentController = TextEditingController().obs;
-  RxBool isSubmit = false.obs;
+
 
   Rx<File> signedOnCompletion = File("").obs;
   Rx<File> clientApproved = File("").obs;
@@ -56,7 +73,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
   }
 
 
-  Future<void> createExcavationHardcoreStoreFileReportController({
+  Future<void> createEmployeeDrainageDuctingReportController({
     required Map<String,dynamic> payload,
     required File clientApprovedSignature,
     required File signedOnCompletionSignature,
@@ -76,7 +93,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
       // Create multipart request
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse("${Api.postExcavationHardcoreStoneFillReport}"),
+        Uri.parse("${Api.postDrainageDuctingReport}"),
       );
 
       request.headers.addAll(headers);
@@ -133,7 +150,7 @@ class ExcavationHardcoreStoreFileReportController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>EmployeeCheckSheetView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];

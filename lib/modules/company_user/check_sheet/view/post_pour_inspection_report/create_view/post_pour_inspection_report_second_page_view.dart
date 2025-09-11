@@ -321,6 +321,28 @@ class PostPourInspectionReportSecondPageView extends StatelessWidget {
                         children: [
 
 
+
+
+                          Expanded(
+                            child: CustomButtonHelper.customRoundedButton(
+                              context: context,
+                              text: "Previous",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(75, 85, 99, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                              borderWidth: 1,
+                              borderColor: Color.fromRGBO(229, 231, 235, 1),
+                              onPressed: () {
+                                Get.to(()=>PostPourInspectionReportFirstPageView(projectId: projectId));
+                              },
+                            ),
+                          ),
+
+                          SpaceHelperClass.h(12.w(context)),
+
+
                           Expanded(
                             child: CustomButtonHelper.customRoundedButton(
                               context: context,
@@ -347,24 +369,7 @@ class PostPourInspectionReportSecondPageView extends StatelessWidget {
                             ),
                           ),
 
-                          SpaceHelperClass.h(12.w(context)),
 
-                          Expanded(
-                            child: CustomButtonHelper.customRoundedButton(
-                              context: context,
-                              text: "Previous",
-                              fontSize: 16,
-                              textColor: Color.fromRGBO(75, 85, 99, 1),
-                              fontWeight: FontWeight.w600,
-                              borderRadius: 8,
-                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
-                              borderWidth: 1,
-                              borderColor: Color.fromRGBO(229, 231, 235, 1),
-                              onPressed: () {
-                                Get.to(()=>PostPourInspectionReportFirstPageView(projectId: projectId));
-                              },
-                            ),
-                          ),
 
 
 

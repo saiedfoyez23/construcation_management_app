@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:construction_management_app/common/app_constant/app_constant.dart';
-import 'package:construction_management_app/common/custom_mime_type/costom_mime_type.dart';
 import 'package:construction_management_app/common/local_store/local_store.dart';
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
@@ -12,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:signature/signature.dart';
-
 import '../../../../common/common.dart';
 
 class DrainageDuctingReportController extends GetxController {

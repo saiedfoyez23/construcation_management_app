@@ -1,21 +1,19 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_drainage_ducting_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/edit_view/edit_drainage_ducting_report_second_page_view.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/get_view/drainage_ducting_report_get_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/post_pour_inspection_report/widget/post_pour_Inspection_report_widget.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/controller/employee_edit_drainage_ducting_report_controller.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/drainage_ducting_report/edit_view/employee_edit_drainage_ducting_report_second_page_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/drainage_ducting_report/get_view/employee_drainage_ducting_report_get_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
-  EditDrainageDuctingReportFirstPageView({super.key,required this.projectId});
+class EmployeeEditDrainageDuctingReportFirstPageView extends StatelessWidget {
+  EmployeeEditDrainageDuctingReportFirstPageView({super.key,required this.projectId});
 
   final String projectId;
 
-
-
   @override
   Widget build(BuildContext context) {
-    EditDrainageDuctingReportController editDrainageDuctingReportController = Get.put(EditDrainageDuctingReportController(projectId: projectId));
+    EmployeeEditDrainageDuctingReportController employeeEditDrainageDuctingReportController = Get.put(EmployeeEditDrainageDuctingReportController(projectId: projectId));
     return Scaffold(
       body: SafeArea(
         child: Obx(()=>Container(
@@ -24,7 +22,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.scaffoldBackGroundColor,
           ),
-          child: editDrainageDuctingReportController.isLoading.value == true ?
+          child: employeeEditDrainageDuctingReportController.isLoading.value == true ?
           CustomLoaderButton().customLoaderButton(
             backgroundColor: Colors.transparent,
             loaderColor: Color.fromRGBO(38, 50, 56, 1),
@@ -39,7 +37,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
                 context: context,
                 height: 80,
                 onBackPressed: () {
-                  Get.off(()=>DrainageDuctingReportGetView(projectId: projectId),preventDuplicates: false);
+                  Get.off(()=>EmployeeDrainageDuctingReportGetView(projectId: projectId),preventDuplicates: false);
                 },
                 title: "Drainage/Ducting Report",
               ),
@@ -65,7 +63,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: editDrainageDuctingReportController.contractController.value,
+                        controller: employeeEditDrainageDuctingReportController.contractController.value,
                         label: "Contract : ",
                         hintText: "Enter contract number",
                       ),
@@ -76,7 +74,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
                         readOnly: true,
-                        controller: editDrainageDuctingReportController.dateController.value,
+                        controller: employeeEditDrainageDuctingReportController.dateController.value,
                         label: "Date : ",
                         hintText: "Enter date",
                         suffixIcon: Padding(
@@ -100,7 +98,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
                             lastDate: DateTime(2100),
                           );
                           if (picked != null) {
-                            editDrainageDuctingReportController.dateController.value.text = picked.toLocal().toString();
+                            employeeEditDrainageDuctingReportController.dateController.value.text = picked.toLocal().toString();
                           }
                         },
                       ),
@@ -109,7 +107,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller:editDrainageDuctingReportController.drawingReferenceInclRevisionController.value,
+                        controller: employeeEditDrainageDuctingReportController.drawingReferenceInclRevisionController.value,
                         label: "Drawing Reference Incl Revision : ",
                         hintText: "Enter drawing reference",
                       ),
@@ -118,7 +116,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: editDrainageDuctingReportController.locationController.value,
+                        controller: employeeEditDrainageDuctingReportController.locationController.value,
                         label: "Location of work : ",
                         hintText: "Enter work  location",
                       ),
@@ -161,10 +159,10 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
                                 horizontal: 16.hpm(context),
                                 vertical: 8.vpm(context),
                               ),
-                              value: editDrainageDuctingReportController.selectCompletionStatus.value == "" ? null : editDrainageDuctingReportController.selectCompletionStatus.value,
+                              value: employeeEditDrainageDuctingReportController.selectCompletionStatus.value == "" ? null : employeeEditDrainageDuctingReportController.selectCompletionStatus.value,
                               items: ['in-progress','completed','not-completed'],
                               onChanged: (value) async {
-                                editDrainageDuctingReportController.selectCompletionStatus.value = value!;
+                                employeeEditDrainageDuctingReportController.selectCompletionStatus.value = value!;
                               },
                               hintText: "Select Completion Status",
                             ),
@@ -181,7 +179,7 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
 
                       PostPourInspectionReportWidget().postPourInspectionReportWidget(
                         context: context,
-                        controller: editDrainageDuctingReportController.subContractorController.value,
+                        controller: employeeEditDrainageDuctingReportController.subContractorController.value,
                         label: "Sub-Contractor : ",
                         hintText: "Enter sub-contractor",
                       ),
@@ -198,16 +196,16 @@ class EditDrainageDuctingReportFirstPageView extends StatelessWidget {
                         borderRadius: 8,
                         backgroundColor: Color.fromRGBO(24, 147, 248, 1),
                         onPressed: () async {
-                          if(editDrainageDuctingReportController.contractController.value.text == "" ||
-                              editDrainageDuctingReportController.dateController.value.text == "" ||
-                              editDrainageDuctingReportController.drawingReferenceInclRevisionController.value.text == "" ||
-                              editDrainageDuctingReportController.locationController.value.text == "" ||
-                              editDrainageDuctingReportController.selectCompletionStatus.value == "" ||
-                              editDrainageDuctingReportController.subContractorController.value.text == ""
+                          if(employeeEditDrainageDuctingReportController.contractController.value.text == "" ||
+                              employeeEditDrainageDuctingReportController.dateController.value.text == "" ||
+                              employeeEditDrainageDuctingReportController.drawingReferenceInclRevisionController.value.text == "" ||
+                              employeeEditDrainageDuctingReportController.locationController.value.text == "" ||
+                              employeeEditDrainageDuctingReportController.selectCompletionStatus.value == "" ||
+                              employeeEditDrainageDuctingReportController.subContractorController.value.text == ""
                           ) {
                             kSnackBar(message: "Please fill all fields", bgColor: AppColors.red);
                           } else {
-                            Get.to(()=>EditDrainageDuctingReportSecondPageView(projectId: projectId));
+                            Get.to(()=>EmployeeEditDrainageDuctingReportSecondPageView(projectId: projectId));
                           }
 
                         },

@@ -1,8 +1,5 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/controller/drainage_ducting_report_controller.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/controller/edit_drainage_ducting_report_controller.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/create_view/drainage_ducting_report_first_page_view.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/create_view/drainage_ducting_report_third_page_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/edit_view/edit_drainage_ducting_report_first_page_view.dart';
 import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/edit_view/edit_drainage_ducting_report_third_page_view.dart';
 import 'package:flutter/material.dart';
@@ -408,6 +405,26 @@ class EditDrainageDuctingReportSecondPageView extends StatelessWidget {
                           Expanded(
                             child: CustomButtonHelper.customRoundedButton(
                               context: context,
+                              text: "Previous",
+                              fontSize: 16,
+                              textColor: Color.fromRGBO(75, 85, 99, 1),
+                              fontWeight: FontWeight.w600,
+                              borderRadius: 8,
+                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
+                              borderWidth: 1,
+                              borderColor: Color.fromRGBO(229, 231, 235, 1),
+                              onPressed: () {
+                                Get.to(()=>EditDrainageDuctingReportFirstPageView(projectId: projectId));
+                              },
+                            ),
+                          ),
+
+                          SpaceHelperClass.h(12.w(context)),
+
+
+                          Expanded(
+                            child: CustomButtonHelper.customRoundedButton(
+                              context: context,
                               text: "Next",
                               fontSize: 16,
                               textColor: Color.fromRGBO(255, 255, 255, 1),
@@ -432,26 +449,6 @@ class EditDrainageDuctingReportSecondPageView extends StatelessWidget {
                               },
                             ),
                           ),
-
-                          SpaceHelperClass.h(12.w(context)),
-
-                          Expanded(
-                            child: CustomButtonHelper.customRoundedButton(
-                              context: context,
-                              text: "Previous",
-                              fontSize: 16,
-                              textColor: Color.fromRGBO(75, 85, 99, 1),
-                              fontWeight: FontWeight.w600,
-                              borderRadius: 8,
-                              backgroundColor: Color.fromRGBO(234, 235, 235, 1),
-                              borderWidth: 1,
-                              borderColor: Color.fromRGBO(229, 231, 235, 1),
-                              onPressed: () {
-                                Get.to(()=>EditDrainageDuctingReportFirstPageView(projectId: projectId));
-                              },
-                            ),
-                          ),
-
 
 
                         ],

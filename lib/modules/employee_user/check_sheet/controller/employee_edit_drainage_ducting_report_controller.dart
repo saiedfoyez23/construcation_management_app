@@ -5,8 +5,8 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/model/get_ducting_report_response_model.dart';
-import 'package:construction_management_app/modules/company_user/check_sheet/view/drainage_ducting_report/get_view/drainage_ducting_report_get_view.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/model/get_employee_ducting_report_response_model.dart';
+import 'package:construction_management_app/modules/employee_user/check_sheet/view/drainage_ducting_report/get_view/employee_drainage_ducting_report_get_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -15,14 +15,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 import '../../../../common/common.dart';
 
-class EditDrainageDuctingReportController extends GetxController {
+class EmployeeEditDrainageDuctingReportController extends GetxController {
 
   String projectId;
   RxBool isLoading = false.obs;
   RxBool isSubmit = false.obs;
-  EditDrainageDuctingReportController({required this.projectId});
+  EmployeeEditDrainageDuctingReportController({required this.projectId});
   Rx<LoginResponseModel> loginResponseModel = LoginResponseModel().obs;
-  Rx<GetDuctingReportResponseModel> getDuctingReportResponseModel = GetDuctingReportResponseModel().obs;
+  Rx<GetEmployeeDuctingReportResponseModel> getEmployeeDuctingReportResponseModel = GetEmployeeDuctingReportResponseModel().obs;
 
   Rx<TextEditingController> contractController = TextEditingController().obs;
   Rx<TextEditingController> dateController = TextEditingController().obs;
@@ -88,11 +88,11 @@ class EditDrainageDuctingReportController extends GetxController {
     super.onInit();
     isLoading(true);
     Future.delayed(Duration(seconds: 1),() async {
-      await getDuctingReportsController(projectId: projectId);
+      await getEmployeeDuctingReportsController(projectId: projectId);
     });
   }
 
-  Future<void> getDuctingReportsController({required String projectId}) async {
+  Future<void> getEmployeeDuctingReportsController({required String projectId}) async {
     try {
       loginResponseModel.value = LoginResponseModel.fromJson(jsonDecode(LocalStorage.getData(key: AppConstant.token)));
 
@@ -111,32 +111,32 @@ class EditDrainageDuctingReportController extends GetxController {
 
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
-        getDuctingReportResponseModel.value = GetDuctingReportResponseModel.fromJson(responseBody);
-        contractController.value.text = getDuctingReportResponseModel.value.data?.contract ?? "";
-        dateController.value.text = getDuctingReportResponseModel.value.data?.date ?? "";
-        drawingReferenceInclRevisionController.value.text = getDuctingReportResponseModel.value.data?.date ?? "";
-        locationController.value.text = getDuctingReportResponseModel.value.data?.locationOfWork ?? "";
-        selectCompletionStatus.value = getDuctingReportResponseModel.value.data?.completionStatus ?? "";
-        subContractorController.value.text = getDuctingReportResponseModel.value.data?.subContractor ?? "";
-        selectBedTypeAndThickness.value = getDuctingReportResponseModel.value.data?.bedTypeAndThickness == true ? "Yes" : "No";
-        selectLine.value = getDuctingReportResponseModel.value.data?.line == true ? "Yes" : "No";
-        selectLevel.value = getDuctingReportResponseModel.value.data?.level == true ? "Yes" : "No";
-        selectPosition.value = getDuctingReportResponseModel.value.data?.position == true ? "Yes" : "No";
-        selectGradient.value = getDuctingReportResponseModel.value.data?.gradient == true ? "Yes" : "No";
-        selectPopUpDealedOff.value = getDuctingReportResponseModel.value.data?.popUpDealedOff == true ? "Yes" : "No";
-        selectTestAirWaterCCTVMandrill.value = getDuctingReportResponseModel.value.data?.testAirWaterCctvMandrill == true ? "Yes" : "No";
-        selectPipeHaunchingSurrounding.value = getDuctingReportResponseModel.value.data?.pipeHaunchingSurrounding == true ? "Yes" : "No";
-        selectCompaction.value = getDuctingReportResponseModel.value.data?.compaction == true ? "Yes" : "No";
-        selectBackfill.value = getDuctingReportResponseModel.value.data?.backfill == true ? "Yes" : "No";
-        selectThickness.value = getDuctingReportResponseModel.value.data?.thickness == true ? "Yes" : "No";
-        selectType.value = getDuctingReportResponseModel.value.data?.type == true ? "Yes" : "No";
-        selectMakerTape.value = getDuctingReportResponseModel.value.data?.markerTape == true ? "Yes" : "No";
-        pipeTypeController.value.text = getDuctingReportResponseModel.value.data?.pipeType ?? "";
-        testCertificateReferenceController.value.text = getDuctingReportResponseModel.value.data?.testCertificateReference ?? "";
-        installByController.value.text = getDuctingReportResponseModel.value.data?.installBy ?? "";
-        commentController.value.text = getDuctingReportResponseModel.value.data?.comment ?? "";
-        signedOnCompletion.value = File("${await downloadFile(getDuctingReportResponseModel.value.data?.signedOnCompletionSignature, "signedOnCompletionSignature")}");
-        clientApproved.value = File("${await downloadFile(getDuctingReportResponseModel.value.data?.clientApprovedSignature, "clientApprovedSignature")}");
+        getEmployeeDuctingReportResponseModel.value = GetEmployeeDuctingReportResponseModel.fromJson(responseBody);
+        contractController.value.text = getEmployeeDuctingReportResponseModel.value.data?.contract ?? "";
+        dateController.value.text = getEmployeeDuctingReportResponseModel.value.data?.date ?? "";
+        drawingReferenceInclRevisionController.value.text = getEmployeeDuctingReportResponseModel.value.data?.date ?? "";
+        locationController.value.text = getEmployeeDuctingReportResponseModel.value.data?.locationOfWork ?? "";
+        selectCompletionStatus.value = getEmployeeDuctingReportResponseModel.value.data?.completionStatus ?? "";
+        subContractorController.value.text = getEmployeeDuctingReportResponseModel.value.data?.subContractor ?? "";
+        selectBedTypeAndThickness.value = getEmployeeDuctingReportResponseModel.value.data?.bedTypeAndThickness == true ? "Yes" : "No";
+        selectLine.value = getEmployeeDuctingReportResponseModel.value.data?.line == true ? "Yes" : "No";
+        selectLevel.value = getEmployeeDuctingReportResponseModel.value.data?.level == true ? "Yes" : "No";
+        selectPosition.value = getEmployeeDuctingReportResponseModel.value.data?.position == true ? "Yes" : "No";
+        selectGradient.value = getEmployeeDuctingReportResponseModel.value.data?.gradient == true ? "Yes" : "No";
+        selectPopUpDealedOff.value = getEmployeeDuctingReportResponseModel.value.data?.popUpDealedOff == true ? "Yes" : "No";
+        selectTestAirWaterCCTVMandrill.value = getEmployeeDuctingReportResponseModel.value.data?.testAirWaterCctvMandrill == true ? "Yes" : "No";
+        selectPipeHaunchingSurrounding.value = getEmployeeDuctingReportResponseModel.value.data?.pipeHaunchingSurrounding == true ? "Yes" : "No";
+        selectCompaction.value = getEmployeeDuctingReportResponseModel.value.data?.compaction == true ? "Yes" : "No";
+        selectBackfill.value = getEmployeeDuctingReportResponseModel.value.data?.backfill == true ? "Yes" : "No";
+        selectThickness.value = getEmployeeDuctingReportResponseModel.value.data?.thickness == true ? "Yes" : "No";
+        selectType.value = getEmployeeDuctingReportResponseModel.value.data?.type == true ? "Yes" : "No";
+        selectMakerTape.value = getEmployeeDuctingReportResponseModel.value.data?.markerTape == true ? "Yes" : "No";
+        pipeTypeController.value.text = getEmployeeDuctingReportResponseModel.value.data?.pipeType ?? "";
+        testCertificateReferenceController.value.text = getEmployeeDuctingReportResponseModel.value.data?.testCertificateReference ?? "";
+        installByController.value.text = getEmployeeDuctingReportResponseModel.value.data?.installBy ?? "";
+        commentController.value.text = getEmployeeDuctingReportResponseModel.value.data?.comment ?? "";
+        signedOnCompletion.value = File("${await downloadFile(getEmployeeDuctingReportResponseModel.value.data?.signedOnCompletionSignature, "signedOnCompletionSignature")}");
+        clientApproved.value = File("${await downloadFile(getEmployeeDuctingReportResponseModel.value.data?.clientApprovedSignature, "clientApprovedSignature")}");
       } else {
         throw "Data retrieve is Failed";
       }
@@ -172,7 +172,7 @@ class EditDrainageDuctingReportController extends GetxController {
   }
 
 
-  Future<void> editDrainageDuctingReportController({
+  Future<void> editEmployeeDrainageDuctingReportController({
     required Map<String,dynamic> payload,
     required File clientApprovedSignature,
     required File signedOnCompletionSignature,
@@ -247,7 +247,7 @@ class EditDrainageDuctingReportController extends GetxController {
         // Handle successful upload
         String successMessage = responseData['message'];
         kSnackBar(message: successMessage, bgColor: AppColors.green);
-        Get.off(()=>DrainageDuctingReportGetView(projectId: projectId),preventDuplicates: false);
+        Get.off(()=>EmployeeDrainageDuctingReportGetView(projectId: projectId),preventDuplicates: false);
       } else {
         // Handle server error
         String errorMessage = responseData['message'];
