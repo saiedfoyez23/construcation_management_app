@@ -46,11 +46,14 @@ class Api {
   static const myProjectSearch = "$baseUrl/projects?limit=1000000000&searchTerm="; //done
   static const updateSingleProject = "$baseUrl/projects"; //done
   static const projectDetails = "$baseUrl/projects"; //done
-  static singleProjectDetails({required projectId}) =>
-      "$baseUrl/projects/$projectId";
+  static singleProjectDetails({required projectId}) => "$baseUrl/projects/$projectId";
 
   /// setting
   static const setting = "$baseUrl/settings"; //done
+
+  ///notification
+  static const notification = "$baseUrl/notifications"; //done
+
 
   /// employees
   static const employeeProfile = "$baseUrl/employees/profile";

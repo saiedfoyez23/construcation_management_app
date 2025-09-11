@@ -1,6 +1,6 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/message/view/send_message.dart';
-import 'package:construction_management_app/modules/company_user/notification/view/notification_screen.dart';
+import 'package:construction_management_app/modules/company_user/notification/view/view/notification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -95,7 +95,7 @@ class CustomAppBarHelper {
           imageFit: BoxFit.contain,
           fit: BoxFit.cover,
           onPressed: () {
-            Get.off(()=>NotificationScreen(),preventDuplicates: false);
+            Get.off(()=>NotificationView(),preventDuplicates: false);
           },
         ),
       ],
