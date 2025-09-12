@@ -54,6 +54,11 @@ class Api {
   ///notification
   static const notification = "$baseUrl/notifications"; //done
 
+  ///chat group
+  static const chatGroup = "$baseUrl/chat-groups/get-my-chats";
+  static const getMessage = "$baseUrl/chat-groups";
+  static const getAllMessage = "$baseUrl/messages";
+
 
   /// employees
   static const employeeProfile = "$baseUrl/employees/profile";
@@ -98,5 +103,7 @@ class Api {
   static const postPostPourInspectionReports = "$baseUrl/post-pour-inspection-reports"; // done
   static const postExcavationHardcoreStoneFillReport = "$baseUrl/excavation-reports"; // done
   static const postDrainageDuctingReport = "$baseUrl/ducting-reports"; // done
+
+  static const socketUrl = "http://206.162.244.133:4000/chat";
 
 }

@@ -1,6 +1,7 @@
 import 'package:construction_management_app/common/common.dart';
-import 'package:construction_management_app/modules/company_user/message/view/send_message.dart';
+import 'package:construction_management_app/modules/company_user/dashboard/view/dashboard_view.dart';
 import 'package:construction_management_app/modules/company_user/notification/view/view/notification_view.dart';
+import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -83,7 +84,7 @@ class CustomAppBarHelper {
           imageFit: BoxFit.contain,
           fit: BoxFit.cover,
           onPressed: () {
-            Get.off(()=>SendMessage(),preventDuplicates: false);
+            Get.off(()=>EmployeeDashboardView(index: 2,),preventDuplicates: false);
           },
         ),
         SpaceHelperClass.h(12.w(context)),

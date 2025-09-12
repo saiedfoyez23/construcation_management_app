@@ -2,7 +2,7 @@ import 'package:construction_management_app/common/app_images/app_images.dart';
 import 'package:construction_management_app/modules/employee_user/create_project/view/employee_all_job_view.dart';
 import 'package:construction_management_app/modules/employee_user/dashboard/controller/employee_dashboard_controller.dart';
 import 'package:construction_management_app/modules/employee_user/home/view/employee_home_view.dart';
-import 'package:construction_management_app/modules/employee_user/message/view/group_message.dart';
+import 'package:construction_management_app/modules/employee_user/message/view/employee_group_message_view.dart';
 import 'package:construction_management_app/modules/employee_user/profile/view/employee_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,7 @@ class EmployeeDashboardView extends StatelessWidget {
   final List<Widget> _screens = [
     EmployeeHomeView(),
     EmployeeAllJobView(),
-    EmployeeGroupMessage(),
+    EmployeeGroupMessageView(),
     EmployeeProfileView()
   ];
 

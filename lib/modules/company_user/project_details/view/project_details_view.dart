@@ -10,6 +10,7 @@ import 'package:construction_management_app/modules/company_user/site_diary/view
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../dashboard/view/dashboard_view.dart';
+import '../../message/view/message_view.dart';
 
 class ProjectDetailsView extends StatelessWidget {
   ProjectDetailsView({super.key,required this.projectId});
@@ -332,7 +333,7 @@ class ProjectDetailsView extends StatelessWidget {
                                   height: 40.h(context),
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      //_handleAddTask(controller: controller);
+                                      Get.off(()=>MessageView(groupChatId: projectViewController.getProjectDetailsResponseModel.value.data!.participants?.first.sId, projectName: projectViewController.getProjectDetailsResponseModel.value.data!.name));
                                     },
                                     style: OutlinedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(

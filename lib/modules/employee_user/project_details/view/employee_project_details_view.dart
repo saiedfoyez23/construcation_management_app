@@ -4,6 +4,7 @@ import 'package:construction_management_app/modules/employee_user/check_sheet/vi
 import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
 import 'package:construction_management_app/modules/employee_user/day_work/view/day_employee_work_view.dart';
 import 'package:construction_management_app/modules/employee_user/folder/view/employee_folder_view.dart';
+import 'package:construction_management_app/modules/employee_user/message/view/employee_message_view.dart';
 import 'package:construction_management_app/modules/employee_user/planning/view/employee_planing_view.dart';
 import 'package:construction_management_app/modules/employee_user/project_details/controller/employee_project_view_controller.dart';
 import 'package:construction_management_app/modules/employee_user/resources/view/employee_resources_view.dart';
@@ -335,7 +336,7 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                                   height: 40.h(context),
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      //_handleAddTask(controller: controller);
+                                      Get.off(()=>EmployeeMessageView(groupChatId: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.participants?.first.sId, projectName: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.name));
                                     },
                                     style: OutlinedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(
