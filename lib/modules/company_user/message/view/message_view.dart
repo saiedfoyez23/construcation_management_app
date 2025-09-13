@@ -61,7 +61,7 @@ class MessageView extends StatelessWidget {
                     ),
 
 
-                    getAllMessageController.getAllMessageList.isEmpty == true ?
+                    getAllMessageController.getAllMessageResponseModel.value.data?.data?.isEmpty == true ?
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -110,10 +110,10 @@ class MessageView extends StatelessWidget {
 
                                         CircleAvatar(
                                           radius: 30.r(context),
-                                          backgroundImage: getAllMessageController.getAllMessageList[index].sender?.user?.image != null
-                                              ? NetworkImage(getAllMessageController.getAllMessageList[index].sender?.user?.image ) : null,
+                                          backgroundImage: getAllMessageController.getAllMessageResponseModel.value.data?.data?[index].sender?.user?.image != null
+                                              ? NetworkImage(getAllMessageController.getAllMessageResponseModel.value.data?.data?[index].sender?.user?.image) : null,
                                           backgroundColor: Colors.grey[300],
-                                          child: getAllMessageController.getAllMessageList[index].sender?.user?.image == null ?
+                                          child: getAllMessageController.getAllMessageResponseModel.value.data?.data?[index].sender?.user?.image == null ?
                                           Icon(
                                             Icons.person,
                                             size: 48.r(context),
@@ -133,7 +133,7 @@ class MessageView extends StatelessWidget {
 
                                               TextHelperClass.headingText(
                                                 context: context,
-                                                text: "${getAllMessageController.getAllMessageList[index].sender?.user?.name}",
+                                                text: "${getAllMessageController.getAllMessageResponseModel.value.data?.data?[index].sender?.user?.name}",
                                                 fontSize: 16,
                                                 textColor: Color.fromRGBO(31, 41, 55, 1),
                                                 fontWeight: FontWeight.w700,
@@ -144,7 +144,7 @@ class MessageView extends StatelessWidget {
 
                                               TextHelperClass.headingText(
                                                 context: context,
-                                                text: "${DateFormat("MMM dd, yyyy hh:mm a").format(DateTime.parse(getAllMessageController.getAllMessageList[index].createdAt))}" ?? "",
+                                                text: "${DateFormat("MMM dd, yyyy hh:mm a").format(DateTime.parse(getAllMessageController.getAllMessageResponseModel.value.data?.data?[index].createdAt))}" ?? "",
                                                 fontSize: 16,
                                                 textColor: Color.fromRGBO(31, 41, 55, 1),
                                                 fontWeight: FontWeight.w500,
@@ -154,7 +154,7 @@ class MessageView extends StatelessWidget {
 
                                               TextHelperClass.headingText(
                                                 context: context,
-                                                text: getAllMessageController.getAllMessageList[index].content ?? "",
+                                                text: getAllMessageController.getAllMessageResponseModel.value.data?.data?[index].content ?? "",
                                                 fontSize: 16,
                                                 textColor: Color.fromRGBO(31, 41, 55, 1),
                                                 fontWeight: FontWeight.w500,
@@ -172,7 +172,7 @@ class MessageView extends StatelessWidget {
                               ),
                             );
                           },
-                          childCount: getAllMessageController.getAllMessageList.length
+                          childCount: getAllMessageController.getAllMessageResponseModel.value.data?.data?.length
                       ),
                     ),
 

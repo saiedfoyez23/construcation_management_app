@@ -41,7 +41,7 @@ class EmployeeHomeView extends StatelessWidget {
               child: CustomScrollView(
                 slivers: [
 
-                  CustomAppBarHelper().homePageAppBar(context),
+                  CustomAppBarHelper().employeeHomePageAppBar(context),
 
 
                   SliverToBoxAdapter(

@@ -1,9 +1,9 @@
 import 'package:construction_management_app/modules/company_user/dashboard/view/dashboard_view.dart';
-import 'package:construction_management_app/modules/company_user/notification/view/controller/notification_controller.dart';
+import 'package:construction_management_app/modules/company_user/notification/controller/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../common/common.dart';
+import '../../../../common/common.dart';
 
 class NotificationView extends StatelessWidget {
   NotificationView({super.key});
@@ -216,7 +216,7 @@ class NotificationView extends StatelessWidget {
 
                     TextHelperClass.headingText(
                       context: context,
-                      text: "No Planing Available",
+                      text: "No Notification Available",
                       alignment: Alignment.center,
                       textAlign: TextAlign.center,
                       fontSize: 24,

@@ -336,7 +336,7 @@ class EmployeeProjectDetailsView extends StatelessWidget {
                                   height: 40.h(context),
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      Get.off(()=>EmployeeMessageView(groupChatId: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.participants?.first.sId, projectName: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data!.name));
+                                      Get.off(()=>EmployeeMessageView(groupChatId: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data?.participants?.first.sId, projectName: employeeProjectViewController.getEmployeeProjectDetailsResponseModel.value.data?.name));
                                     },
                                     style: OutlinedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(

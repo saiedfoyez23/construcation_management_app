@@ -50,7 +50,6 @@ class GetAllMessageController extends GetxController {
   Future<void> handleIncomingMessage(dynamic data) async {
     print("call");
     if (data != null && data is Map<String, dynamic>) {
-      getAllMessageList.clear();
       await getAllMessageController(groupChatId: groupChatId);
       _scrollToEnd();
     }
@@ -122,9 +121,6 @@ class GetAllMessageController extends GetxController {
       if (responseBody != null) {
         print("hello ${jsonEncode(responseBody)}");
         getAllMessageResponseModel.value = GetAllMessageResponseModel.fromJson(responseBody);
-        getAllMessageResponseModel.value.data?.data?.forEach((value) {
-          getAllMessageList.add(value);
-        });
       } else {
         throw "Data retrieve is Failed";
       }

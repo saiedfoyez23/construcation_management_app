@@ -216,7 +216,7 @@ class EmployeeNotificationView extends StatelessWidget {
 
                     TextHelperClass.headingText(
                       context: context,
-                      text: "No Planing Available",
+                      text: "No Notification Available",
                       alignment: Alignment.center,
                       textAlign: TextAlign.center,
                       fontSize: 24,

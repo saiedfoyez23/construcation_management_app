@@ -4,7 +4,7 @@ import 'package:construction_management_app/common/local_store/local_store.dart'
 import 'package:construction_management_app/data/api.dart';
 import 'package:construction_management_app/data/base_client.dart';
 import 'package:construction_management_app/modules/authentication/sign_in/model/login_response_model.dart';
-import 'package:construction_management_app/modules/company_user/notification/view/model/get_all_notification_response_model.dart';
+import 'package:construction_management_app/modules/company_user/notification/model/get_all_notification_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../common/common.dart';

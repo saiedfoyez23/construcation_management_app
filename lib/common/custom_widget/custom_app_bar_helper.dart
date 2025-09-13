@@ -1,7 +1,8 @@
 import 'package:construction_management_app/common/common.dart';
 import 'package:construction_management_app/modules/company_user/dashboard/view/dashboard_view.dart';
-import 'package:construction_management_app/modules/company_user/notification/view/view/notification_view.dart';
+import 'package:construction_management_app/modules/company_user/notification/view/notification_view.dart';
 import 'package:construction_management_app/modules/employee_user/dashboard/view/employee_dashboard_view.dart';
+import 'package:construction_management_app/modules/employee_user/notification/view/view/employee_notification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,7 +57,7 @@ class CustomAppBarHelper {
     );
   }
 
-  Widget homePageAppBar(BuildContext context) {
+  Widget employeeHomePageAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 100.h(context),
       toolbarHeight: 100.h(context),
@@ -85,6 +86,57 @@ class CustomAppBarHelper {
           fit: BoxFit.cover,
           onPressed: () {
             Get.off(()=>EmployeeDashboardView(index: 2,),preventDuplicates: false);
+          },
+        ),
+        SpaceHelperClass.h(12.w(context)),
+        ImageHelperClass.customImageButtonContainer(
+          context: context,
+          height: 42,
+          width: 42,
+          imagePath: AppImages.notificationCircle,
+          imageFit: BoxFit.contain,
+          fit: BoxFit.cover,
+          onPressed: () {
+            Get.off(()=>EmployeeNotificationView(),preventDuplicates: false);
+          },
+        ),
+      ],
+      pinned: true,
+      floating: false,
+    );
+  }
+
+
+
+  Widget homePageAppBar(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 100.h(context),
+      toolbarHeight: 100.h(context),
+      scrolledUnderElevation: 0,
+      backgroundColor: AppColors.background,
+      leadingWidth: 120.w(context),
+      leading: Padding(
+        padding: EdgeInsets.only(left: 20.lpm(context)),
+        child: ImageHelperClass.customImageContainer(
+          context: context,
+          height: 67.h(context),
+          width: 67.w(context),
+          imagePath: AppImages.siteflow,
+          imageFit: BoxFit.contain,
+          fit: BoxFit.cover,
+        ),
+      ),
+      actionsPadding: const EdgeInsets.all(20),
+      actions: [
+        ImageHelperClass.customImageButtonContainer(
+          context: context,
+          height: 42,
+          width: 42,
+          imagePath: AppImages.messageNotificationCircle,
+          imageFit: BoxFit.contain,
+          fit: BoxFit.cover,
+          onPressed: () {
+            Get.off(()=>DashboardView(index: 3,),preventDuplicates: false);
           },
         ),
         SpaceHelperClass.h(12.w(context)),
