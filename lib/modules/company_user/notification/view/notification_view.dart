@@ -2,7 +2,6 @@ import 'package:construction_management_app/modules/company_user/dashboard/view/
 import 'package:construction_management_app/modules/company_user/notification/controller/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../common/common.dart';
 
 class NotificationView extends StatelessWidget {

@@ -1,7 +1,7 @@
 class Api {
   /// base url
 
-  static const baseUrl = "http://206.162.244.133:5000/api/v1";
+  static const baseUrl = "http://74.118.168.203:5007/api/v1";
   //static const baseUrl = "http://10.10.10.17:5003/api/v1";
 
   ///auth
@@ -104,6 +104,6 @@ class Api {
   static const postExcavationHardcoreStoneFillReport = "$baseUrl/excavation-reports"; // done
   static const postDrainageDuctingReport = "$baseUrl/ducting-reports"; // done
 
-  static const socketUrl = "http://206.162.244.133:4000/chat";
+  static const socketUrl = "http://74.118.168.203:4007/chat";
 
 }

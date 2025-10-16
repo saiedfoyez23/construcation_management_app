@@ -10,26 +10,24 @@ import '../../../../data/api.dart';
 import '../../../../data/base_client.dart';
 
 class EmailVerifyController extends GetxController {
-
   RxInt timeCounter = 60.obs;
   RxString otp = "".obs;
   RxBool isLoading = false.obs;
   RxBool isResendOtpSend = false.obs;
   Rx<TextEditingController> pinController = TextEditingController().obs;
 
-
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    Future.delayed(Duration(milliseconds: 10),() async {
+    Future.delayed(Duration(milliseconds: 10), () async {
       await otpTimer();
     });
   }
 
   Future<void> otpTimer() async {
     Future.delayed(Duration(seconds: 1), () async {
-      if(timeCounter > 0) {
+      if (timeCounter > 0) {
         timeCounter.value = timeCounter.value - 1;
         otpTimer();
       } else {
@@ -38,8 +36,9 @@ class EmailVerifyController extends GetxController {
     });
   }
 
-
-  Future<void> forgotPasswordResendOtpController({required Map<String,dynamic> data,}) async {
+  Future<void> forgotPasswordResendOtpController({
+    required Map<String, dynamic> data,
+  }) async {
     try {
       isResendOtpSend(true);
 
@@ -75,10 +74,9 @@ class EmailVerifyController extends GetxController {
     }
   }
 
-
   Future<void> forgotPasswordOtpVerifyController({
-    required Map<String,dynamic> data,
-    required String email
+    required Map<String, dynamic> data,
+    required String email,
   }) async {
     try {
       isLoading(true);
@@ -100,7 +98,7 @@ class EmailVerifyController extends GetxController {
         print("hello ${jsonEncode(responseBody)}");
         String message = responseBody['message'].toString();
         kSnackBar(message: message, bgColor: AppColors.green);
-        Get.off(()=>NewPasswordView(email: email,),preventDuplicates: false);
+        Get.off(() => NewPasswordView(email: email), preventDuplicates: false);
       } else {
         isLoading(false);
         throw 'Send data is failed!';
@@ -112,8 +110,4 @@ class EmailVerifyController extends GetxController {
       isLoading(false);
     }
   }
-
-
-
-
 }
