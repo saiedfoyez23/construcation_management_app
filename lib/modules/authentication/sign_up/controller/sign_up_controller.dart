@@ -75,6 +75,8 @@ class SignUpController extends GetxController {
       String mimeType = CustomMimeType.getMimeType(file.path);
       MediaType contentType = MediaType.parse(mimeType);
 
+      print(file.path);
+
       // Add file to request with proper MIME type
       request.files.add(
         await http.MultipartFile.fromPath(
