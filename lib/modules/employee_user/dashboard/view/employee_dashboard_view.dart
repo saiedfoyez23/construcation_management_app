@@ -33,19 +33,39 @@ class EmployeeDashboardView extends StatelessWidget {
           unselectedItemColor: Colors.grey,
           items: [
             BottomNavigationBarItem(
-              icon: Image.asset(AppImages.home, height: 24, width: 24),
+              icon: Image.asset(
+                controller.selectedIndex.value == 0 ?
+                AppImages.home : AppImages.blackHome,
+                height: 24,
+                width: 24,
+              ),
               label: "Home",
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(AppImages.book, height: 24, width: 24),
+              icon: Image.asset(
+                controller.selectedIndex.value == 1 ?
+                AppImages.book : AppImages.blackBook,
+                height: 24,
+                width: 24,
+              ),
               label: "Projects",
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(AppImages.nmessage, height: 24, width: 24),
+              icon: Image.asset(
+                controller.selectedIndex.value == 2 ?
+                AppImages.nmessage : AppImages.blackMessage,
+                height: 24,
+                width: 24,
+              ),
               label: "Message",
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(AppImages.nprofile, height: 24, width: 24),
+              icon: Image.asset(
+                controller.selectedIndex.value == 3 ?
+                AppImages.nprofile : AppImages.blackProfile,
+                height: 24,
+                width: 24,
+              ),
               label: "Profile",
             ),
           ],

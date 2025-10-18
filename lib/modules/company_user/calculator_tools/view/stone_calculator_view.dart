@@ -110,6 +110,7 @@ class StoneCalculatorView extends StatelessWidget {
                               textColor: Color.fromRGBO(75, 85, 99, 1),
                               fontWeight: FontWeight.w500,
                             ),
+
                             SpaceHelperClass.v(8.h(context)),
 
                             CustomDropdownHelperClass<String>(

@@ -96,7 +96,7 @@ class SignInView extends StatelessWidget {
                         context: context,
                         obscureText: signInController.isObscureText.value,
                         controller: signInController.passwordController.value,
-                        hintText: 'Enter your password Password',
+                        hintText: 'Enter your password',
                         keyboardType: TextInputType.text,
                         suffixIcon: IconButton(
                           onPressed: () async {

@@ -35,7 +35,7 @@ class PostPourInspectionReportGetView extends StatelessWidget {
 
               CustomAppBarHelper.normalAppBar(
                 context: context,
-                height: 60,
+                height: 80,
                 onBackPressed: () {
                   Get.off(()=>CheckSheetView(projectId: projectId),preventDuplicates: false);
                 },

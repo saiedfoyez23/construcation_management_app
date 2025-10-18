@@ -49,7 +49,11 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
       width: width,
       child: DropdownButtonFormField<T>(
         value: value,
-        icon: const SizedBox.shrink(),
+        icon: showDropdownIcon ? Icon(
+          Icons.keyboard_arrow_down_outlined,
+          size: iconSize.r(context),
+          color: iconColor,
+        ) : null,
         isExpanded: true,
         decoration: InputDecoration(
           contentPadding: contentPadding ?? EdgeInsets.symmetric(
@@ -68,13 +72,6 @@ class CustomDropdownHelperClass<T> extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius.r(context)),
             borderSide: BorderSide(color: borderColor, width: borderWidth),
           ),
-          suffixIcon: showDropdownIcon
-              ? Icon(
-            Icons.keyboard_arrow_down_outlined,
-            size: iconSize.r(context),
-            color: iconColor,
-          )
-              : null,
           filled: true,
           fillColor: fillColor,
           hintText: hintText,

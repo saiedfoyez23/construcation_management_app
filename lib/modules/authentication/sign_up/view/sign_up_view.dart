@@ -218,6 +218,8 @@ class SignUpView extends StatelessWidget {
                             kSnackBar(message: "Please enter company phone number", bgColor: AppColors.red);
                           } else if(signUpController.passwordController.value.text == "") {
                             kSnackBar(message: "Please enter password", bgColor: AppColors.red);
+                          } else if(signUpController.passwordController.value.text.length < 8) {
+                            kSnackBar(message: "Please enter 8 character password", bgColor: AppColors.red);
                           } else if(signUpController.selectedFile.value.path == "") {
                             kSnackBar(message: "Please select a company logo", bgColor: AppColors.red);
                           } else if(signUpController.confirmPasswordController.value.text == "") {

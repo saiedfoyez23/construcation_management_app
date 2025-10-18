@@ -115,17 +115,6 @@ class EmployeeDetailsView extends StatelessWidget {
                                     ),
                                   ),
 
-                                  SpaceHelperClass.h(4.w(context)),
-
-                                  ImageHelperClass.customImageButtonContainer(
-                                    onPressed: () async {},
-                                    context: context,
-                                    height: 42.h(context),
-                                    width: 42.w(context),
-                                    imagePath: AppImages.messageSendIcon,
-                                    fit: BoxFit.cover,
-                                    imageFit: BoxFit.contain,
-                                  ),
                                 ],
                               ),
                             ),
